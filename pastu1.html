@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="pastu0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutsch - pastunisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - abhängen von + D": "په + D پورې اړه لري. - 001",
+			"002 - achten auf + A": "+ A ته پام وکړئ. - 002",
+			"003 - anfangen mit + D": "د + D سره پیل وکړئ. - 003",
+			"004 - ankommen auf + A": "په + A ته ورسیږئ. - 004",
+			"005 - antworten auf + A": "ځواب + A. - 005",
+			"006 - sich ärgern über + A": "د + A په اړه خپه کیږئ. - 006",
+			"007 - aufhören mit + D": "د + D سره ودریږئ. - 007",
+			"008 - aufpassen auf + A": "+ A ته پام وکړئ. - 008",
+			"009 - sich aufregen über + A": "د + A په اړه خپه کیږئ. - 009",
+			"010 - ausgeben für + A": "په + A مصرف کړئ. - 010",
+			"011 - sich bedanken bei + D": "مننه D. - 011",
+			"012 - sich bedanken für + A": "مننه A. د A لپاره. - 012",
+			"013 - beginnen mit + D": "په D سره پیل کړئ. - 013",
+			"014 - sich bemühen um + A": "په A پای کې. - 014",
+			"015 - berichten über. + A": "په A راپور ورکړئ. - 015",
+			"016 - sich beschäftigen mit + D": "په D اشغال کړئ. - 016",
+			"017 - sich beschweren bei + D": "په D کې شکایت وکړئ. - 017",
+			"018 - bestehen aus + D": "په D کې شامل دي. - 018",
+			"019 - bestehen auf + A": "په A ټینګار وکړئ. - 019",
+			"020 - sich beteiligen an + D": "په D کې ګډون وکړئ. - 020",
+			"021 - sich bewerben bei + D": "+ D ته درخواست ورکړئ. - 021",
+			"022 - sich bewerben um + A": "+ A لپاره درخواست وکړئ. - 022",
+			"023 - sich beziehen auf + A": "+ A ته مراجعه وکړئ. - 023",
+			"024 - bitten um + A": "+ A لپاره غوښتنه وکړئ. - 024",
+			"025 - danken für + A": "د + A لپاره مننه. - 025",
+			"026 - denken an + A": "د + A په اړه فکر وکړئ. - 026",
+			"027 - diskutieren über + A": "د + A په اړه بحث وکړئ. - 027",
+			"028 - einladen zu + D": "+ D ته بلنه ورکړئ. - 028",
+			"029 - sich entscheiden für + A": "د + A لپاره پریکړه وکړئ. - 029",
+			"030 - sich entschließen zu + D": "په + D پریکړه وکړئ. - 030",
+			"031 - sich entschuldigen bei + D": "په پام کې ونیول شي - 031",
+			"032 - sich entschuldigen für + A": "په پام کې ونیول شي - 032",
+			"033 - erfahren von + D": "له + D څخه زده کړه. - 033",
+			"034 - sich erholen von + D": "له + D څخه بیرته ترلاسه کول. - 034",
+			"035 - sich erinnern an + A": "په یاد ولرئ + A. - 035",
+			"036 - erkennen an + D": "مننه + D. - 036",
+			"037 - sich erkundigen nach + D": "د + D په اړه پوښتنه وکړئ. - 037",
+			"038 - erschrecken über + A": "د + A لخوا حیران شئ. - 038",
+			"039 - erzählen über + A": "د + A په اړه ووایاست. - 039",
+			"040 - erzählen von + D": "د + D په اړه ووایاست. - 040",
+			"041 - fragen nach + D": "د + D په اړه پوښتنه وکړئ. - 041",
+			"042 - sich freuen auf + A": "د + A په اړه سترګې په لار. - 042",
+			"043 - sich freuen über + A": "د + A په اړه خوشحاله اوسئ. - 043",
+			"044 - gehen um + A": "د + A شاوخوا ګرځئ. - 044",
+			"045 - gehören zu + D": "د + D سره تړاو لري. - 045",
+			"046 - sich gewöhnen an + A": "د + A سره عادت شئ. - 046",
+			"047 - glauben an + A": "په + A باور وکړئ. - 047",
+			"048 - gratulieren zu + D": "د + D مبارکي ورکړئ. - 048",
+			"049 - halten für + A": "په پام کې ونیسئ + A. - 049",
+			"050 - halten von + D": "د + D په اړه فکر وکړئ. - 050",
+			"051 - sich handeln um + A": "د + A سره معامله کول. - 051",
+			"052 - handeln von + D": "د + D سره معامله کول. - 052",
+			"053 - helfen bei + D": "د + D سره مرسته کول. - 053",
+			"054 - hindern an + D": "مخنیوی کول + D. - 054",
+			"055 - hoffen auf + A": "د + A لپاره هیله کول. - 055",
+			"056 - hören von + D": "د + D په اړه اوریدل. - 056",
+			"057 - sich informieren über + A": "د + A په اړه معلومات ترلاسه کول. - 057",
+			"058 - sich interessieren für + A": "د + A سره علاقه لرل. - 058",
+			"059 - klagen über + A": "د + A په اړه شکایت کول. - 059",
+			"060 - kämpfen für + A": "د + A لپاره مبارزه کول. - 060",
+			"061 - kommen zu + D": "+ D ته راشئ. - 061",
+			"062 - sich konzentrieren auf + A": "په + A تمرکز وکړئ. - 062",
+			"063 - sich kümmern um + A": "د + A پاملرنه وکړئ. - 063",
+			"064 - lachen über + A": "په + A وخندل. - 064",
+			"065 - leiden an + D": "د + D څخه رنځ وړي. - 065",
+			"066 - leiden unter + A": "د + A څخه رنځ وړي. - 066",
+			"067 - nachdenken über + A": "د + A په اړه فکر وکړئ. - 067",
+			"068 - protestieren gegen + A": "د + A په وړاندې اعتراض. - 068",
+			"069 - rechnen mit + D": "په + D حساب وکړئ. - 069",
+			"070 - reden über + A": "د + A په اړه خبرې وکړئ. - 070",
+			"071 - reden von + D": "د + D په اړه خبرې وکړئ. - 071",
+			"072 - riechen nach + D": "د + D په څیر بوی وکړئ. - 072",
+			"073 - sagen über + A": "د + A په اړه ووایاست. - 073",
+			"074 - sagen zu + D": "د + D ته ووایاست. - 074",
+			"075 - schicken an + A": "+ A ته واستوئ. - 075",
+			"076 - schicken zu + D": "+ D ته واستوئ. - 076",
+			"077 - schimpfen über + A": "د + A په اړه شکایت وکړئ. - 077",
+			"078 - schmecken nach + D": "د + D په څیر خوند واخلئ. - 078",
+			"079 - schreiben an + A": "+ A ته ولیکئ. - 079",
+			"080 - sich schützen vor + D": "د + D څخه ځان وساتئ. - 080",
+			"081 - sein für + A": "د + الف لپاره وي. - 081",
+			"082 - sein gegen  + A": "د + الف پر وړاندې وي. - 082",
+			"083 - sorgen für + A": "د + الف پاملرنه وکړي. - 083",
+			"084 - sprechen mit + D": "د + D سره خبرې وکړي. - 084",
+			"085 - sprechen über + A": "د + الف په اړه خبرې وکړي. - 085",
+			"086 - sterben an + D": "د + D څخه مړ شي. - 086",
+			"087 - streiten mit + D": "د + D سره بحث وکړي. - 087",
+			"088 - streiten über + A": "د + الف په اړه بحث وکړي. - 088",
+			"089 - teilnehmen an + D": "په + D کې برخه واخلي. - 089",
+			"090 - telefonieren mit + D": "د + D سره په تلیفون خبرې وکړي. - 090",
+			"091 - sich treffen mit + D": " د + D سره د لیدو لپاره. - 091",
+			"092 - sich treffen zu + D": " په + D کې د لیدو لپاره. - 092",
+			"093 - überreden zu + D": " د + D قانع کول. - 093",
+			"094 - sich unterhalten mit + D": " د + D سره د خبرو کولو لپاره. - 094",
+			"095 - sich unterhalten über + A": " د + A په اړه خبرې کول. - 095",
+			"096 - sich verabreden mit + D": " د + D سره د ملاقات لپاره. - 096",
+			"097 - sich verabschieden von + D": " د + D سره د خدای پاماني کولو لپاره. - 097",
+			"098 - vergleichen mit + D": " د + D سره پرتله کول. - 098",
+			"099 - sich verlassen auf + A": " په + A تکیه کول. - 099",
+			"100 - sich verlieben in + A": " د + A سره مینه کول. - 100",
+			"101 - sich verstehen mit + D": " د + D پوهیدلو لپاره. - 101",
+			"102 - verstehen von + D": " د + D پوهیدلو لپاره. - 102",
+			"103 - sich vorbereiten auf + A": " د + A لپاره چمتووالی نیول. - 103",
+			"104 - warnen vor + D": " د + D په اړه خبرداری ورکول. - 104",
+			"105 - warten auf + A": " د + A انتظار کول. - 105",
+			"106 - sich wenden an + A": " د + A ته مخه کول. - 106",
+			"107 - werden zu + D": " د + D کیدو لپاره. - 107",
+			"108 - wissen von + D": " د + D په اړه پوهیدل. - 108",
+			"109 - sich wundern über + A": " د + A لخوا حیرانیدل. - 109",
+			"110 - zuschauen bei + D": " د + D لیدلو لپاره. - 110",
+			"111 - zusehen bei + D": " د مشاهدې لپاره + D. - 111",
+			"112 - zweifeln an + D": " شک کول + D. - 112",
+
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - abhängen von + D":{
+				de: "Ob wir fahren, hängt vom Wetter ab.",
+				hu: " موږ ځو که نه دا په هوا پورې اړه لري."
+			},
+			"002 - achten auf + A":{
+				de: "Bitte achte auf den neuen Mantel.",
+				hu: " مهرباني وکړئ د نوي کوټ پاملرنه وکړئ."
+			},
+			"003 - anfangen mit + D":{
+				de: "Ich fange mit der Übung an.",
+				hu: " زه تمرین پیل کوم."
+			},
+			"004 - ankommen auf + A":{
+				de: "Es kommt auf den richtigen Preis an.",
+				hu: " دا ټول د سم قیمت په اړه دي."
+			},
+			"005 - antworten auf + A":{
+				de: "Bitte antworten Sie heute auf den Brief.",
+				hu: " مهرباني وکړئ نن لیک ته ځواب ورکړئ."
+			},
+			"006 - sich ärgern über + A":{
+				de: "Wir ärgern uns über den Regen.",
+				hu: " موږ د باران په اړه خپه یو."
+			},
+			"007 - aufhören mit + D":{
+				de: "Er hört um 17.00 Uhr mit der Arbeit auf.",
+				hu: " هغه د ماښام په ۵:۰۰ بجو کار پای ته رسوي."
+			},
+			"008 - aufpassen auf + A":{
+				de: "Ein Babysitter passt auf kleine Kinder auf. ",
+				hu: " یو ماشوم ساتونکی د کوچنیو ماشومانو پالنه کوي."
+			},
+			"009 - sich aufregen über + A":{
+				de: "Deutsche regen sich über Unpünktlichkeit auf.",
+				hu: " جرمنيان د بې وختۍ څخه شکایت کوي."
+			},
+			"010 - ausgeben für + A":{
+				de: "Frauen geben viel Geld für Schuhe aus.",
+				hu: " ښځې په بوټانو ډیرې پیسې مصرفوي."
+			},
+			"011 - sich bedanken bei + D":{
+				de: "Ich bedanke mich herzlich bei dir.",
+				hu: " زه له تاسو څخه ډیره مننه کوم."
+			},
+			"012 - sich bedanken für + A":{
+				de: "Martin bedankt sich für das Geschenk.",
+				hu: " مارټین د ډالۍ لپاره ستاسو څخه مننه کوي."
+			},
+			"013 - beginnen mit + D":{
+				de: "Wir beginnen pünktlich mit dem Deutschkurs.",
+				hu: " موږ د جرمني کورس په وخت پیل کوو."
+			},
+			"014 - sich bemühen um + A":{
+				de: "Karla bemüht sich um eine Arbeit.",
+				hu: " کارلا د دندې په لټه کې ده."
+			},
+			"015 - berichten über. + A":{
+				de: "Der Reporter berichtet über die Wahlen.",
+				hu: " خبریال د ټاکنو په اړه راپور ورکوي."
+			},
+			"016 - sich beschäftigen mit + D":{
+				de: "Ich beschäftige mich gern mit Pflanzen.",
+				hu: " زه د بوټو سره کار کول خوښوم."
+			},
+			"017 - sich beschweren bei + D":{
+				de: "Der Gast beschwert sich beim Kellner.",
+				hu: " میلمه ویټر ته شکایت کوي."
+			},
+			"018 - bestehen aus + D":{
+				de: "Eheringe bestehen aus Gold.",
+				hu: " د واده ګوتې د سرو زرو څخه جوړې شوې دي."
+			},
+			"019 - bestehen auf + A":{
+				de: "Ich bestehe auf sofortige Bezahlung des Autos.",
+				hu: " زه د موټر لپاره د سمدستي پیسو غوښتنه کوم."
+			},
+			"020 - sich beteiligen an + D":{
+				de: "Viele Studenten beteiligen sich an den Streiks.",
+				hu: " ډیری زده کونکي په اعتصابونو کې برخه اخلي."
+			},
+			"021 - sich bewerben bei + D":{
+				de: "Er bewirbt sich bei einer Bäckerei.",
+				hu: " هغه په ​​یوه بیکري کې د دندې لپاره غوښتنه کوي."
+			},
+			"022 - sich bewerben um + A":{
+				de: "Sie bewirbt sich um eine Stelle als Sekretärin.",
+				hu: " هغه د منشي په توګه د دندې لپاره غوښتنه کوي."
+			},
+			"023 - sich beziehen auf + A":{
+				de: "Meine Frage bezieht sich auf Ihr Angebot.",
+				hu: " زما پوښتنه ستاسو د وړاندیز په اړه ده."
+			},
+			"024 - bitten um + A":{
+				de: "Der Redner bittet um Aufmerksamkeit.",
+				hu: " ویناوال د پاملرنې غوښتنه کوي."
+			},
+			"025 - danken für + A":{
+				de: "Sam dankt für Ritas Hilfe.",
+				hu: " سام د ریتا څخه د هغې د مرستې لپاره مننه کوي."
+			},
+			"026 - denken an + A":{
+				de: "Maria denkt oft an den Urlaub.",
+				hu: " ماریا ډیری وخت د رخصتۍ په اړه فکر کوي."
+			},
+			"027 - diskutieren über + A":{
+				de: "Das Kabinett diskutiert über eine neue Steuer.",
+				hu: " کابینه د نوي مالیې په اړه بحث کوي."
+			},
+			"028 - einladen zu + D":{
+				de: "Ich lade dich zu meinem Geburtstag ein.",
+				hu: " زه تاسو ته زما د کلیزې جشن ته بلنه درکوم."
+			},
+			"029 - sich entscheiden für + A":{
+				de: "Frauen entscheiden sich gern für Gold. ",
+				hu: " ښځې ډیری وخت سره زر غوره کوي."
+			},
+			"030 - sich entschließen zu + D":{
+				de: "Karl entschließt sich zu einem Studium. ",
+				hu: " کارل پریکړه کوي چې پوهنتون ته لاړ شي."
+			},
+			"031 - sich entschuldigen bei + D":{
+				de: "Mia entschuldigt sich bei ihrem Mann.",
+				hu: " میا له خپل میړه څخه بخښنه غواړي."
+			},
+			"032 - sich entschuldigen für + A":{
+				de: "Ich entschuldige mich für das Verhalten meiner Tochter.",
+				hu: " زه د خپلې لور د چلند لپاره بخښنه غواړم."
+			},
+			"033 - erfahren von + D":{
+				de: "Heute haben wir von dem Bauprojekt erfahren.",
+				hu: " نن موږ د ساختماني پروژې په اړه زده کړل."
+			},
+			"034 - sich erholen von + D":{
+				de: "Von dem Schock muss ich mich erst erholen.",
+				hu: " زه باید له شاک څخه روغ شم."
+			},
+			"035 - sich erinnern an + A":{
+				de: "Wir erinnern uns gern an unser erstes Ehejahr.",
+				hu: " موږ د واده لومړی کال په مینه سره یادوو."
+			},
+			"036 - erkennen an + D":{
+				de: "Man erkennt Pinocchio an seiner langen Nase.",
+				hu: " تاسو کولی شئ پنوچیو د هغه د اوږدې پوزې له امله وپیژنئ."
+			},
+			"037 - sich erkundigen nach + D":{
+				de: "Oma erkundigt sich oft nach meinen Plänen.",
+				hu: " انا ډیری وخت زما د پلانونو په اړه پوښتنه کوي."
+			},
+			"038 - erschrecken über + A":{
+				de: "Die Frau erschrickt über eine Maus.",
+				hu: " ښځه د موږک له امله حیرانه کیږي."
+			},
+			"039 - erzählen über + A":{
+				de: "Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+				hu: " یو ختیځ برلینر په پخواني GDR کې د خپل ژوند په اړه خبرې کوي."
+			},
+			"040 - erzählen von + D":{
+				de: "Der Bischoff erzählt von der Reise nach Rom.",
+				hu: " بشپ روم ته د خپل سفر په اړه خبرې کوي."
+			},
+			"041 - fragen nach + D":{
+				de: "Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+				hu: " خبریال د قانون د بدلون د پایلو په اړه پوښتنه کوي."
+			},
+			"042 - sich freuen auf + A":{
+				de: "Kinder freuen sich auf Weihnachten.",
+				hu: " ماشومان کرسمس ته سترګې په لار دي."
+			},
+			"043 - sich freuen über + A":{
+				de: "Jeder freut sich über eine Gehaltserhöhung.",
+				hu: " هرڅوک د معاش د زیاتوالي په اړه خوښ دي."
+			},
+			"044 - gehen um + A":{
+				de: "Immer geht es um Geld.",
+				hu: " دا تل د پیسو په اړه وي."
+			},
+			"045 - gehören zu + D":{
+				de: "Das Elsass gehört zu Frankreich.",
+				hu: " السیس د فرانسې پورې اړه لري."
+			},
+			"046 - sich gewöhnen an + A":{
+				de: "Ich kann mich nicht an den Euro gewöhnen.",
+				hu: " زه نشم کولی د یورو سره عادت شم."
+			},
+			"047 - glauben an + A":{
+				de: "Teenager glauben an die große Liebe.",
+				hu: " ځوانان په ریښتینې مینه باور لري."
+			},
+			"048 - gratulieren zu + D":{
+				de: "Wir gratulieren dir zum 18. Geburtstag.",
+				hu: " موږ ستاسو د ۱۸ کلیزې مبارکي وایو."
+			},
+			"049 - halten für + A":{
+				de: "Ich halte das für keine gute Idee.",
+				hu: " زه فکر نه کوم چې دا ښه نظر دی."
+			},
+			"050 - halten von + D":{
+				de: "Kinder halten nicht viel von Ordnung.",
+				hu: " ماشومان د نظم پروا نه کوي."
+			},
+			"051 - sich handeln um + A":{
+				de: "Bei der Kopie handelt es sich nicht um Originalsoftware.",
+				hu: " کاپي اصلي سافټویر نه دی."
+			},
+			"052 - handeln von + D":{
+				de: "Märchen handeln von Gut und Böse.",
+				hu: " د خاپېرو کیسې د ښه او بد په اړه دي."
+			},
+			"053 - helfen bei + D":{
+				de: "Kann ich dir beim Tischdecken helfen?",
+				hu: " ایا زه تاسو سره د میز په تنظیمولو کې مرسته کولی شم؟"
+			},
+			"054 - hindern an + D":{
+				de: "Ein langsamer Fahrer hindert Greta am Überholen.",
+				hu: " یو ورو موټر چلوونکی ګریټا د تیریدو څخه منع کوي."
+			},
+			"055 - hoffen auf + A":{
+				de: "Im März hoffen alle auf warme Frühlingstage.",
+				hu: " په مارچ کې، هرڅوک د پسرلي د ګرمو ورځو هیله لري."
+			},
+			"056 - hören von + D":{
+				de: "Ich habe seit Sonntag nichts von Piet gehört.",
+				hu: " ما د یکشنبې راهیسې د پیټ څخه څه نه دي اوریدلي."
+			},
+			"057 - sich informieren über + A":{
+				de: "Auf der Messe kann man sich über die neue Technologie informieren.",
+				hu: " تاسو کولی شئ د سوداګرۍ په نندارتون کې د نوي ټیکنالوژۍ په اړه ومومئ."
+			},
+			"058 - sich interessieren für + A":{
+				de: "Monika interessiert sich für ein Smartphone.",
+				hu: " مونیکا د سمارټ فون سره علاقه لري."
+			},
+			"059 - klagen über + A":{
+				de: "Frauen klagen häufig über Kopfschmerzen.",
+				hu: " ښځې ډیری وختونه د سر درد شکایت کوي."
+			},
+			"060 - kämpfen für + A":{
+				de: "Die Gewerkschaft kämpft für höhere Löhne.",
+				hu: " اتحادیه د لوړ معاش لپاره مبارزه کوي."
+			},
+			"061 - kommen zu + D":{
+				de: "In der Besprechung kam es zu einem Streit.",
+				hu: " د غونډې په جریان کې یوه شخړه وشوه."
+			},
+			"062 - sich konzentrieren auf + A":{
+				de: "Karl konzentriert sich auf seine Hausaufgaben.",
+				hu: " کارل په خپل کورني کار تمرکز کوي."
+			},
+			"063 - sich kümmern um + A":{
+				de: "Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+				hu: " په نرسنګ کور کې، دوی د هغو زړو خلکو پاملرنه کوي چې ناروغه دي."
+			},
+			"064 - lachen über + A":{
+				de: "Über einen guten Witz muss man laut lachen.",
+				hu: " تاسو باید په ښه ټوکه په لوړ غږ وخاندئ."
+			},
+			"065 - leiden an + D":{
+				de: "Jeder fünfte Manager leidet an Burn-out.",
+				hu: " په پنځو مدیرانو کې یو یې د سوځیدنې څخه رنځ وړي."
+			},
+			"066 - leiden unter + A":{
+				de: "Kaffeetrinker leiden unter Schlafproblemen.",
+				hu: " د قهوې څښونکي د خوب له ستونزو سره مخ دي."
+			},
+			"067 - nachdenken über + A":{
+				de: "Beamte müssen nicht über ihre Rente nachdenken.",
+				hu: " ملکي مامورین د خپلو تقاعدونو په اړه اندیښنه نلري."
+			},
+			"068 - protestieren gegen + A":{
+				de: "Viele Menschen protestieren gegen Atomkraft.",
+				hu: " ډیری خلک د اټومي انرژۍ په وړاندې لاریون کوي."
+			},
+			"069 - rechnen mit + D":{
+				de: "Im Januar muss man mit Schnee rechnen.",
+				hu: " تاسو باید په جنوري کې د واورې تمه وکړئ."
+			},
+			"070 - reden über + A":{
+				de: "Deine Mutter redet gern über Krankheiten.",
+				hu: " ستاسو مور د ناروغیو په اړه خبرې کول خوښوي."
+			},
+			"071 - reden von + D":{
+				de: "Großvater redet von den guten alten Zeiten.",
+				hu: " نيکه د ښو زړو ورځو په اړه خبرې کوي."
+			},
+			"072 - riechen nach + D":{
+				de: "Hier riecht es nach Kuchen.",
+				hu: " دلته د کيک ​​بوی راځي."
+			},
+			"073 - sagen über + A":{
+				de: "Brigitte sagt über Dietmar, dass er oft lügt.",
+				hu: " بريګيټ وايي چې ډيټمار ډېر وخت دروغ وايي."
+			},
+			"074 - sagen zu + D":{
+				de: "Was sagst du zu meinem neuen Haarschnitt?",
+				hu: " زما د نوي ويښتانو په اړه څه فکر کوې؟"
+			},
+			"075 - schicken an + A":{
+				de: "Die E-Mail schicke ich dir morgen.",
+				hu: " زه به سبا تاسو ته برېښناليک ولېږم."
+			},
+			"076 - schicken zu + D":{
+				de: "Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+				hu: " عمومي ډاکټر ناروغ متخصص ته راجع کوي."
+			},
+			"077 - schimpfen über + A":{
+				de: "Alle schimpfen über den Regen.",
+				hu: " هرڅوک د باران په اړه شکايت کوي."
+			},
+			"078 - schmecken nach + D":{
+				de: "Muscheln schmecken nach Meerwasser.",
+				hu: " د کبانو خوند د سمندري اوبو په څېر دی."
+			},
+			"079 - schreiben an + A":{
+				de: "Bitte schreibe noch heute an deine Mutter.",
+				hu: " مهرباني وکړئ نن خپلې مور ته ولیکئ."
+			},
+			"080 - sich schützen vor + D":{
+				de: "Den Computer des Ministers muss man vor Hackern schützen.",
+				hu: " د وزير کمپيوټر بايد د هکرانو څخه خوندي شي."
+			},
+			"081 - sein für + A":{
+				de: "Ich bin für die Abschaffung der Kinderarbeit.",
+				hu: " زه د ماشومانو د کار د ختمولو پلوی یم."
+			},
+			"082 - sein gegen  + A":{
+				de: "Viele sind gegen Steuererhöhungen.",
+				hu: " ډیری د مالیې د زیاتوالي مخالف دي."
+			},
+			"083 - sorgen für + A":{
+				de: "Kinder müssen im Alter für ihre Eltern sorgen.",
+				hu: " ماشومان باید په زاړه عمر کې د خپلو والدینو پاملرنه وکړي."
+			},
+			"084 - sprechen mit + D":{
+				de: "Ich spreche noch einmal mit deinem Vater.",
+				hu: " زه به بیا ستاسو له پلار سره خبرې وکړم."
+			},
+			"085 - sprechen über + A":{
+				de: "Lass uns über deine Zukunft sprechen.",
+				hu: " راځئ چې ستاسو د راتلونکي په اړه وغږیږو."
+			},
+			"086 - sterben an + D":{
+				de: "Zwei Deutsche sind an der Grippe gestorben.",
+				hu: " دوه جرمنيان د انفلونزا له امله مړه شوي دي."
+			},
+			"087 - streiten mit + D":{
+				de: "Ich möchte nicht mit dir streiten.",
+				hu: " زه نه غواړم له تاسو سره بحث وکړم."
+			},
+			"088 - streiten über + A":{
+				de: "Die USA und Deutschland streiten über eine neue Strategie.",
+				hu: " امریکا او جرمني د یوې نوې ستراتیژۍ په اړه بحث کوي."
+			},
+			"089 - teilnehmen an + D":{
+				de: "Nordkorea nimmt an der Fußball-WM teil.",
+				hu: " شمالي کوریا په نړیوال جام کې برخه اخلي."
+			},
+			"090 - telefonieren mit + D":{
+				de: "Hast du schon mit dem Arzt telefoniert?",
+				hu: " ایا تاسو دمخه له ډاکټر سره خبرې کړې دي؟"
+			},
+			"091 - sich treffen mit + D":{
+				de: "Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+				hu: " چانسلر هره ورځ د خپل مطبوعاتي سکرتر سره ګوري."
+			},
+			"092 - sich treffen zu + D":{
+				de: "Sie treffen sich nur zu einem kurzen Gespräch.",
+				hu: " دوی یوازې د لنډو خبرو اترو لپاره سره ګوري."
+			},
+			"093 - überreden zu + D":{
+				de: "Kann ich dich zu einem Glas Wein überreden?",
+				hu: " ایا زه کولی شم تاسو قانع کړم چې یو ګیلاس شراب وڅښئ؟"
+			},
+			"094 - sich unterhalten mit + D":{
+				de: "Der Sänger unterhält sich mit dem Bassisten.",
+				hu: " سندرغاړی د باس غږونکي سره خبرې کوي."
+			},
+			"095 - sich unterhalten über + A":{
+				de: "Die Modedesigner unterhalten sich über die neuesten Trends.",
+				hu: " د فیشن ډیزاینران د وروستي رجحاناتو په اړه بحث کوي."
+			},
+			"096 - sich verabreden mit + D":{
+				de: "Heute verabrede ich mich mit einer Freundin.",
+				hu: " زه نن له یو ملګري سره ګورم."
+			},
+			"097 - sich verabschieden von + D":{
+				de: "Nun wollen wir uns von euch verabschieden.",
+				hu: " اوس موږ غواړو خدای پاماني وکړو."
+			},
+			"098 - vergleichen mit + D":{
+				de: "Vergleichen Sie München mit Berlin.",
+				hu: " د برلین سره میونخ پرتله کړئ."
+			},
+			"099 - sich verlassen auf + A":{
+				de: "Auf mich kann man sich verlassen.",
+				hu: " تاسو کولی شئ په ما تکیه وکړئ."
+			},
+			"100 - sich verlieben in + A":{
+				de: "Britta hat sich in das alte Bauernhaus verliebt.",
+				hu: " بریټا د زاړه فارم هاوس سره مینه لري."
+			},
+			"101 - sich verstehen mit + D":{
+				de: "Daniel versteht sich gut mit seinem Chef.",
+				hu: " ډینیل د خپل مشر سره ښه چلند کوي."
+			},
+			"102 - verstehen von + D":{
+				de: "Verstehst du etwas von Elektrik?",
+				hu: " ایا تاسو د بریښنایی کار په اړه څه پوهیږئ؟"
+			},
+			"103 - sich vorbereiten auf + A":{
+				de: "Karl bereitet sich auf eine Präsentation vor.",
+				hu: " کارل د پریزنټیشن لپاره چمتووالی نیسي."
+			},
+			"104 - warnen vor + D":{
+				de: "Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+				hu: " هغه ته د زاړه موټر د لوړ لګښت په اړه خبرداری ورکړل شوی و."
+			},
+			"105 - warten auf + A":{
+				de: "In Namibia wartet man lange auf einen Bus.",
+				hu: " په نامیبیا کې، تاسو باید د بس لپاره ډیر وخت انتظار وکړئ."
+			},
+			"106 - sich wenden an + A":{
+				de: "Bitte wenden Sie sich an die Buchhaltung.",
+				hu: " مهرباني وکړئ د محاسبې څانګې سره اړیکه ونیسئ."
+			},
+			"107 - werden zu + D":{
+				de: "Unter null Grad wird Eis zu Wasser.",
+				hu: " د صفر درجې سانتي ګراد څخه ښکته، یخ په اوبو بدلیږي."
+			},
+			"108 - wissen von + D":{
+				de: "Ich weiß nichts von neuen Computern für unser Team.",
+				hu: " زه زموږ د ټیم لپاره د نویو کمپیوټرونو په اړه هیڅ نه پوهیږم."
+			},
+			"109 - sich wundern über + A":{
+				de: "Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+				hu: " ډیری جرمنيان د بریښنا د ناڅاپي لوړ لګښتونو څخه حیران دي."
+			},
+			"110 - zuschauen bei + D":{
+				de: "Kann ich dir bei der Reparatur zuschauen?",
+				hu: " ایا زه کولی شم تاسو د ترمیم کولو څارنه وکړم؟"
+			},
+			"111 - zusehen bei + D":{
+				de: "Willst du mir beim Kochen zusehen?",
+				hu: " ایا تاسو غواړئ چې ما پخلی وګورئ؟"
+			},
+			"112 - zweifeln an + D":{
+				de: "John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+				hu: " جان شک لري چې د هغه زوی ریښتیا ویلي دي."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

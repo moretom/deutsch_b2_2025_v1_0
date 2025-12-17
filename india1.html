@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="india0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutsch - indisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - abhängen von + D": "001 - + D पर निर्भर रहें।",
+			"002 - achten auf + A": "002 - + A पर ध्यान दें।",
+			"003 - anfangen mit + D": "003 - + D से शुरू करें।",
+			"004 - ankommen auf + A": "004 - + A पर पहुँचें।",
+			"005 - antworten auf + A": "005 - + A का जवाब दें।",
+			"006 - sich ärgern über + A": "006 - + A को लेकर परेशान हों।",
+			"007 - aufhören mit + D": "007 - + D पर रुकें।",
+			"008 - aufpassen auf + A": "008 - + A पर ध्यान दें।",
+			"009 - sich aufregen über + A": "009 - + A को लेकर परेशान हों।",
+			"010 - ausgeben für + A": "010 - + A पर खर्च करें।",
+			"011 - sich bedanken bei + D": "011 - + D का शुक्रिया अदा करें।",
+			"012 - sich bedanken für + A": "012 - + A के लिए शुक्रिया अदा करें।",
+			"013 - beginnen mit + D": "013 - + D से शुरू करें।",
+			"014 - sich bemühen um + A": "014 - + A के लिए कोशिश करें।",
+			"015 - berichten über. + A": "015 - रिपोर्ट करें। + A.",
+			"016 - sich beschäftigen mit + D": "016 - + D से निपटना",
+			"017 - sich beschweren bei + D": "017 - + D से शिकायत करना",
+			"018 - bestehen aus + D": "018 - + D से मिलकर बनाना",
+			"019 - bestehen auf + A": "019 - + A पर ज़ोर देना",
+			"020 - sich beteiligen an + D": "020 - + D में हिस्सा लेना",
+			"021 - sich bewerben bei + D": "021 - + D के लिए अप्लाई करना",
+			"022 - sich bewerben um + A": "022 - + A के लिए अप्लाई करना",
+			"023 - sich beziehen auf + A": "023 - + A को रेफर करना",
+			"024 - bitten um + A": "024 - + A के लिए पूछना",
+			"025 - danken für + A": "025 - + A के लिए थैंक यू बोलना",
+			"026 - denken an + A": "026 - + A के बारे में सोचना",
+			"027 - diskutieren über + A": "027 - + A पर चर्चा करना",
+			"028 - einladen zu + D": "028 - + D के लिए इनवाइट करना",
+			"029 - sich entscheiden für + A": "029 - + A के लिए डिसाइड करना",
+			"030 - sich entschließen zu + D": "030 - + D का हल निकालना",
+			"031 - sich entschuldigen bei + D": "031 - + D से माफ़ी मांगना",
+			"032 - sich entschuldigen für + A": "032 - + A के लिए माफ़ी मांगना",
+			"033 - erfahren von + D": "033 - + D से सीखना",
+			"034 - sich erholen von + D": "034 - + D से रिकवर करना",
+			"035 - sich erinnern an + A": "035 - + D को याद रखना A.",
+			"036 - erkennen an + D": "036 - पहचानना + D.",
+			"037 - sich erkundigen nach + D": "037 - पूछना + D.",
+			"038 - erschrecken über + A": "038 - से चौंक जाना + A.",
+			"039 - erzählen über + A": "039 - के बारे में बताना + A.",
+			"040 - erzählen von + D": "040 - के बारे में बताना + D.",
+			"041 - fragen nach + D": "041 - के बारे में पूछना + D.",
+			"042 - sich freuen auf + A": "042 - उम्मीद करना + A.",
+			"043 - sich freuen über + A": "043 - के बारे में खुश होना + A.",
+			"044 - gehen um + A": "044 - घूमना + A.",
+			"045 - gehören zu + D": "045 - से जुड़ना + D.",
+			"046 - sich gewöhnen an + A": "046 - की आदत डालना + A.",
+			"047 - glauben an + A": "047 - पर विश्वास करना + A.",
+			"048 - gratulieren zu + D": "048 - बधाई देना + D.",
+			"049 - halten für + A": "049 - के बारे में सोचना + A.",
+			"050 - halten von + D": "050 - के बारे में सोचना + D.",
+			"051 - sich handeln um + A": "051 - + A से निपटना",
+			"052 - handeln von + D": "052 - + D से निपटना",
+			"053 - helfen bei + D": "053 - + D में मदद करना",
+			"054 - hindern an + D": "054 - + D में रुकावट डालना",
+			"055 - hoffen auf + A": "055 - + A की उम्मीद करना",
+			"056 - hören von + D": "056 - + D के बारे में सुनना",
+			"057 - sich informieren über + A": "057 - + A के बारे में जानकारी रखना",
+			"058 - sich interessieren für + A": "058 - + A में दिलचस्पी लेना",
+			"059 - klagen über + A": "059 - + A के बारे में शिकायत करना",
+			"060 - kämpfen für + A": "060 - + A के लिए लड़ना",
+			"061 - kommen zu + D": "061 - + D पर आना",
+			"062 - sich konzentrieren auf + A": "062 - + A पर ध्यान देना",
+			"063 - sich kümmern um + A": "063 - + A की परवाह करना",
+			"064 - lachen über + A": "064 - + A पर हंसना",
+			"065 - leiden an + D": "065 - + D से परेशान होना",
+			"066 - leiden unter + A": "066 - + A से परेशान होना",
+			"067 - nachdenken über + A": "067 - + A के बारे में सोचना",
+			"068 - protestieren gegen + A": "068 - + A का विरोध करना",
+			"069 - rechnen mit + D": "069 - + D पर भरोसा करना",
+			"070 - reden über + A": "070 - + A के बारे में बात करना A.",
+			"071 - reden von + D": "071 - + D से बात करना।",
+			"072 - riechen nach + D": "072 - + D की महक।",
+			"073 - sagen über + A": "073 - + A के बारे में कहना।",
+			"074 - sagen zu + D": "074 - + D से कहना।",
+			"075 - schicken an + A": "075 - + A को भेजना।",
+			"076 - schicken zu + D": "076 - + D को भेजना।",
+			"077 - schimpfen über + A": "077 - + A के बारे में शिकायत करना।",
+			"078 - schmecken nach + D": "078 - + D जैसा स्वाद।",
+			"079 - schreiben an + A": "079 - + A को लिखना।",
+			"080 - sich schützen vor + D": "080 - + D से खुद को बचाना।",
+			"081 - sein für + A": "081 - + A के लिए होना।",
+			"082 - sein gegen  + A": "082 - + A के खिलाफ होना।",
+			"083 - sorgen für + A": "083 - + A की परवाह करना।",
+			"084 - sprechen mit + D": "084 - + D से बात करना।",
+			"085 - sprechen über + A": "085 - + A के बारे में बात करना।",
+			"086 - sterben an + D": "086 - + D से मरना।",
+			"087 - streiten mit + D": "087 - + D से बहस करना।",
+			"088 - streiten über + A": "088 - + A के बारे में बहस करना।",
+			"089 - teilnehmen an + D": "089 - + D में हिस्सा लेना।",
+			"090 - telefonieren mit + D": "090 - + D को बताना।",
+			"091 - sich treffen mit + D": "091 - + के साथ मीटिंग करना D.",
+			"092 - sich treffen zu + D": "092 - + D पर मिलना।",
+			"093 - überreden zu + D": "093 - + D को मनाना।",
+			"094 - sich unterhalten mit + D": "094 - + D से बात करना।",
+			"095 - sich unterhalten über + A": "095 - + A के बारे में बात करना।",
+			"096 - sich verabreden mit + D": "096 - + D के साथ अपॉइंटमेंट लेना।",
+			"097 - sich verabschieden von + D": "097 - + D को अलविदा कहना।",
+			"098 - vergleichen mit + D": "098 - + D से तुलना करना।",
+			"099 - sich verlassen auf + A": "099 - + A पर भरोसा करना।",
+			"100 - sich verlieben in + A": "100 - + A से प्यार हो जाना।",
+			"101 - sich verstehen mit + D": "101 - समझना + D.",
+			"102 - verstehen von + D": "102 - समझना + D.",
+			"103 - sich vorbereiten auf + A": "103 - + A के लिए तैयार होना",
+			"104 - warnen vor + D": "104 - + D के बारे में चेतावनी देना",
+			"105 - warten auf + A": "105 - + A का इंतज़ार करना",
+			"106 - sich wenden an + A": "106 - + A की ओर मुड़ना",
+			"107 - werden zu + D": "107 - + D बनना",
+			"108 - wissen von + D": "108 - + D के बारे में जानना",
+			"109 - sich wundern über + A": "109 - + A से हैरान होना",
+			"110 - zuschauen bei + D": "110 - + D को देखना",
+			"111 - zusehen bei + D": "111 - + D को देखना",
+			"112 - zweifeln an + D": "112 - + D पर शक करना",
+
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - abhängen von + D":{
+				de: "Ob wir fahren, hängt vom Wetter ab.",
+				hu: " हम जाएंगे या नहीं, यह मौसम पर निर्भर करता है।"
+			},
+			"002 - achten auf + A":{
+				de: "Bitte achte auf den neuen Mantel.",
+				hu: " प्लीज़ नए कोट का ध्यान रखना।"
+			},
+			"003 - anfangen mit + D":{
+				de: "Ich fange mit der Übung an.",
+				hu: " मैं एक्सरसाइज़ शुरू कर रहा हूँ।"
+			},
+			"004 - ankommen auf + A":{
+				de: "Es kommt auf den richtigen Preis an.",
+				hu: " यह सब सही कीमत के बारे में है।"
+			},
+			"005 - antworten auf + A":{
+				de: "Bitte antworten Sie heute auf den Brief.",
+				hu: " प्लीज़ आज ही लेटर का जवाब देना।"
+			},
+			"006 - sich ärgern über + A":{
+				de: "Wir ärgern uns über den Regen.",
+				hu: " हम बारिश से परेशान हैं।"
+			},
+			"007 - aufhören mit + D":{
+				de: "Er hört um 17.00 Uhr mit der Arbeit auf.",
+				hu: " वह शाम 5:00 बजे काम खत्म करता है।"
+			},
+			"008 - aufpassen auf + A":{
+				de: "Ein Babysitter passt auf kleine Kinder auf. ",
+				hu: " एक बेबीसिटर छोटे बच्चों की देखभाल करता है।"
+			},
+			"009 - sich aufregen über + A":{
+				de: "Deutsche regen sich über Unpünktlichkeit auf.",
+				hu: " जर्मन लोग समय पर न आने की शिकायत करते हैं।"
+			},
+			"010 - ausgeben für + A":{
+				de: "Frauen geben viel Geld für Schuhe aus.",
+				hu: " औरतें जूतों पर बहुत पैसा खर्च करती हैं।"
+			},
+			"011 - sich bedanken bei + D":{
+				de: "Ich bedanke mich herzlich bei dir.",
+				hu: " मैं आपका बहुत-बहुत धन्यवाद करता हूँ।"
+			},
+			"012 - sich bedanken für + A":{
+				de: "Martin bedankt sich für das Geschenk.",
+				hu: " मार्टिन गिफ़्ट के लिए धन्यवाद देता है।"
+			},
+			"013 - beginnen mit + D":{
+				de: "Wir beginnen pünktlich mit dem Deutschkurs.",
+				hu: " हम जर्मन कोर्स समय पर शुरू करते हैं।"
+			},
+			"014 - sich bemühen um + A":{
+				de: "Karla bemüht sich um eine Arbeit.",
+				hu: " कार्ला नौकरी ढूंढ रही है।"
+			},
+			"015 - berichten über. + A":{
+				de: "Der Reporter berichtet über die Wahlen.",
+				hu: " रिपोर्टर चुनाव की रिपोर्टिंग कर रहा है।"
+			},
+			"016 - sich beschäftigen mit + D":{
+				de: "Ich beschäftige mich gern mit Pflanzen.",
+				hu: " मुझे पौधों के साथ काम करने में मज़ा आता है।"
+			},
+			"017 - sich beschweren bei + D":{
+				de: "Der Gast beschwert sich beim Kellner.",
+				hu: " मेहमान वेटर से शिकायत करता है।"
+			},
+			"018 - bestehen aus + D":{
+				de: "Eheringe bestehen aus Gold.",
+				hu: " शादी की अंगूठियां सोने की बनी होती हैं।"
+			},
+			"019 - bestehen auf + A":{
+				de: "Ich bestehe auf sofortige Bezahlung des Autos.",
+				hu: " मैं कार के लिए तुरंत पेमेंट करने पर ज़ोर देता हूँ।"
+			},
+			"020 - sich beteiligen an + D":{
+				de: "Viele Studenten beteiligen sich an den Streiks.",
+				hu: " कई छात्र हड़ताल में हिस्सा ले रहे हैं।"
+			},
+			"021 - sich bewerben bei + D":{
+				de: "Er bewirbt sich bei einer Bäckerei.",
+				hu: " वह एक बेकरी में नौकरी के लिए अप्लाई कर रहा है।"
+			},
+			"022 - sich bewerben um + A":{
+				de: "Sie bewirbt sich um eine Stelle als Sekretärin.",
+				hu: " वह सेक्रेटरी की पोस्ट के लिए अप्लाई कर रही है।"
+			},
+			"023 - sich beziehen auf + A":{
+				de: "Meine Frage bezieht sich auf Ihr Angebot.",
+				hu: " मेरा सवाल आपके ऑफर के बारे में है।"
+			},
+			"024 - bitten um + A":{
+				de: "Der Redner bittet um Aufmerksamkeit.",
+				hu: " स्पीकर ध्यान देने के लिए कहता है।"
+			},
+			"025 - danken für + A":{
+				de: "Sam dankt für Ritas Hilfe.",
+				hu: " सैम रीटा को उसकी मदद के लिए धन्यवाद देता है।"
+			},
+			"026 - denken an + A":{
+				de: "Maria denkt oft an den Urlaub.",
+				hu: " मारिया अक्सर छुट्टी पर जाने के बारे में सोचती है।"
+			},
+			"027 - diskutieren über + A":{
+				de: "Das Kabinett diskutiert über eine neue Steuer.",
+				hu: " कैबिनेट एक नए टैक्स पर बात कर रही है।"
+			},
+			"028 - einladen zu + D":{
+				de: "Ich lade dich zu meinem Geburtstag ein.",
+				hu: " मैं तुम्हें अपनी बर्थडे पार्टी में बुला रहा हूँ।"
+			},
+			"029 - sich entscheiden für + A":{
+				de: "Frauen entscheiden sich gern für Gold. ",
+				hu: " औरतें अक्सर सोना चुनती हैं।"
+			},
+			"030 - sich entschließen zu + D":{
+				de: "Karl entschließt sich zu einem Studium. ",
+				hu: " कार्ल यूनिवर्सिटी जाने का फैसला करता है।"
+			},
+			"031 - sich entschuldigen bei + D":{
+				de: "Mia entschuldigt sich bei ihrem Mann.",
+				hu: " मिया अपने पति से माफी मांगती है।"
+			},
+			"032 - sich entschuldigen für + A":{
+				de: "Ich entschuldige mich für das Verhalten meiner Tochter.",
+				hu: " मैं अपनी बेटी के बर्ताव के लिए माफी मांगता हूँ।"
+			},
+			"033 - erfahren von + D":{
+				de: "Heute haben wir von dem Bauprojekt erfahren.",
+				hu: " आज हमें कंस्ट्रक्शन प्रोजेक्ट के बारे में पता चला।"
+			},
+			"034 - sich erholen von + D":{
+				de: "Von dem Schock muss ich mich erst erholen.",
+				hu: " मुझे सदमे से उबरने की ज़रूरत है।"
+			},
+			"035 - sich erinnern an + A":{
+				de: "Wir erinnern uns gern an unser erstes Ehejahr.",
+				hu: " हमें अपनी शादी का पहला साल प्यार से याद है।"
+			},
+			"036 - erkennen an + D":{
+				de: "Man erkennt Pinocchio an seiner langen Nase.",
+				hu: " आप पिनोकियो को उसकी लंबी नाक से पहचान सकते हैं।"
+			},
+			"037 - sich erkundigen nach + D":{
+				de: "Oma erkundigt sich oft nach meinen Plänen.",
+				hu: " दादी अक्सर मेरे प्लान के बारे में पूछती हैं।"
+			},
+			"038 - erschrecken über + A":{
+				de: "Die Frau erschrickt über eine Maus.",
+				hu: " एक चूहे को देखकर औरत चौंक जाती है।"
+			},
+			"039 - erzählen über + A":{
+				de: "Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+				hu: " एक ईस्ट बर्लिनर पुराने GDR में अपनी ज़िंदगी के बारे में बात करता है।"
+			},
+			"040 - erzählen von + D":{
+				de: "Der Bischoff erzählt von der Reise nach Rom.",
+				hu: " बिशप रोम की अपनी ट्रिप के बारे में बताता है।"
+			},
+			"041 - fragen nach + D":{
+				de: "Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+				hu: " पत्रकार कानून में बदलाव के नतीजों के बारे में पूछता है।"
+			},
+			"042 - sich freuen auf + A":{
+				de: "Kinder freuen sich auf Weihnachten.",
+				hu: " बच्चे क्रिसमस का इंतज़ार करते हैं।"
+			},
+			"043 - sich freuen über + A":{
+				de: "Jeder freut sich über eine Gehaltserhöhung.",
+				hu: " सैलरी बढ़ने से हर कोई खुश है।"
+			},
+			"044 - gehen um + A":{
+				de: "Immer geht es um Geld.",
+				hu: " यह हमेशा पैसे के बारे में होता है।"
+			},
+			"045 - gehören zu + D":{
+				de: "Das Elsass gehört zu Frankreich.",
+				hu: " अलसैस फ्रांस का है।"
+			},
+			"046 - sich gewöhnen an + A":{
+				de: "Ich kann mich nicht an den Euro gewöhnen.",
+				hu: " मुझे यूरो की आदत नहीं पड़ रही है।"
+			},
+			"047 - glauben an + A":{
+				de: "Teenager glauben an die große Liebe.",
+				hu: " टीनएजर्स सच्चे प्यार में विश्वास करते हैं।"
+			},
+			"048 - gratulieren zu + D":{
+				de: "Wir gratulieren dir zum 18. Geburtstag.",
+				hu: " हम आपको आपके 18वें जन्मदिन पर बधाई देते हैं।"
+			},
+			"049 - halten für + A":{
+				de: "Ich halte das für keine gute Idee.",
+				hu: " मुझे नहीं लगता कि यह अच्छा आइडिया है।"
+			},
+			"050 - halten von + D":{
+				de: "Kinder halten nicht viel von Ordnung.",
+				hu: " बच्चों को साफ़-सफ़ाई की ज़्यादा परवाह नहीं होती।"
+			},
+			"051 - sich handeln um + A":{
+				de: "Bei der Kopie handelt es sich nicht um Originalsoftware.",
+				hu: " कॉपी ओरिजिनल सॉफ़्टवेयर नहीं है।"
+			},
+			"052 - handeln von + D":{
+				de: "Märchen handeln von Gut und Böse.",
+				hu: " परियों की कहानियाँ अच्छाई और बुराई के बारे में होती हैं।"
+			},
+			"053 - helfen bei + D":{
+				de: "Kann ich dir beim Tischdecken helfen?",
+				hu: " क्या मैं टेबल सेट करने में आपकी मदद कर सकता हूँ?"
+			},
+			"054 - hindern an + D":{
+				de: "Ein langsamer Fahrer hindert Greta am Überholen.",
+				hu: " एक धीमा ड्राइवर ग्रेटा को ओवरटेक करने से रोकता है।"
+			},
+			"055 - hoffen auf + A":{
+				de: "Im März hoffen alle auf warme Frühlingstage.",
+				hu: " मार्च में, हर कोई गर्म वसंत के दिनों की उम्मीद करता है।"
+			},
+			"056 - hören von + D":{
+				de: "Ich habe seit Sonntag nichts von Piet gehört.",
+				hu: " मैंने रविवार से पीट से बात नहीं की है।"
+			},
+			"057 - sich informieren über + A":{
+				de: "Auf der Messe kann man sich über die neue Technologie informieren.",
+				hu: " आप ट्रेड फेयर में नई टेक्नोलॉजी के बारे में पता कर सकते हैं।"
+			},
+			"058 - sich interessieren für + A":{
+				de: "Monika interessiert sich für ein Smartphone.",
+				hu: " मोनिका को स्मार्टफोन में दिलचस्पी है।"
+			},
+			"059 - klagen über + A":{
+				de: "Frauen klagen häufig über Kopfschmerzen.",
+				hu: " महिलाओं को अक्सर सिरदर्द की शिकायत होती है।"
+			},
+			"060 - kämpfen für + A":{
+				de: "Die Gewerkschaft kämpft für höhere Löhne.",
+				hu: " यूनियन ज़्यादा सैलरी के लिए लड़ रही है।"
+			},
+			"061 - kommen zu + D":{
+				de: "In der Besprechung kam es zu einem Streit.",
+				hu: " मीटिंग के दौरान बहस हो गई।"
+			},
+			"062 - sich konzentrieren auf + A":{
+				de: "Karl konzentriert sich auf seine Hausaufgaben.",
+				hu: " कार्ल अपने होमवर्क पर ध्यान दे रहा है।"
+			},
+			"063 - sich kümmern um + A":{
+				de: "Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+				hu: " नर्सिंग होम में, वे बीमार बुज़ुर्ग लोगों की देखभाल करते हैं।"
+			},
+			"064 - lachen über + A":{
+				de: "Über einen guten Witz muss man laut lachen.",
+				hu: " आपको एक अच्छे मज़ाक पर ज़ोर से हंसना होगा।"
+			},
+			"065 - leiden an + D":{
+				de: "Jeder fünfte Manager leidet an Burn-out.",
+				hu: " पाँच में से एक मैनेजर बर्नआउट से परेशान है।"
+			},
+			"066 - leiden unter + A":{
+				de: "Kaffeetrinker leiden unter Schlafproblemen.",
+				hu: " कॉफ़ी पीने वालों को नींद की दिक्कत होती है।"
+			},
+			"067 - nachdenken über + A":{
+				de: "Beamte müssen nicht über ihre Rente nachdenken.",
+				hu: " सिविल सर्वेंट को अपनी पेंशन की चिंता करने की ज़रूरत नहीं है।"
+			},
+			"068 - protestieren gegen + A":{
+				de: "Viele Menschen protestieren gegen Atomkraft.",
+				hu: " बहुत से लोग न्यूक्लियर पावर का विरोध कर रहे हैं।"
+			},
+			"069 - rechnen mit + D":{
+				de: "Im Januar muss man mit Schnee rechnen.",
+				hu: " आपको जनवरी में बर्फ़बारी की उम्मीद करनी होगी।"
+			},
+			"070 - reden über + A":{
+				de: "Deine Mutter redet gern über Krankheiten.",
+				hu: " आपकी माँ को बीमारियों के बारे में बात करना पसंद है।"
+			},
+			"071 - reden von + D":{
+				de: "Großvater redet von den guten alten Zeiten.",
+				hu: " दादाजी पुराने अच्छे दिनों के बारे में बात करते हैं।"
+			},
+			"072 - riechen nach + D":{
+				de: "Hier riecht es nach Kuchen.",
+				hu: " यहाँ केक जैसी खुशबू आ रही है।"
+			},
+			"073 - sagen über + A":{
+				de: "Brigitte sagt über Dietmar, dass er oft lügt.",
+				hu: " ब्रिगिट कहती है कि डाइटमार अक्सर झूठ बोलता है।"
+			},
+			"074 - sagen zu + D":{
+				de: "Was sagst du zu meinem neuen Haarschnitt?",
+				hu: " मेरा नया हेयरकट आपको कैसा लगा?"
+			},
+			"075 - schicken an + A":{
+				de: "Die E-Mail schicke ich dir morgen.",
+				hu: " मैं आपको कल ईमेल भेजूंगा।"
+			},
+			"076 - schicken zu + D":{
+				de: "Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+				hu: " जनरल प्रैक्टिशनर मरीज़ को स्पेशलिस्ट के पास भेज रहे हैं।"
+			},
+			"077 - schimpfen über + A":{
+				de: "Alle schimpfen über den Regen.",
+				hu: " हर कोई बारिश की शिकायत कर रहा है।"
+			},
+			"078 - schmecken nach + D":{
+				de: "Muscheln schmecken nach Meerwasser.",
+				hu: " मसल्स का स्वाद समुद्री पानी जैसा होता है।"
+			},
+			"079 - schreiben an + A":{
+				de: "Bitte schreibe noch heute an deine Mutter.",
+				hu: " प्लीज़ आज अपनी माँ को लिखें।"
+			},
+			"080 - sich schützen vor + D":{
+				de: "Den Computer des Ministers muss man vor Hackern schützen.",
+				hu: " मिनिस्टर के कंप्यूटर को हैकर्स से बचाना होगा।"
+			},
+			"081 - sein für + A":{
+				de: "Ich bin für die Abschaffung der Kinderarbeit.",
+				hu: " मैं बाल मज़दूरी खत्म करने के पक्ष में हूँ।"
+			},
+			"082 - sein gegen  + A":{
+				de: "Viele sind gegen Steuererhöhungen.",
+				hu: " बहुत से लोग टैक्स बढ़ाने के खिलाफ हैं।"
+			},
+			"083 - sorgen für + A":{
+				de: "Kinder müssen im Alter für ihre Eltern sorgen.",
+				hu: " बच्चों को बुढ़ापे में अपने माता-पिता की देखभाल करनी होती है।"
+			},
+			"084 - sprechen mit + D":{
+				de: "Ich spreche noch einmal mit deinem Vater.",
+				hu: " मैं तुम्हारे पिता से फिर बात करूँगा।"
+			},
+			"085 - sprechen über + A":{
+				de: "Lass uns über deine Zukunft sprechen.",
+				hu: " चलो तुम्हारे भविष्य के बारे में बात करते हैं।"
+			},
+			"086 - sterben an + D":{
+				de: "Zwei Deutsche sind an der Grippe gestorben.",
+				hu: " दो जर्मन फ्लू से मर गए हैं।"
+			},
+			"087 - streiten mit + D":{
+				de: "Ich möchte nicht mit dir streiten.",
+				hu: " मैं तुमसे बहस नहीं करना चाहता।"
+			},
+			"088 - streiten über + A":{
+				de: "Die USA und Deutschland streiten über eine neue Strategie.",
+				hu: " USA और जर्मनी एक नई स्ट्रैटेजी के बारे में बहस कर रहे हैं।"
+			},
+			"089 - teilnehmen an + D":{
+				de: "Nordkorea nimmt an der Fußball-WM teil.",
+				hu: " नॉर्थ कोरिया वर्ल्ड कप में हिस्सा ले रहा है।"
+			},
+			"090 - telefonieren mit + D":{
+				de: "Hast du schon mit dem Arzt telefoniert?",
+				hu: " क्या तुमने डॉक्टर से बात कर ली है?"
+			},
+			"091 - sich treffen mit + D":{
+				de: "Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+				hu: " चांसलर रोज़ अपनी प्रेस सेक्रेटरी से मिलती हैं।"
+			},
+			"092 - sich treffen zu + D":{
+				de: "Sie treffen sich nur zu einem kurzen Gespräch.",
+				hu: " वे सिर्फ़ थोड़ी देर बात करने के लिए मिलते हैं।"
+			},
+			"093 - überreden zu + D":{
+				de: "Kann ich dich zu einem Glas Wein überreden?",
+				hu: " क्या मैं तुम्हें एक ग्लास वाइन पीने के लिए मना सकता हूँ?"
+			},
+			"094 - sich unterhalten mit + D":{
+				de: "Der Sänger unterhält sich mit dem Bassisten.",
+				hu: " सिंगर बेसिस्ट से बात कर रहा है।"
+			},
+			"095 - sich unterhalten über + A":{
+				de: "Die Modedesigner unterhalten sich über die neuesten Trends.",
+				hu: " फैशन डिज़ाइनर लेटेस्ट ट्रेंड्स पर बात कर रहे हैं।"
+			},
+			"096 - sich verabreden mit + D":{
+				de: "Heute verabrede ich mich mit einer Freundin.",
+				hu: " मैं आज एक दोस्त से मिल रहा हूँ।"
+			},
+			"097 - sich verabschieden von + D":{
+				de: "Nun wollen wir uns von euch verabschieden.",
+				hu: " अब हम अलविदा कहना चाहेंगे।"
+			},
+			"098 - vergleichen mit + D":{
+				de: "Vergleichen Sie München mit Berlin.",
+				hu: " म्यूनिख की तुलना बर्लिन से करें।"
+			},
+			"099 - sich verlassen auf + A":{
+				de: "Auf mich kann man sich verlassen.",
+				hu: " आप मुझ पर भरोसा कर सकते हैं।"
+			},
+			"100 - sich verlieben in + A":{
+				de: "Britta hat sich in das alte Bauernhaus verliebt.",
+				hu: " ब्रिटा को पुराने फार्महाउस से प्यार हो गया है।"
+			},
+			"101 - sich verstehen mit + D":{
+				de: "Daniel versteht sich gut mit seinem Chef.",
+				hu: " डेनियल की अपने बॉस से अच्छी बनती है।"
+			},
+			"102 - verstehen von + D":{
+				de: "Verstehst du etwas von Elektrik?",
+				hu: " क्या तुम्हें बिजली के काम के बारे में कुछ पता है?"
+			},
+			"103 - sich vorbereiten auf + A":{
+				de: "Karl bereitet sich auf eine Präsentation vor.",
+				hu: " कार्ल एक प्रेजेंटेशन की तैयारी कर रहा है।"
+			},
+			"104 - warnen vor + D":{
+				de: "Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+				hu: " उसे पुरानी कार की ज़्यादा कीमत के बारे में चेतावनी दी गई थी।"
+			},
+			"105 - warten auf + A":{
+				de: "In Namibia wartet man lange auf einen Bus.",
+				hu: " नामीबिया में, बस के लिए बहुत देर तक इंतज़ार करना पड़ता है।"
+			},
+			"106 - sich wenden an + A":{
+				de: "Bitte wenden Sie sich an die Buchhaltung.",
+				hu: " कृपया अकाउंटिंग डिपार्टमेंट से संपर्क करें।"
+			},
+			"107 - werden zu + D":{
+				de: "Unter null Grad wird Eis zu Wasser.",
+				hu: " ज़ीरो डिग्री सेल्सियस से नीचे, बर्फ़ पानी में बदल जाती है।"
+			},
+			"108 - wissen von + D":{
+				de: "Ich weiß nichts von neuen Computern für unser Team.",
+				hu: " मुझे हमारी टीम के लिए नए कंप्यूटर के बारे में कुछ नहीं पता।"
+			},
+			"109 - sich wundern über + A":{
+				de: "Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+				hu: " कई जर्मन अचानक बढ़ी बिजली की कीमतों से हैरान हैं।"
+			},
+			"110 - zuschauen bei + D":{
+				de: "Kann ich dir bei der Reparatur zuschauen?",
+				hu: " क्या मैं तुम्हें रिपेयर करते हुए देख सकता हूँ?"
+			},
+			"111 - zusehen bei + D":{
+				de: "Willst du mir beim Kochen zusehen?",
+				hu: " क्या तुम मुझे खाना बनाते हुए देखना चाहते हो?"
+			},
+			"112 - zweifeln an + D":{
+				de: "John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+				hu: " जॉन को शक है कि उसके बेटे ने सच कहा है।"
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

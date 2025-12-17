@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="persian0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - persisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - Abschied nehmen von": "خداحافظی کن - 001",
+			"002 - die Absicht haben": "قصد دارند - 002",
+			"003 - eine Absprache treffen mit": "با - 003",
+			"004 - eine Ahnung haben von": "ایده ای از - 004",
+			"005 - eine Andeutung machen": "یک اشاره کنید - 005",
+			"006 - Anerkennung finden bei/für": "شناسایی را در/برای پیدا کنید - 006",
+			"007 - einen Anfang machen mit": "شروع کن با - 007",
+			"008 - eine Anforderung erfüllen": "برآورده کردن یک نیاز - 008",
+			"009 - ein Angebot machen": "پیشنهاد بدهید - 009",
+			"010 - ein Angebot unterbreiten": "پیشنهاد بدهید - 010",
+			"011 - etwas im Angebot haben": "چیزی در پیشنهاد داشته باشید - 011",
+			"012 - etwas in Anspruch nehmen": "چیزی بردار - 012",
+			"013 - einen Antrag stellen auf": "درخواست ارسال کنید - 013",
+			"014 - eine Antwort geben": "جواب بده - 014",
+			"015 - eine Anweisung geben": "یک دستورالعمل بدهد - 015",
+			"016 - zur Anwendung kommen": "مورد استفاده قرار گیرد - 016",
+			"017 - einen Auftrag erteilen": "سفارش دهید - 017",
+			"018 - in Auftrag geben zu": "کمیسیون به - 018",
+			"019 - aus den Augen verlieren": "از بین رفتن - 019",
+			"020 - zum Ausdruck bringen": "بیان کنید - 020",
+			"021 - zum Ausdruck kommen": "بیان شود - 021",
+			"022 - Auskunft geben": "ارائه اطلاعات - 022",
+			"023 - eine Äußerung machen": "بیانیه ای بیان کنید - 023",
+			"024 - Beachtung finden bei/für": "توجه به/برای - 024",
+			"025 - Beachtung schenken": "توجه کنید - 025",
+			"026 - einen Beitrag leisten für/zu": "کمک به/برای - 026",
+			"027 - Berücksichtigung finden": "در نظر گرفتن - 027",
+			"028 - bei/wegen Bescheid geben": "اخطار دادن در/به دلیل - 028",
+			"029 - eine Bestellung aufgeben": "سفارش دهید - 029",
+			"030 - in Betracht kommen": "در نظر گرفته شود - 030",
+			"031 - in Betracht ziehen": "در نظر گرفتن - 031",
+			"032 - in Betrieb nehmen": "به بهره برداری رساند - 032",
+			"033 - Bezug nehmen auf": "رجوع شود - 033",
+			"034 - im Blick haben": "چشم داشته باشید - 034",
+			"035 - die Daumen drücken für": "انگشتان ضربدری برای - 035",
+			"036 - zur Debatte stehen": "قابل بحث هستند - 036",
+			"037 - eine Diskussion führen über/mit": "بحث در مورد/با - 037",
+			"038 - zur Diskussion stellen": "قرار دادن برای بحث - 038",
+			"039 - unter Druck setzen": "تحت فشار قرار دهد - 039",
+			"040 - einen Eindruck bekommen von": "برداشتی از - 040",
+			"041 - Eindruck machen auf": "تحت تاثیر قرار دادن - 041",
+			"042 - Einfluss nehmen auf": "تحت تأثیر قرار دادن - 042",
+			"043 - eine Entscheidung treffen": "تصمیم بگیر - 043",
+			"044 - zur Entscheidung bringen": "را به تصمیم گیری برساند - 044",
+			"045 - zur Entscheidung stellen": "تصمیم بگیر - 045",
+			"046 - eine Erfahrung machen mit": "تجربه ای با - 046",
+			"047 - in Erfahrung bringen": "پیدا کردن - 047",
+			"048 - in Erfüllung gehen": "به حقیقت پیوست - 048",
+			"049 - eine Erklärung finden für": "توضیحی برای - 049",
+			"050 - Ersatz leisten für": "جبران کند - 050",
+			"051 - Feedback bekommen": "بازخورد دریافت کنید - 051",
+			"052 - Feedback geben": "بازخورد بدهید - 052",
+			"053 - einen Fehler beheben": "رفع یک خطا - 053",
+			"054 - zur Folge haben": "نتیجه - 054",
+			"055 - eine Forderung stellen": "مطالبه کنید - 055",
+			"056 - eine Frage stellen": "سوال بپرس - 056",
+			"057 - eine Freude bereiten": "شادی به ارمغان بیاورد - 057",
+			"058 - ins Geschäft kommen mit": "وارد تجارت با - 058",
+			"059 - ein Gespräch führen über/mit": "گفتگو در مورد/با - 059",
+			"060 - ins Gespräch bringen": "وارد گفتگو کنید - 060",
+			"061 - den Glauben verlieren": "از دست دادن ایمان - 061",
+			"062 - etwas im Griff haben": "چیزی را تحت کنترل داشته باشید - 062",
+			"063 - etwas in den Griff bekommen": "چیزی را تحت کنترل بگیرید - 063",
+			"064 - auf den Grund gehen": "به پایین بروید - 064",
+			"065 - jemanden vor eine Herausforderung stellen": "برای ارائه یک چالش - 065",
+			"066 - Hilfe leisten": "کمک کند - 066",
+			"067 - zu Hilfe nehmen": "کمک بگیرید - 067",
+			"068 - die Hoffnung aufgeben": "امید را از دست بده - 068",
+			"069 - sich Hoffnung machen": "امید داشته باشید - 069",
+			"070 - auf eine Idee kommen": "یک ایده بیاور - 070",
+			"071 - infrage kommen": "زیر سوال رفتن - 071",
+			"072 - infrage stellen": "سوال - 072",
+			"073 - Interesse wecken an/für": "برانگیختن علاقه به/برای - 073",
+			"074 - Interesse zeigen an/für": "نشان دادن علاقه به/برای - 074",
+			"075 - in Kenntnis setzen von": "اطلاع از - 075",
+			"076 - zur Kenntnis nehmen": "توجه داشته باشید - 076",
+			"077 - Kontakt aufnehmen mit": "با - 077",
+			"078 - Klarheit gewinnen über": "به وضوح در مورد - 078",
+			"079 - Kontakt halten": "در تماس باشید - 079",
+			"080 - Kontakt knüpfen mit": "با - 080",
+			"081 - Kontakt knüpfen zu": "با - 081",
+			"082 - in Kontakt stehen mit": "در تماس باشد - 082",
+			"083 - in Kontakt treten mit": "با - 083",
+			"084 - die Kosten tragen für": "هزینه ها را برای - 084",
+			"085 - die Kosten übernehmen für": "پوشش هزینه ها برای - 085",
+			"086 - in Kraft treten": "لازم الاجرا شود - 086",
+			"087 - Krieg führen gegen/mit/wegen": "جنگ علیه / با / به دلیل - 087",
+			"088 - Kritik üben an/für": "انتقاد کردن/برای - 088",
+			"089 - den Kürzeren ziehen": "نی کوتاه را بکش - 089",
+			"090 - jemanden auf dem Laufenden halten": "کسی را به روز نگه دارید - 090",
+			"091 - auf dem Laufenden sein": "به روز باشد - 091",
+			"092 - der Meinung sein": "نظر داشته باشید - 092",
+			"093 - in Ordnung bringen": "مرتب کردن - 093",
+			"094 - ein Profil anlegen": "یک پروفایل ایجاد کنید - 094",
+			"095 - eine Prüfung bestehen": "قبولی در یک امتحان - 095",
+			"096 - durch eine Prüfung fallen": "رد شدن در امتحان - 096",
+			"097 - eine Qualifikation mitbringen": "صلاحیت بیاورد - 097",
+			"098 - einen Rat geben": "یه نصیحت کن - 098",
+			"099 - Rechenschaft ablegen über": "حساب برای - 099",
+			"100 - zur Rechenschaft ziehen für": "پاسخگو باشد - 100",
+			"101 - in Rechnung stellen": "فاکتور - 101",
+			"102 - eine Rede halten über": "سخنرانی در مورد - 102",
+			"103 - in eine Reihenfolge bringen": "به ترتیب قرار دادن - 103",
+			"104 - den Respekt verlieren vor": "از دست دادن احترام - 104",
+			"105 - Rückmeldung geben": "بازخورد دادن - 105",
+			"106 - Rücksicht nehmen auf": "با ملاحظه باشید - 106",
+			"107 - die Ruhe bewahren": "آرامش خود را حفظ کن - 107",
+			"108 - Schluss machen mit": "جدا شدن با - 108",
+			"109 - zur Sprache bringen": "مطرح کردن - 109",
+			"110 - Stellung nehmen zu": "موضع گیری کنید - 110",
+			"111 - unter Strafe stehen": "مجازات شود - 111",
+			"112 - unter Strafe stellen": "قابل مجازات - 112",
+			"113 - in Streik treten": "اعتصاب کنند - 113",
+			"114 - Stress haben mit": "استرس داشتن با - 114",
+			"115 - unter Stress stehen": "تحت استرس باشد - 115",
+			"116 - eine Tätigkeit ausüben": "فعالیتی را انجام دهد - 116",
+			"117 - im Trend liegen": "در روند هستند - 117",
+			"118 - einen Überblick bekommen": "یک نمای کلی دریافت کنید - 118",
+			"119 - einen Überblick geben": "یک نمای کلی ارائه دهید - 119",
+			"120 - einen Unterschied machen": "تفاوت ایجاد کند - 120",
+			"121 - eine Verabredung treffen": "قرار ملاقات بگذار - 121",
+			"122 - die Verantwortung übernehmen für": "مسئولیت پذیرفتن - 122",
+			"123 - sich in Verbindung setzen mit": "با - 123",
+			"124 - eine Vereinbarung treffen zu": "به توافق برسند - 124",
+			"125 - zur Verfügung stehen": "در دسترس هستند - 125",
+			"126 - zur Verfügung stellen": "فراهم کند - 126",
+			"127 - in Verhandlungen stehen": "در حال مذاکره هستند - 127",
+			"128 - in Verhandlungen treten": "وارد مذاکره شود - 128",
+			"129 - ein Versprechen geben": "قول بده - 129",
+			"130 - einen Vertrag abschließen mit": "منعقد کردن قرارداد با - 130",
+			"131 - Vertrauen herstellen": "اعتماد ایجاد کنید - 131",
+			"132 - Vorbereitungen treffen": "مقدمات را فراهم کنید - 132",
+			"133 - im Vordergrund stehen": "در پیش زمینه باشد - 133",
+			"134 - einen Vorschlag machen": "پیشنهاد بدهید - 134",
+			"135 - einen Vorschlag unterbreiten": "پیشنهاد بدهید - 135",
+			"136 - Vorsorge treffen für": "اقدامات احتیاطی برای - 136",
+			"137 - eine Wahl treffen": "انتخاب کنید - 137",
+			"138 - im Wettbewerb stehen mit": "رقابت کنند - 138",
+			"139 - Wert legen auf": "ارزش مکان در - 139",
+			"140 - Wertschätzung genießen": "از قدردانی لذت ببرید - 140",
+			"141 - Widerstand leisten gegen": "در مقابل مقاومت کن - 141",
+			"142 - Wirkung zeigen": "نشان دادن اثر - 142",
+			"143 - das Wort ergreifen": "حرف بزن - 143",
+			"144 - ein Ziel setzen": "یک هدف تعیین کنید - 144",
+			"145 - ein Ziel verfolgen": "یک هدف را دنبال کند - 145",
+			"146 - eine Zusage erhalten": "تعهد دریافت کنند - 146",
+			"147 - im Zusammenhang stehen mit": "مرتبط هستند - 147",
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von":{
+				de: " Ich werde von dir Abschied nehmen.",
+				hu: "من با شما خداحافظی خواهم کرد. "
+			},
+			"002 - die Absicht haben":{
+				de: " Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: "من قصد ندارم حقیقت را به او بگویم. "
+			},
+			"003 - eine Absprache treffen mit":{
+				de: " Wir haben mit der Firma keine Absprache getroffen.",
+				hu: "ما هیچ هماهنگی با شرکت انجام نداده ایم. "
+			},
+			"004 - eine Ahnung haben von":{
+				de: " Er hat keine Ahnung von moderner Technologie.",
+				hu: "او هیچ ایده ای از فناوری مدرن ندارد. "
+			},
+			"005 - eine Andeutung machen":{
+				de: " Er hat eine klare Andeutung über seine Kündigung gemacht. ",
+				hu: "او نشانه روشنی از پایان کار خود ارائه کرد. "
+			},
+			"006 - Anerkennung finden bei/für":{
+				de: " Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit. ",
+				hu: "کارمند جدید به سرعت در بین همکارانش به دلیل قابلیت اطمینان خود شناخته می شود. "
+			},
+			"007 - einen Anfang machen mit":{
+				de: " Wir sollten endlich einen Anfang mit den Vorbereitungen machen. ",
+				hu: "بالاخره باید آماده سازی را شروع کنیم. "
+			},
+			"008 - eine Anforderung erfüllen":{
+				de: " Das Produkt muss alle Sicherheitsanforderungen erfüllen. ",
+				hu: "محصول باید تمام الزامات ایمنی را برآورده کند. "
+			},
+			"009 - ein Angebot machen":{
+				de: " Die Firma machte dem Kunden ein sehr attraktives Angebot. ",
+				hu: "این شرکت پیشنهاد بسیار جذابی به مشتری داد. "
+			},
+			"010 - ein Angebot unterbreiten":{
+				de: " Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten. ",
+				hu: "توسعه دهنده فردا یک پیشنهاد کتبی به ما خواهد داد. "
+			},
+			"011 - etwas im Angebot haben":{
+				de: " Der Supermarkt hat diese Woche frische Erdbeeren im Angebot. ",
+				hu: "سوپرمارکت این هفته توت فرنگی تازه دارد. "
+			},
+			"012 - etwas in Anspruch nehmen":{
+				de: " Die Reparatur nahm viel Zeit in Anspruch. ",
+				hu: "تعمیر زمان زیادی را صرف کرد. "
+			},
+			"013 - einen Antrag stellen auf":{
+				de: " Viele Studenten stellen einen Antrag auf BAföG. ",
+				hu: "بسیاری از دانش آموزان برای BAföG درخواست می دهند. "
+			},
+			"014 - eine Antwort geben":{
+				de: " Ich konnte noch keine Antwort auf die Aufgabe geben.",
+				hu: "هنوز نتوانسته ام جواب تکلیف را بدهم. "
+			},
+			"015 - eine Anweisung geben":{
+				de: " Wir haben im Computerprogramm eine Anweisung gegeben.",
+				hu: "در برنامه کامپیوتری دستور دادیم. "
+			},
+			"016 - zur Anwendung kommen":{
+				de: " Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+				hu: "این برنامه فقط در آیفون قابل استفاده است."
+			},
+			"017 - einen Auftrag erteilen":{
+				de: " Er hat einen Auftrag für eine kleine Firma erteilt.",
+				hu: "او برای یک شرکت کوچک سفارش داد. "
+			},
+			"018 - in Auftrag geben zu":{
+				de: " Die Schule hat zu Renovieren in Auftrag gegeben.",
+				hu: "این مدرسه عملیات بازسازی را انجام داده است. "
+			},
+			"019 - aus den Augen verlieren":{
+				de: " Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+				hu: "من مادرم را در مرکز خرید از دست دادم. "
+			},
+			"020 - zum Ausdruck bringen":{
+				de: " In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen. ",
+				hu: "در این نامه باید به وضوح نگرانی های خود را بیان کنید. "
+			},
+			"021 - zum Ausdruck kommen":{
+				de: " Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck. ",
+				hu: "روحیه تیم با تشویق های بلند نشان داده شد. "
+			},
+			"022 - Auskunft geben":{
+				de: " Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+				hu: "معلم اطلاعاتی در مورد امتحان به ما داد. "
+			},
+			"023 - eine Äußerung machen":{
+				de: " Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+				hu: "وزیر خارجه در این مورد اظهار نظری نکرده است. "
+			},
+			"024 - Beachtung finden bei/für":{
+				de: " Mein Vorschlag fand bei der Klasse keine Beachtung.",
+				hu: "پیشنهاد من توسط کلاس نادیده گرفته شد. "
+			},
+			"025 - Beachtung schenken":{
+				de: " Wir können nicht alle Punkten Beachtung schenken.",
+				hu: "ما نمی توانیم به همه نکات توجه کنیم. "
+			},
+			"026 - einen Beitrag leisten für/zu":{
+				de: " Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+				hu: "شرکت هیچ کمکی به آموزش بیشتر شما نمی کند. "
+			},
+			"027 - Berücksichtigung finden":{
+				de: " Die Firma hat deine Überstunden die Berücksichtigung finden.",
+				hu: "شرکت باید اضافه کاری شما را در نظر بگیرد. "
+			},
+			"028 - bei/wegen Bescheid geben":{
+				de: " Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+				hu: "نمی توانم به شما اطلاع دهم چون آفلاین خواهم بود. "
+			},
+			"029 - eine Bestellung aufgeben":{
+				de: " Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+				hu: "چون پول ندارم نمیخوام سفارش بدم. "
+			},
+			"030 - in Betracht kommen":{
+				de: " Diese Lösung kommt für uns nicht in Betracht.",
+				hu: "این راه حل برای ما گزینه ای نیست. "
+			},
+			"031 - in Betracht ziehen":{
+				de: " Wir müssen die Verspätung in Betracht ziehen.",
+				hu: "باید تاخیر را در نظر بگیریم. "
+			},
+			"032 - in Betrieb nehmen":{
+				de: " Der Techniker hat der Computer in Betrieb genommen.",
+				hu: "تکنسین کامپیوتر را راه اندازی کرد. "
+			},
+			"033 - Bezug nehmen auf":{
+				de: " Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+				hu: "به صحبتی که دیروز داشتیم اشاره می کنم. "
+			},
+			"034 - im Blick haben":{
+				de: " Die Firma hat die Konkurrenz immer im Blick.",
+				hu: "این شرکت همیشه رقابت را زیر نظر دارد. "
+			},
+			"035 - die Daumen drücken für":{
+				de: " Wir drücken dir die Daumen für deine Prüfung.",
+				hu: "ما برای امتحان شما دست روی دست گذاشته ایم. "
+			},
+			"036 - zur Debatte stehen":{
+				de: " Die neuen Vorschläge stehen zur Debatte.",
+				hu: "پیشنهادهای جدید در حال بحث و بررسی هستند. "
+			},
+			"037 - eine Diskussion führen über/mit":{
+				de: " Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+				hu: "من با همسرم در مورد آینده صحبت کردم. "
+			},
+			"038 - zur Diskussion stellen":{
+				de: " Dieses Thema möchte ich zur Diskussion stellen.",
+				hu: "من می خواهم این موضوع را برای بحث مطرح کنم. "
+			},
+			"039 - unter Druck setzen":{
+				de: " Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+				hu: "شرایط امتحان او را تحت فشار زیادی قرار داد. "
+			},
+			"040 - einen Eindruck bekommen von":{
+				de: " Ich habe von dir einen guten Eindruck bekommen.",
+				hu: "من برداشت خوبی از شما گرفتم. "
+			},
+			"041 - Eindruck machen auf":{
+				de: " Das neue Auto macht einen guten Eindruck auf mich.",
+				hu: "ماشین جدید تاثیر خوبی روی من گذاشت. "
+			},
+			"042 - Einfluss nehmen auf":{
+				de: " Sie nimmt Einfluss auf ihren Partner.",
+				hu: "او بر شریک زندگی خود تأثیر می گذارد. "
+			},
+			"043 - eine Entscheidung treffen":{
+				de: " Wir haben noch keine endgültige Entscheidung getroffen.",
+				hu: "هنوز تصمیم نهایی نگرفته ایم. "
+			},
+			"044 - zur Entscheidung bringen":{
+				de: " Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+				hu: "او هنوز نتوانسته در مورد مقصد تعطیلاتش تصمیم بگیرد. "
+			},
+			"045 - zur Entscheidung stellen":{
+				de: " Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+				hu: "تو برای آرزوهای من تصمیم نخواهی گرفت. "
+			},
+			"046 - eine Erfahrung machen mit":{
+				de: " Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+				hu: "با این کار می توانید تجربه خوبی داشته باشید. "
+			},
+			"047 - in Erfahrung bringen":{
+				de: " Wir müssen in Erfahrung bringen, wer das getan hat.",
+				hu: "باید ببینیم چه کسی این کار را کرده است. "
+			},
+			"048 - in Erfüllung gehen":{
+				de: " Endlich ist mein Traum in Erfüllung gegangen.",
+				hu: "بالاخره رویای من به حقیقت پیوست. "
+			},
+			"049 - eine Erklärung finden für":{
+				de: " Ich muss dringend eine Erklärung für mein Fehlen finden.",
+				hu: "من نیاز فوری دارم برای غیبت خود توضیحی پیدا کنم. "
+			},
+			"050 - Ersatz leisten für":{
+				de: " Die Versicherung muss Ersatz für den Schaden leisten. ",
+				hu: "شرکت بیمه باید خسارت وارده را جبران کند."
+			},
+			"051 - Feedback bekommen":{
+				de: " Hast du schon Feedback von deinem Chef bekommen",
+				hu: "آیا قبلاً از رئیس خود بازخورد دریافت کرده اید؟"
+			},
+			"052 - Feedback geben":{
+				de: " Kannst du mir bitte Feedback zu meinem Entwurf geben ",
+				hu: "لطفاً می توانید در مورد پیش نویس من بازخوردی به من بدهید"
+			},
+			"053 - einen Fehler beheben":{
+				de: " Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+				hu: "تکنسین توانست به سرعت خطای لپ تاپ من را برطرف کند. "
+			},
+			"054 - zur Folge haben":{
+				de: " Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+				hu: "تصمیمات ضعیف من عواقب جدی در پی خواهد داشت. "
+			},
+			"055 - eine Forderung stellen":{
+				de: " Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+				hu: "کارگران خواستار افزایش دستمزد شدند. "
+			},
+			"056 - eine Frage stellen":{
+				de: " Darf ich dir eine Frage stellen?",
+				hu: "میتونم یه سوال بپرسم؟ "
+			},
+			"057 - eine Freude bereiten":{
+				de: " Sie wollte ihren Eltern eine Freude bereiten.",
+				hu: "او می خواست پدر و مادرش را خوشحال کند. "
+			},
+			"058 - ins Geschäft kommen mit":{
+				de: " Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+				hu: "رئیس من شروع به تجارت با شرکت دیگری کرد. "
+			},
+			"059 - ein Gespräch führen über/mit":{
+				de: " Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+				hu: "رئیس با من در مورد ترفیع من صحبت کرد. "
+			},
+			"060 - ins Gespräch bringen":{
+				de: " Mein Kollege hat seine Idee ins Gespräch gebracht.",
+				hu: "همکارم ایده خود را مطرح کرد. "
+			},
+			"061 - den Glauben verlieren":{
+				de: " Er ist Atheist, weil er den Glauben verloren hat.",
+				hu: "او یک آتئیست است زیرا ایمانش را از دست داده است. "
+			},
+			"062 - etwas im Griff haben":{
+				de: " Ich habe die Situation im Griff.",
+				hu: "من اوضاع را تحت کنترل دارم. "
+			},
+			"063 - etwas in den Griff bekommen":{
+				de: " Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+				hu: "رئیس جدید می تواند مدیریت کارکنان را تحت کنترل درآورد. "
+			},
+			"064 - auf den Grund gehen":{
+				de: " Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+				hu: "روانشناس می خواهد به عمق ذهن انسان برسد. "
+			},
+			"065 - jemanden vor eine Herausforderung stellen":{
+				de: " Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+				hu: "کار جدید من را با چالش بزرگتری روبرو می کند. "
+			},
+			"066 - Hilfe leisten":{
+				de: " Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+				hu: "دوستانم در بوروکراسی آلمان به من کمک کردند. "
+			},
+			"067 - zu Hilfe nehmen":{
+				de: " Ich habe einen Freund zu Hilfe genommen.",
+				hu: "یه دوست پیدا کردم که کمکم کنه"
+			},
+			"068 - die Hoffnung aufgeben":{
+				de: " Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+				hu: "سیاستمدار از سیاست قطع امید کرده است. "
+			},
+			"069 - sich Hoffnung machen":{
+				de: " Du solltest dir keine falschen Hoffnungen machen.",
+				hu: "نباید امیدهای واهی داشت"
+			},
+			"070 - auf eine Idee kommen":{
+				de: " Ich bin plötzlich auf eine gute Idee gekommen.",
+				hu: "من ناگهان به یک ایده خوب رسیدم. "
+			},
+			"071 - infrage kommen":{
+				de: " Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+				hu: "نقل مکان به یک آپارتمان کوچکتر برای من غیر ممکن است. "
+			},
+			"072 - infrage stellen":{
+				de: " Er stellt die Entscheidung des Chefs infrage.",
+				hu: "او تصمیم رئیس را زیر سوال می برد. "
+			},
+			"073 - Interesse wecken an/für":{
+				de: " Die Werbung weckt Interesse für das neue Produkt.",
+				hu: "تبلیغات باعث ایجاد علاقه به محصول جدید می شود. "
+			},
+			"074 - Interesse zeigen an/für":{
+				de: " Viele Studenten zeigen Interesse an diesem Kurs.",
+				hu: "بسیاری از دانشجویان به این درس علاقه نشان می دهند. "
+			},
+			"075 - in Kenntnis setzen von":{
+				de: " Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+				hu: "خدمات به من از هزینه های بازسازی اطلاع خواهد داد. "
+			},
+			"076 - zur Kenntnis nehmen":{
+				de: " Ich nehme Ihre Beschwerde zur Kenntnis.",
+				hu: "من به شکایت شما توجه می کنم. "
+			},
+			"077 - Kontakt aufnehmen mit":{
+				de: " Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+				hu: "آیا می خواهید با دوستان قدیمی خود در تماس باشید؟ "
+			},
+			"078 - Klarheit gewinnen über":{
+				de: " Ich muss Klarheit über die Lösung gewinnen.",
+				hu: "من باید در مورد راه حل شفافیت پیدا کنم. "
+			},
+			"079 - Kontakt halten":{
+				de: " Ich halte Kontakt zu meinen alten Freunden.",
+				hu: "من با دوستان قدیمی ام در ارتباط هستم. "
+			},
+			"080 - Kontakt knüpfen mit":{
+				de: " Der Administrator knüpft Kontakte mit der Entwicklungen.",
+				hu: "مدیر با تحولات ارتباط برقرار می کند. "
+			},
+			"081 - Kontakt knüpfen zu":{
+				de: " Sie will mehrere Kontakte im Internet zu knüpfen.",
+				hu: "او می خواهد چندین تماس در اینترنت برقرار کند. "
+			},
+			"082 - in Kontakt stehen mit":{
+				de: " Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+				hu: "این شرکت با چندین شرکت شریک در تماس است. "
+			},
+			"083 - in Kontakt treten mit":{
+				de: " Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+				hu: "خدمات مشتری دیروز با من تماس گرفت. "
+			},
+			"084 - die Kosten tragen für":{
+				de: " Die Saga trägt die Kosten für die Renovierung.",
+				hu: "Saga هزینه های بازسازی را پوشش می دهد. "
+			},
+			"085 - die Kosten übernehmen für":{
+				de: " Die Versicherung übernimmt die Kosten für die Behandlung.",
+				hu: "بیمه هزینه های درمان را پوشش می دهد. "
+			},
+			"086 - in Kraft treten":{
+				de: " Das neue Gesetz wird morgen in Kraft treten.",
+				hu: "قانون جدید فردا اجرایی می شود. "
+			},
+			"087 - Krieg führen gegen/mit/wegen":{
+				de: " Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+				hu: "ما نمی خواهیم با همسایگان خود جنگ کنیم. "
+			},
+			"088 - Kritik üben an/für":{
+				de: " Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+				hu: "او از تصمیم رئیس انتقادی نکرد. "
+			},
+			"089 - den Kürzeren ziehen":{
+				de: " Er hat den Kürzeren gezogen.",
+				hu: "انتهای کوتاه چوب را گرفت. "
+			},
+			"090 - jemanden auf dem Laufenden halten":{
+				de: " Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+				hu: "این ایستگاه مسافران را از تاخیر مطلع خواهد کرد. "
+			},
+			"091 - auf dem Laufenden sein":{
+				de: " In der IT muss man auf dem Laufenden sein.",
+				hu: "در IT باید به روز باشید. "
+			},
+			"092 - der Meinung sein":{
+				de: " Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+				hu: "من معتقدم که باید کارهای زیادی انجام دهیم. "
+			},
+			"093 - in Ordnung bringen":{
+				de: " Ich muss meine Wohnung in Ordnung bringen.",
+				hu: "من باید آپارتمانم را مرتب کنم. "
+			},
+			"094 - ein Profil anlegen":{
+				de: " Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+				hu: "دیروز یک نمایه جدید در LindekIn ایجاد کردم. "
+			},
+			"095 - eine Prüfung bestehen":{
+				de: " Ich will die B2 Prüfung bestehen.",
+				hu: "من می خواهم در آزمون B2 شرکت کنم. "
+			},
+			"096 - durch eine Prüfung fallen":{
+				de: " Ich bin durch meine letzte B2 Prüfung gefallen.",
+				hu: "من آخرین امتحان B2 ام را رد کردم. "
+			},
+			"097 - eine Qualifikation mitbringen":{
+				de: " Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+				hu: "او تجربه و مدارک خوبی به ارمغان می آورد. "
+			},
+			"098 - einen Rat geben":{
+				de: " Können Sie mir einen guten Rat geben?",
+				hu: "میشه یه راهنمایی خوب به من بکنید؟ "
+			},
+			"099 - Rechenschaft ablegen über":{
+				de: " Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+				hu: "آنها گزارشی از برنامه های سفر خود ارائه کرده اند. "
+			},
+			"100 - zur Rechenschaft ziehen für":{
+				de: " Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+				hu: "شما نمی توانید من را در قبال اشتباهات خود مسئول بدانید. "
+			},
+			"101 - in Rechnung stellen":{
+				de: " Der Zahnarzt stellt mir die Kosten in Rechnung.",
+				hu: "دندانپزشک هزینه ها را به من می دهد. "
+			},
+			"102 - eine Rede halten über":{
+				de: " Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+				hu: "رئیس جمهور در مورد برنامه های جدید سخنرانی کرد. "
+			},
+			"103 - in eine Reihenfolge bringen":{
+				de: " Ich bringe meine Dokumente immer in eine Reihenfolge.",
+				hu: "من همیشه مدارکم را مرتب می کنم. "
+			},
+			"104 - den Respekt verlieren vor":{
+				de: " Man sollte vor der Natur nicht den Respekt verlieren",
+				hu: "نباید احترام به طبیعت را از دست داد"
+			},
+			"105 - Rückmeldung geben":{
+				de: " Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten. ",
+				hu: "مدرس به دانشجویان بازخورد دقیقی در مورد کارشان داد. "
+			},
+			"106 - Rücksicht nehmen auf":{
+				de: " Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn! ",
+				hu: "لطفا مراقب خواب شبانه همسایگان خود باشید! "
+			},
+			"107 - die Ruhe bewahren":{
+				de: " Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe. ",
+				hu: "اگرچه شرایط بحرانی بود، اما کاپیتان آرام بود. "
+			},
+			"108 - Schluss machen mit":{
+				de: " Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht. ",
+				hu: "او پس از پنج سال از دوست دخترش جدا شد. "
+			},
+			"109 - zur Sprache bringen":{
+				de: " Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen. ",
+				hu: "در جلسه بعدی مسائل را مطرح خواهیم کرد. "
+			},
+			"110 - Stellung nehmen zu":{
+				de: " Ich möchte zu diesem komplizierten Fall keine Stellung nehmen. ",
+				hu: "من نمی خواهم در مورد این پرونده پیچیده اظهار نظر کنم."
+			},
+			"111 - unter Strafe stehen":{
+				de: " Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig. ",
+				hu: "این عمل مستقیما قابل مجازات نیست، اما از نظر اخلاقی مشکوک است. "
+			},
+			"112 - unter Strafe stellen":{
+				de: " Man sollte das unnötige Töten von Tieren unter Strafe stellen. ",
+				hu: "کشتار غیرضروری حیوانات باید جرم انگاری شود. "
+			},
+			"113 - in Streik treten":{
+				de: " Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten. ",
+				hu: "کارگران صبح امروز به دلیل دستمزد پایین دست به اعتصاب زدند. "
+			},
+			"114 - Stress haben mit":{
+				de: " Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms. ",
+				hu: "مدتی بود که به خاطر سر و صدا با همسایه ام مشکل داشتم. "
+			},
+			"115 - unter Stress stehen":{
+				de: " Aufgrund der Abgabetermine steht das gesamte Team unter Stress. ",
+				hu: "به دلیل ضرب الاجل، کل تیم تحت استرس هستند. "
+			},
+			"116 - eine Tätigkeit ausüben":{
+				de: " Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus. ",
+				hu: "او سال هاست که به عنوان مترجم آزاد کار می کند. "
+			},
+			"117 - im Trend liegen":{
+				de: " Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt. ",
+				hu: "این فناوری پنج سال پیش مد روز بود، اما اکنون منسوخ شده است. "
+			},
+			"118 - einen Überblick bekommen":{
+				de: " Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+				hu: "باید مدارک رو بخونم تا یه دید کلی پیدا کنم. "
+			},
+			"119 - einen Überblick geben":{
+				de: " Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+				hu: "رئیس به همه کارکنان یک نمای کلی از ارقام سه ماهه ارائه می دهد. "
+			},
+			"120 - einen Unterschied machen":{
+				de: " Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+				hu: "اگر امروز صبح شروع کنیم فرقی نمی کند. "
+			},
+			"121 - eine Verabredung treffen":{
+				de: " Möchten Sie mit mir eine Verabredung zu treffen?",
+				hu: "آیا دوست داری من را در یک قرار ملاقات ببینی؟ "
+			},
+			"122 - die Verantwortung übernehmen für":{
+				de: " Er musste die Verantwortung für den Fehler übernehmen.",
+				hu: "او باید مسئولیت اشتباه را بر عهده می گرفت. "
+			},
+			"123 - sich in Verbindung setzen mit":{
+				de: " Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+				hu: "فردا صبح با خدمات مشتری تماس خواهم گرفت. "
+			},
+			"124 - eine Vereinbarung treffen zu":{
+				de: " Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+				hu: "امیدواریم بتوانیم به زودی بر سر شرایط به توافق برسیم. "
+			},
+			"125 - zur Verfügung stehen":{
+				de: " Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+				hu: "من خوشحال خواهم شد که به هر سوالی که ممکن است داشته باشید پاسخ دهم. "
+			},
+			"126 - zur Verfügung stellen":{
+				de: " Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+				hu: "این شرکت بودجه لازم را تامین خواهد کرد. "
+			},
+			"127 - in Verhandlungen stehen":{
+				de: " Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+				hu: "ماه هاست با صاحبخانه در حال مذاکره بودیم. "
+			},
+			"128 - in Verhandlungen treten":{
+				de: " Nach der Einigung können wir über die Details in Verhandlungen treten.",
+				hu: "پس از توافق، می توانیم مذاکرات را در مورد جزئیات آغاز کنیم. "
+			},
+			"129 - ein Versprechen geben":{
+				de: " Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+				hu: "من به شما قول می دهم که به موقع می آیم. "
+			},
+			"130 - einen Vertrag abschließen mit":{
+				de: " Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+				hu: "ما با تامین کننده خود قرارداد جدیدی امضا کرده ایم. "
+			},
+			"131 - Vertrauen herstellen":{
+				de: " Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+				hu: "ایجاد اعتماد بین همکاران زمان بر است. "
+			},
+			"132 - Vorbereitungen treffen":{
+				de: " Wir müssen Vorbereitungen für die Konferenz treffen.",
+				hu: "ما باید مقدمات کنفرانس را فراهم کنیم. "
+			},
+			"133 - im Vordergrund stehen":{
+				de: " Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+				hu: "این پروژه بر کارایی تمرکز دارد نه هزینه ها. "
+			},
+			"134 - einen Vorschlag machen":{
+				de: " Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+				hu: "میتونم یه پیشنهاد بدم که چطوری مشکل رو حل کنیم؟ "
+			},
+			"135 - einen Vorschlag unterbreiten":{
+				de: " Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+				hu: "لطفا تا هفته آینده پیشنهاد خود را به صورت کتبی به من ارسال کنید. "
+			},
+			"136 - Vorsorge treffen für":{
+				de: " Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+				hu: "ما باید برای هزینه های پیش بینی نشده پیش بینی کنیم. "
+			},
+			"137 - eine Wahl treffen":{
+				de: " Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+				hu: "او باید بین شغل و خانواده اش یکی را انتخاب می کرد. "
+			},
+			"138 - im Wettbewerb stehen mit":{
+				de: " Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+				hu: "شرکت ما با بسیاری از شرکت های بین المللی رقابت می کند. "
+			},
+			"139 - Wert legen auf":{
+				de: " Unsere Firma legt viel Wert auf die Sicherheit.",
+				hu: "شرکت ما به ایمنی اهمیت زیادی می دهد. "
+			},
+			"140 - Wertschätzung genießen":{
+				de: " In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+				hu: "در آلمان، کارمندان از کارشان قدردانی می کنند. "
+			},
+			"141 - Widerstand leisten gegen":{
+				de: " Ich leiste Widerstand gegen viele Süßigkeiten.",
+				hu: "من در مقابل شیرینی زیاد مقاومت می کنم. "
+			},
+			"142 - Wirkung zeigen":{
+				de: " Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+				hu: "متأسفانه درخواست رئیس جمهور تأثیر چندانی نداشت. "
+			},
+			"143 - das Wort ergreifen":{
+				de: " Nach einer langen Pause ergriff der Moderator das Wort.",
+				hu: "پس از مکثی طولانی، ناظم به صحبت پرداخت. "
+			},
+			"144 - ein Ziel setzen":{
+				de: " Ich setze mir eine Ziel.",
+				hu: "برای خودم هدف گذاشتم"
+			},
+			"145 - ein Ziel verfolgen":{
+				de: " Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+				hu: "با وجود موانع زیاد، او پیگیرانه به دنبال هدف خود بود. "
+			},
+			"146 - eine Zusage erhalten":{
+				de: " Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+				hu: "قبل از برنامه ریزی، باید از آپارتمان تاییدیه بگیریم. "
+			},
+			"147 - im Zusammenhang stehen mit":{
+				de: " Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+				hu: "افزایش قیمت ها رابطه مستقیمی با تورم دارد."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

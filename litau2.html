@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="litau0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - litauisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - Abschied nehmen von": "001 - atsisveikinti su",
+			"002 - die Absicht haben": "002 - ketinti",
+			"003 - eine Absprache treffen mit": "003 - sudaryti susitarimą su",
+			"004 - eine Ahnung haben von": "004 - turėti idėją",
+			"005 - eine Andeutung machen": "005 - duoti užuominą",
+			"006 - Anerkennung finden bei/für": "006 - gauti pripažinimą iš/kam nors",
+			"007 - einen Anfang machen mit": "007 - pradėti nuo",
+			"008 - eine Anforderung erfüllen": "008 - įvykdyti reikalavimą",
+			"009 - ein Angebot machen": "009 - pateikti pasiūlymą",
+			"010 - ein Angebot unterbreiten": "010 - pateikti pasiūlymą",
+			"011 - etwas im Angebot haben": "011 - turėti ką nors siūlomą",
+			"012 - etwas in Anspruch nehmen": "012 - kuo nors pasinaudoti",
+			"013 - einen Antrag stellen auf": "013 - kreiptis dėl",
+			"014 - eine Antwort geben": "014 - duoti atsakymą",
+			"015 - eine Anweisung geben": "015 - duoti nurodymą",
+			"016 - zur Anwendung kommen": "016 - įsigalioti",
+			"017 - einen Auftrag erteilen": "017 - duoti įsakymą",
+			"018 - in Auftrag geben zu": "018 - pavesti",
+			"019 - aus den Augen verlieren": "019 - pamiršti",
+			"020 - zum Ausdruck bringen": "020 - išreikšti",
+			"021 - zum Ausdruck kommen": "021 - būti išsakytai",
+			"022 - Auskunft geben": "022 - pateikti informaciją",
+			"023 - eine Äußerung machen": "023 - padaryti pareiškimą",
+			"024 - Beachtung finden bei/für": "024 - būti svarstomam / dėl kurio",
+			"025 - Beachtung schenken": "025 - atkreipti dėmesį",
+			"026 - einen Beitrag leisten für/zu": "026 - prisidėti / dėl kurio",
+			"027 - Berücksichtigung finden": "027 - būti atsižvelgtam",
+			"028 - bei/wegen Bescheid geben": "028 - pranešti apie / apie",
+			"029 - eine Bestellung aufgeben": "029 - pateikti užsakymą",
+			"030 - in Betracht kommen": "030 - būti svarstomam",
+			"031 - in Betracht ziehen": "031 - svarstyti",
+			"032 - in Betrieb nehmen": "032 - pradėti eksploatuoti",
+			"033 - Bezug nehmen auf": "033 - remtis",
+			"034 - im Blick haben": "034 - stebėti",
+			"035 - die Daumen drücken für": "035 - palaikyti sukryžiavusius pirštus",
+			"036 - zur Debatte stehen": "036 - būti diskusijoje",
+			"037 - eine Diskussion führen über/mit": "037 - diskutuoti apie / su kuo nors",
+			"038 - zur Diskussion stellen": "038 - pateikti diskusijai",
+			"039 - unter Druck setzen": "039 - daryti spaudimą",
+			"040 - einen Eindruck bekommen von": "040 - susidaryti įspūdį apie",
+			"041 - Eindruck machen auf": "041 - Padaryti įspūdį",
+			"042 - Einfluss nehmen auf": "042 - Įtaka",
+			"043 - eine Entscheidung treffen": "043 - Priimti sprendimą",
+			"044 - zur Entscheidung bringen": "044 - Privesti prie sprendimo",
+			"045 - zur Entscheidung stellen": "045 - Privesti prie sprendimo",
+			"046 - eine Erfahrung machen mit": "046 - Įgauti patirties su",
+			"047 - in Erfahrung bringen": "047 - Išsiaiškinti",
+			"048 - in Erfüllung gehen": "048 - Įvykti",
+			"049 - eine Erklärung finden für": "049 - Rasti paaiškinimą",
+			"050 - Ersatz leisten für": "050 - Sugalvoti pakaitalą",
+			"051 - Feedback bekommen": "051 - Gauti atsiliepimus",
+			"052 - Feedback geben": "052 - Pateikti atsiliepimus",
+			"053 - einen Fehler beheben": "053 - Ištaisyti klaidą",
+			"054 - zur Folge haben": "054 - Turėti pasekmes",
+			"055 - eine Forderung stellen": "055 - Reikalauti",
+			"056 - eine Frage stellen": "056 - Užduoti klausimą",
+			"057 - eine Freude bereiten": "057 - Suteikti malonumą",
+			"058 - ins Geschäft kommen mit": "058 - Užmegzti verslo ryšius su",
+			"059 - ein Gespräch führen über/mit": "059 - Pakalbėti apie/su",
+			"060 - ins Gespräch bringen": "060 - Įtraukti į pokalbį",
+			"061 - den Glauben verlieren": "061 - prarasti tikėjimą",
+			"062 - etwas im Griff haben": "062 - kontroliuoti kažką",
+			"063 - etwas in den Griff bekommen": "063 - suvaldyti kažką",
+			"064 - auf den Grund gehen": "064 - išsiaiškinti esmę",
+			"065 - jemanden vor eine Herausforderung stellen": "065 - mesti kam nors iššūkį",
+			"066 - Hilfe leisten": "066 - pasiūlyti pagalbą",
+			"067 - zu Hilfe nehmen": "067 - prašyti pagalbos",
+			"068 - die Hoffnung aufgeben": "068 - prarasti viltį",
+			"069 - sich Hoffnung machen": "069 - turėti vilties",
+			"070 - auf eine Idee kommen": "070 - sugalvoti idėją",
+			"071 - infrage kommen": "071 - būti svarstomam",
+			"072 - infrage stellen": "072 - klausinėti",
+			"073 - Interesse wecken an/für": "073 - sužadinti susidomėjimą / kuo nors",
+			"074 - Interesse zeigen an/für": "074 - parodyti susidomėjimą / kuo nors",
+			"075 - in Kenntnis setzen von": "075 - informuoti apie",
+			"076 - zur Kenntnis nehmen": "076 - atkreipti dėmesį į",
+			"077 - Kontakt aufnehmen mit": "077 - susisiekti",
+			"078 - Klarheit gewinnen über": "078 - išsiaiškinti apie",
+			"079 - Kontakt halten": "079 - palaikyti ryšį",
+			"080 - Kontakt knüpfen mit": "080 - užmegzti ryšį su",
+			"081 - Kontakt knüpfen zu": "081 - susisiekti su",
+			"082 - in Kontakt stehen mit": "082 - palaikyti ryšį su",
+			"083 - in Kontakt treten mit": "083 - susisiekti su",
+			"084 - die Kosten tragen für": "084 - padengti išlaidas už",
+			"085 - die Kosten übernehmen für": "085 - padengti išlaidas už",
+			"086 - in Kraft treten": "086 - įsigaliojimą",
+			"087 - Krieg führen gegen/mit/wegen": "087 - kariauti prieš/su/dėl",
+			"088 - Kritik üben an/für": "088 - kritikuoti/už",
+			"089 - den Kürzeren ziehen": "089 - pasirodyti pralaimėjusiam",
+			"090 - jemanden auf dem Laufenden halten": "090 - informuoti ką nors",
+			"091 - auf dem Laufenden sein": "091 - būti informuotam",
+			"092 - der Meinung sein": "092 - turėti nuomonę",
+			"093 - in Ordnung bringen": "093 - išsiaiškinti",
+			"094 - ein Profil anlegen": "094 - susikurti profilį",
+			"095 - eine Prüfung bestehen": "095 - išlaikyti egzaminą",
+			"096 - durch eine Prüfung fallen": "096 - neišlaikyti egzamino",
+			"097 - eine Qualifikation mitbringen": "097 - turėti kvalifikaciją",
+			"098 - einen Rat geben": "098 - duoti patarimą",
+			"099 - Rechenschaft ablegen über": "099 - atsiskaityti",
+			"100 - zur Rechenschaft ziehen für": "100 - laikyti atsakingu už",
+			"101 - in Rechnung stellen": "101 - išrašyti sąskaitą faktūrą",
+			"102 - eine Rede halten über": "102 - pasakyti kalbą apie",
+			"103 - in eine Reihenfolge bringen": "103 - sutvarkyti tvarką",
+			"104 - den Respekt verlieren vor": "104 - prarasti pagarbą",
+			"105 - Rückmeldung geben": "105 - pateikti atsiliepimą",
+			"106 - Rücksicht nehmen auf": "106 - būti dėmesingam",
+			"107 - die Ruhe bewahren": "107 - išlikti ramiam",
+			"108 - Schluss machen mit": "108 - išsiskirti",
+			"109 - zur Sprache bringen": "109 - pradėti kalbėti",
+			"110 - Stellung nehmen zu": "110 - užimti poziciją",
+			"111 - unter Strafe stehen": "111 - būti nubaustam",
+			"112 - unter Strafe stellen": "112 - skirti bausmę",
+			"113 - in Streik treten": "113 - streikuoti",
+			"114 - Stress haben mit": "114 - turėti problemų su",
+			"115 - unter Stress stehen": "115 - patirti stresą",
+			"116 - eine Tätigkeit ausüben": "116 - atlikti veiklą",
+			"117 - im Trend liegen": "117 - būti madingam",
+			"118 - einen Überblick bekommen": "118 - gauti apžvalgą",
+			"119 - einen Überblick geben": "119 - pateikti apžvalgą",
+			"120 - einen Unterschied machen": "120 - ką nors pakeisti",
+			"121 - eine Verabredung treffen": "121 - susitarti dėl susitikimo",
+			"122 - die Verantwortung übernehmen für": "122 - prisiimti atsakomybę už",
+			"123 - sich in Verbindung setzen mit": "123 - susisiekti su",
+			"124 - eine Vereinbarung treffen zu": "124 - susitarti",
+			"125 - zur Verfügung stehen": "125 - būti pasiekiamam",
+			"126 - zur Verfügung stellen": "126 - sudaryti susitarimą",
+			"127 - in Verhandlungen stehen": "127 - derėtis",
+			"128 - in Verhandlungen treten": "128 - pradėti derybas",
+			"129 - ein Versprechen geben": "129 - duoti pažadą",
+			"130 - einen Vertrag abschließen mit": "130 - sudaryti sutartį su",
+			"131 - Vertrauen herstellen": "131 - užmegzti pasitikėjimą",
+			"132 - Vorbereitungen treffen": "132 - pasiruošti",
+			"133 - im Vordergrund stehen": "133 - būti pirmame plane",
+			"134 - einen Vorschlag machen": "134 - pateikti pasiūlymą",
+			"135 - einen Vorschlag unterbreiten": "135 - pateikti pasiūlymą",
+			"136 - Vorsorge treffen für": "136 - pasiruošti",
+			"137 - eine Wahl treffen": "137 - priimti sprendimą",
+			"138 - im Wettbewerb stehen mit": "138 - konkuruoti su",
+			"139 - Wert legen auf": "139 - vertinti",
+			"140 - Wertschätzung genießen": "140 - džiaugtis dėkingumu",
+			"141 - Widerstand leisten gegen": "141 - Priešintis",
+			"142 - Wirkung zeigen": "142 - Daryti įtaką",
+			"143 - das Wort ergreifen": "143 - Išsakyti savo nuomonę",
+			"144 - ein Ziel setzen": "144 - Išsikelti tikslą",
+			"145 - ein Ziel verfolgen": "145 - Siekti tikslo",
+			"146 - eine Zusage erhalten": "146 - Įsipareigoti",
+			"147 - im Zusammenhang stehen mit": "147 - Būti susijusiam su",
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von":{
+				de: " Ich werde von dir Abschied nehmen.",
+				hu: " Atsisveikinsiu su jumis."
+			},
+			"002 - die Absicht haben":{
+				de: " Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: " Nenoriu jam sakyti tiesos."
+			},
+			"003 - eine Absprache treffen mit":{
+				de: " Wir haben mit der Firma keine Absprache getroffen.",
+				hu: " Nesudarėme jokių susitarimų su įmone."
+			},
+			"004 - eine Ahnung haben von":{
+				de: " Er hat keine Ahnung von moderner Technologie.",
+				hu: " Jis visiškai neišmano šiuolaikinių technologijų."
+			},
+			"005 - eine Andeutung machen":{
+				de: " Er hat eine klare Andeutung über seine Kündigung gemacht. ",
+				hu: " Jis aiškiai parodė savo ketinimą atsistatydinti."
+			},
+			"006 - Anerkennung finden bei/für":{
+				de: " Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit. ",
+				hu: " Naujasis darbuotojas greitai pelno kolegų pripažinimą už savo patikimumą."
+			},
+			"007 - einen Anfang machen mit":{
+				de: " Wir sollten endlich einen Anfang mit den Vorbereitungen machen. ",
+				hu: " Pagaliau turėtume pradėti pasiruošimą."
+			},
+			"008 - eine Anforderung erfüllen":{
+				de: " Das Produkt muss alle Sicherheitsanforderungen erfüllen. ",
+				hu: " Produktas turi atitikti visus saugos reikalavimus."
+			},
+			"009 - ein Angebot machen":{
+				de: " Die Firma machte dem Kunden ein sehr attraktives Angebot. ",
+				hu: " Įmonė pateikė klientui labai patrauklų pasiūlymą."
+			},
+			"010 - ein Angebot unterbreiten":{
+				de: " Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten. ",
+				hu: " Vystytojas rytoj pateiks mums raštišką pasiūlymą."
+			},
+			"011 - etwas im Angebot haben":{
+				de: " Der Supermarkt hat diese Woche frische Erdbeeren im Angebot. ",
+				hu: " Šią savaitę prekybos centre siūlomos šviežios braškės."
+			},
+			"012 - etwas in Anspruch nehmen":{
+				de: " Die Reparatur nahm viel Zeit in Anspruch. ",
+				hu: " Remontas užtruko daug laiko."
+			},
+			"013 - einen Antrag stellen auf":{
+				de: " Viele Studenten stellen einen Antrag auf BAföG. ",
+				hu: " Daugelis studentų kreipiasi dėl BAföG (Vokietijos studentų finansinės pagalbos)."
+			},
+			"014 - eine Antwort geben":{
+				de: " Ich konnte noch keine Antwort auf die Aufgabe geben.",
+				hu: " Dar negalėjau atsakyti į klausimą."
+			},
+			"015 - eine Anweisung geben":{
+				de: " Wir haben im Computerprogramm eine Anweisung gegeben.",
+				hu: " Pateikėme instrukcijas kompiuterinėje programoje."
+			},
+			"016 - zur Anwendung kommen":{
+				de: " Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+				hu: " Šią programėlę galima naudoti tik „iPhone“ telefone."
+			},
+			"017 - einen Auftrag erteilen":{
+				de: " Er hat einen Auftrag für eine kleine Firma erteilt.",
+				hu: " Jis pateikė užsakymą mažai įmonei."
+			},
+			"018 - in Auftrag geben zu":{
+				de: " Die Schule hat zu Renovieren in Auftrag gegeben.",
+				hu: " Mokyklos užsakymai renovacijai."
+			},
+			"019 - aus den Augen verlieren":{
+				de: " Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+				hu: " Prekybos centre pamečiau mamą iš akių."
+			},
+			"020 - zum Ausdruck bringen":{
+				de: " In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen. ",
+				hu: " Šiame laiške turite aiškiai išreikšti savo susirūpinimą."
+			},
+			"021 - zum Ausdruck kommen":{
+				de: " Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck. ",
+				hu: " Komandos nuotaika buvo išreikšta garsiais plojimais."
+			},
+			"022 - Auskunft geben":{
+				de: " Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+				hu: " Mokytojas pateikė mums informacijos apie egzaminą."
+			},
+			"023 - eine Äußerung machen":{
+				de: " Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+				hu: " Ministras šiuo klausimu nepasakė jokio pareiškimo."
+			},
+			"024 - Beachtung finden bei/für":{
+				de: " Mein Vorschlag fand bei der Klasse keine Beachtung.",
+				hu: " Klasė ignoravo mano pasiūlymą."
+			},
+			"025 - Beachtung schenken":{
+				de: " Wir können nicht alle Punkten Beachtung schenken.",
+				hu: " Mes negalime aptarti visų punktų."
+			},
+			"026 - einen Beitrag leisten für/zu":{
+				de: " Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+				hu: " Įmonė neprisideda prie jūsų profesinio tobulėjimo."
+			},
+			"027 - Berücksichtigung finden":{
+				de: " Die Firma hat deine Überstunden die Berücksichtigung finden.",
+				hu: " Įmonė privalo atsižvelgti į jūsų viršvalandžius."
+			},
+			"028 - bei/wegen Bescheid geben":{
+				de: " Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+				hu: " Negaliu jūsų informuoti, nes būsiu neprisijungęs prie interneto."
+			},
+			"029 - eine Bestellung aufgeben":{
+				de: " Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+				hu: " Nenoriu pateikti užsakymo, nes neturiu pinigų."
+			},
+			"030 - in Betracht kommen":{
+				de: " Diese Lösung kommt für uns nicht in Betracht.",
+				hu: " Šis sprendimas mums netinka."
+			},
+			"031 - in Betracht ziehen":{
+				de: " Wir müssen die Verspätung in Betracht ziehen.",
+				hu: " Turime atsižvelgti į vėlavimą."
+			},
+			"032 - in Betrieb nehmen":{
+				de: " Der Techniker hat der Computer in Betrieb genommen.",
+				hu: " Technikas paleido kompiuterį."
+			},
+			"033 - Bezug nehmen auf":{
+				de: " Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+				hu: " Kalbu apie vakarykštį pokalbį."
+			},
+			"034 - im Blick haben":{
+				de: " Die Firma hat die Konkurrenz immer im Blick.",
+				hu: " Įmonė visada stebi konkurentus."
+			},
+			"035 - die Daumen drücken für":{
+				de: " Wir drücken dir die Daumen für deine Prüfung.",
+				hu: " Laikome sukryžiuotus pirštus dėl jūsų egzamino."
+			},
+			"036 - zur Debatte stehen":{
+				de: " Die neuen Vorschläge stehen zur Debatte.",
+				hu: " Nauji pasiūlymai aptarti."
+			},
+			"037 - eine Diskussion führen über/mit":{
+				de: " Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+				hu: " Aptariau su žmona ateitį."
+			},
+			"038 - zur Diskussion stellen":{
+				de: " Dieses Thema möchte ich zur Diskussion stellen.",
+				hu: " Norėčiau šią temą aptarti."
+			},
+			"039 - unter Druck setzen":{
+				de: " Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+				hu: " Egzamino situacija jam sukėlė didelį spaudimą."
+			},
+			"040 - einen Eindruck bekommen von":{
+				de: " Ich habe von dir einen guten Eindruck bekommen.",
+				hu: " Susidariau apie jus gerą įspūdį."
+			},
+			"041 - Eindruck machen auf":{
+				de: " Das neue Auto macht einen guten Eindruck auf mich.",
+				hu: " Naujas automobilis man daro gerą įspūdį."
+			},
+			"042 - Einfluss nehmen auf":{
+				de: " Sie nimmt Einfluss auf ihren Partner.",
+				hu: " Ji daro įtaką savo partneriui."
+			},
+			"043 - eine Entscheidung treffen":{
+				de: " Wir haben noch keine endgültige Entscheidung getroffen.",
+				hu: " Mes dar nepriėmėme galutinio sprendimo."
+			},
+			"044 - zur Entscheidung bringen":{
+				de: " Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+				hu: " Jis dar negalėjo apsispręsti dėl savo atostogų."
+			},
+			"045 - zur Entscheidung stellen":{
+				de: " Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+				hu: " Neleisi mano norams daryti įtakos tavo sprendimui."
+			},
+			"046 - eine Erfahrung machen mit":{
+				de: " Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+				hu: " Su šiuo darbu gali patirti gerą patirtį."
+			},
+			"047 - in Erfahrung bringen":{
+				de: " Wir müssen in Erfahrung bringen, wer das getan hat.",
+				hu: " Turime išsiaiškinti, kas tai padarė."
+			},
+			"048 - in Erfüllung gehen":{
+				de: " Endlich ist mein Traum in Erfüllung gegangen.",
+				hu: " Mano svajonė pagaliau išsipildė."
+			},
+			"049 - eine Erklärung finden für":{
+				de: " Ich muss dringend eine Erklärung für mein Fehlen finden.",
+				hu: " Man skubiai reikia rasti paaiškinimą dėl savo nebuvimo."
+			},
+			"050 - Ersatz leisten für":{
+				de: " Die Versicherung muss Ersatz für den Schaden leisten. ",
+				hu: " Draudimo bendrovė privalo atlyginti žalą."
+			},
+			"051 - Feedback bekommen":{
+				de: " Hast du schon Feedback von deinem Chef bekommen",
+				hu: " Ar jau gavote atsiliepimą iš savo viršininko?"
+			},
+			"052 - Feedback geben":{
+				de: " Kannst du mir bitte Feedback zu meinem Entwurf geben ",
+				hu: " Gal galėtumėte pateikti atsiliepimą apie mano juodraštį?"
+			},
+			"053 - einen Fehler beheben":{
+				de: " Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+				hu: " Technikas sugebėjo greitai išspręsti problemą mano nešiojamajame kompiuteryje."
+			},
+			"054 - zur Folge haben":{
+				de: " Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+				hu: " Mano blogi sprendimai turės rimtų pasekmių."
+			},
+			"055 - eine Forderung stellen":{
+				de: " Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+				hu: " Darbuotojai pareikalavo didesnių atlyginimų."
+			},
+			"056 - eine Frage stellen":{
+				de: " Darf ich dir eine Frage stellen?",
+				hu: " Ar galiu užduoti jums klausimą?"
+			},
+			"057 - eine Freude bereiten":{
+				de: " Sie wollte ihren Eltern eine Freude bereiten.",
+				hu: " Ji norėjo pavaišinti savo tėvus."
+			},
+			"058 - ins Geschäft kommen mit":{
+				de: " Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+				hu: " Mano viršininkas sudarė sandorį su kita įmone."
+			},
+			"059 - ein Gespräch führen über/mit":{
+				de: " Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+				hu: " Viršininkas kalbėjosi su manimi apie mano profesinį tobulėjimą."
+			},
+			"060 - ins Gespräch bringen":{
+				de: " Mein Kollege hat seine Idee ins Gespräch gebracht.",
+				hu: " Mano kolega iškėlė savo idėją."
+			},
+			"061 - den Glauben verlieren":{
+				de: " Er ist Atheist, weil er den Glauben verloren hat.",
+				hu: " Jis ateistas, nes prarado tikėjimą."
+			},
+			"062 - etwas im Griff haben":{
+				de: " Ich habe die Situation im Griff.",
+				hu: " Aš kontroliuoju situaciją."
+			},
+			"063 - etwas in den Griff bekommen":{
+				de: " Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+				hu: " Naujasis viršininkas gali valdyti personalą."
+			},
+			"064 - auf den Grund gehen":{
+				de: " Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+				hu: " Psichologas nori įsigilinti į žmogaus proto gelmes."
+			},
+			"065 - jemanden vor eine Herausforderung stellen":{
+				de: " Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+				hu: " Naujas darbas man kelia didesnį iššūkį."
+			},
+			"066 - Hilfe leisten":{
+				de: " Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+				hu: " Mano draugai padėjo man tvarkytis su Vokietijos biurokratija."
+			},
+			"067 - zu Hilfe nehmen":{
+				de: " Ich habe einen Freund zu Hilfe genommen.",
+				hu: " Paprašiau draugo pagalbos."
+			},
+			"068 - die Hoffnung aufgeben":{
+				de: " Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+				hu: " Politikas prarado viltį politikoje."
+			},
+			"069 - sich Hoffnung machen":{
+				de: " Du solltest dir keine falschen Hoffnungen machen.",
+				hu: " Neturėtumėte puoselėti didelių vilčių."
+			},
+			"070 - auf eine Idee kommen":{
+				de: " Ich bin plötzlich auf eine gute Idee gekommen.",
+				hu: " Staiga man šovė gera mintis."
+			},
+			"071 - infrage kommen":{
+				de: " Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+				hu: " Persikėlimas į mažesnį butą man neįmanomas."
+			},
+			"072 - infrage stellen":{
+				de: " Er stellt die Entscheidung des Chefs infrage.",
+				hu: " Jis abejoja viršininko sprendimu."
+			},
+			"073 - Interesse wecken an/für":{
+				de: " Die Werbung weckt Interesse für das neue Produkt.",
+				hu: " Reklama sukelia susidomėjimą nauju produktu."
+			},
+			"074 - Interesse zeigen an/für":{
+				de: " Viele Studenten zeigen Interesse an diesem Kurs.",
+				hu: " Daugelis studentų rodo susidomėjimą šiuo kursu."
+			},
+			"075 - in Kenntnis setzen von":{
+				de: " Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+				hu: " Aptarnavimo tarnyba informuoja mane apie renovacijos išlaidas."
+			},
+			"076 - zur Kenntnis nehmen":{
+				de: " Ich nehme Ihre Beschwerde zur Kenntnis.",
+				hu: " Gavęs jūsų skundą, suprantu."
+			},
+			"077 - Kontakt aufnehmen mit":{
+				de: " Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+				hu: " Ar norėtumėte susisiekti su savo senais draugais?"
+			},
+			"078 - Klarheit gewinnen über":{
+				de: " Ich muss Klarheit über die Lösung gewinnen.",
+				hu: " Man reikia išsiaiškinti sprendimą."
+			},
+			"079 - Kontakt halten":{
+				de: " Ich halte Kontakt zu meinen alten Freunden.",
+				hu: " Palaikau ryšį su savo senais draugais."
+			},
+			"080 - Kontakt knüpfen mit":{
+				de: " Der Administrator knüpft Kontakte mit der Entwicklungen.",
+				hu: " Administratorius susisiekia su kūrimo komanda."
+			},
+			"081 - Kontakt knüpfen zu":{
+				de: " Sie will mehrere Kontakte im Internet zu knüpfen.",
+				hu: " Ji nori užmegzti kelis kontaktus internetu."
+			},
+			"082 - in Kontakt stehen mit":{
+				de: " Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+				hu: " Įmonė palaiko ryšį su keliomis partnerių įmonėmis."
+			},
+			"083 - in Kontakt treten mit":{
+				de: " Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+				hu: " Vakar su manimi susisiekė klientų aptarnavimo tarnyba."
+			},
+			"084 - die Kosten tragen für":{
+				de: " Die Saga trägt die Kosten für die Renovierung.",
+				hu: " „Saga“ padengia renovacijos išlaidas."
+			},
+			"085 - die Kosten übernehmen für":{
+				de: " Die Versicherung übernimmt die Kosten für die Behandlung.",
+				hu: " Draudimo bendrovė padengia gydymo išlaidas."
+			},
+			"086 - in Kraft treten":{
+				de: " Das neue Gesetz wird morgen in Kraft treten.",
+				hu: " Naujasis įstatymas įsigalios rytoj."
+			},
+			"087 - Krieg führen gegen/mit/wegen":{
+				de: " Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+				hu: " Nenorime pradėti karo prieš savo kaimynus."
+			},
+			"088 - Kritik üben an/für":{
+				de: " Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+				hu: " Jis nekritikavo viršininko sprendimo."
+			},
+			"089 - den Kürzeren ziehen":{
+				de: " Er hat den Kürzeren gezogen.",
+				hu: " Jis pralaimėjo."
+			},
+			"090 - jemanden auf dem Laufenden halten":{
+				de: " Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+				hu: " Traukinių stotis informuoja keleivius apie vėlavimą."
+			},
+			"091 - auf dem Laufenden sein":{
+				de: " In der IT muss man auf dem Laufenden sein.",
+				hu: " IT srityje reikia neatsilikti nuo naujausių žinių."
+			},
+			"092 - der Meinung sein":{
+				de: " Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+				hu: " Manau, kad turėtume atlikti daug užduočių."
+			},
+			"093 - in Ordnung bringen":{
+				de: " Ich muss meine Wohnung in Ordnung bringen.",
+				hu: " Man reikia susitvarkyti butą."
+			},
+			"094 - ein Profil anlegen":{
+				de: " Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+				hu: " Vakar sukūriau naują profilį „LindeIn“."
+			},
+			"095 - eine Prüfung bestehen":{
+				de: " Ich will die B2 Prüfung bestehen.",
+				hu: " Noriu išlaikyti B2 egzaminą."
+			},
+			"096 - durch eine Prüfung fallen":{
+				de: " Ich bin durch meine letzte B2 Prüfung gefallen.",
+				hu: " Neišlaikiau paskutinio B2 egzamino."
+			},
+			"097 - eine Qualifikation mitbringen":{
+				de: " Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+				hu: " Jis turi daug patirties ir gerą kvalifikaciją."
+			},
+			"098 - einen Rat geben":{
+				de: " Können Sie mir einen guten Rat geben?",
+				hu: " Gal galite duoti man gerų patarimų?"
+			},
+			"099 - Rechenschaft ablegen über":{
+				de: " Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+				hu: " Jūs atsiskaitėte už savo kelionių planus."
+			},
+			"100 - zur Rechenschaft ziehen für":{
+				de: " Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+				hu: " Jūs negalite manęs laikyti atsakingu už savo klaidas."
+			},
+			"101 - in Rechnung stellen":{
+				de: " Der Zahnarzt stellt mir die Kosten in Rechnung.",
+				hu: " Odontologas man išrašo sąskaitą."
+			},
+			"102 - eine Rede halten über":{
+				de: " Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+				hu: " Prezidentas pasakė kalbą apie naujus planus."
+			},
+			"103 - in eine Reihenfolge bringen":{
+				de: " Ich bringe meine Dokumente immer in eine Reihenfolge.",
+				hu: " Aš visada susitvarkau savo dokumentus."
+			},
+			"104 - den Respekt verlieren vor":{
+				de: " Man sollte vor der Natur nicht den Respekt verlieren",
+				hu: " Negalima prarasti pagarbos gamtai."
+			},
+			"105 - Rückmeldung geben":{
+				de: " Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten. ",
+				hu: " Dėstytojas pateikė studentams išsamius atsiliepimus apie jų darbą."
+			},
+			"106 - Rücksicht nehmen auf":{
+				de: " Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn! ",
+				hu: " Prašome atsižvelgti į kaimynų miegą!"
+			},
+			"107 - die Ruhe bewahren":{
+				de: " Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe. ",
+				hu: " Nors situacija buvo kritinė, kapitonas išliko ramus."
+			},
+			"108 - Schluss machen mit":{
+				de: " Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht. ",
+				hu: " Jis išsiskyrė su savo mergina po penkerių metų."
+			},
+			"109 - zur Sprache bringen":{
+				de: " Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen. ",
+				hu: " Problemas aptarsime kitame posėdyje."
+			},
+			"110 - Stellung nehmen zu":{
+				de: " Ich möchte zu diesem komplizierten Fall keine Stellung nehmen. ",
+				hu: " Nenoriu komentuoti šios sudėtingos bylos."
+			},
+			"111 - unter Strafe stehen":{
+				de: " Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig. ",
+				hu: " Šis veiksmas nėra tiesiogiai baudžiamas, tačiau moraliai abejotinas."
+			},
+			"112 - unter Strafe stellen":{
+				de: " Man sollte das unnötige Töten von Tieren unter Strafe stellen. ",
+				hu: " Nereikalingas gyvūnų žudymas turėtų būti baudžiamas."
+			},
+			"113 - in Streik treten":{
+				de: " Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten. ",
+				hu: " Darbininkai šįryt streikavo dėl mažų atlyginimų."
+			},
+			"114 - Stress haben mit":{
+				de: " Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms. ",
+				hu: " Kurį laiką turėjau problemų su kaimyne dėl triukšmo."
+			},
+			"115 - unter Stress stehen":{
+				de: " Aufgrund der Abgabetermine steht das gesamte Team unter Stress. ",
+				hu: " Visa komanda patiria stresą dėl terminų."
+			},
+			"116 - eine Tätigkeit ausüben":{
+				de: " Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus. ",
+				hu: " Ji daugelį metų dirba laisvai samdoma vertėja."
+			},
+			"117 - im Trend liegen":{
+				de: " Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt. ",
+				hu: " Ši technologija buvo madinga prieš penkerius metus, bet dabar yra pasenusi."
+			},
+			"118 - einen Überblick bekommen":{
+				de: " Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+				hu: " Man reikia perskaityti dokumentus, kad susidaryčiau bendrą vaizdą."
+			},
+			"119 - einen Überblick geben":{
+				de: " Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+				hu: " Viršininkas visiems darbuotojams pateiks ketvirčio duomenų apžvalgą."
+			},
+			"120 - einen Unterschied machen":{
+				de: " Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+				hu: " Nesvarbu, ar pradedame šįryt."
+			},
+			"121 - eine Verabredung treffen":{
+				de: " Möchten Sie mit mir eine Verabredung zu treffen?",
+				hu: " Ar norėtumėte susitarti dėl susitikimo su manimi?"
+			},
+			"122 - die Verantwortung übernehmen für":{
+				de: " Er musste die Verantwortung für den Fehler übernehmen.",
+				hu: " Jis turėjo prisiimti atsakomybę už klaidą."
+			},
+			"123 - sich in Verbindung setzen mit":{
+				de: " Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+				hu: " Rytoj ryte susisieksiu su klientų aptarnavimo tarnyba."
+			},
+			"124 - eine Vereinbarung treffen zu":{
+				de: " Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+				hu: " Tikimės greitai susitarti dėl sąlygų."
+			},
+			"125 - zur Verfügung stehen":{
+				de: " Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+				hu: " Jei turite klausimų, nedvejodami susisiekite su manimi."
+			},
+			"126 - zur Verfügung stellen":{
+				de: " Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+				hu: " Įmonė suteiks reikiamas lėšas."
+			},
+			"127 - in Verhandlungen stehen":{
+				de: " Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+				hu: " Jau kelis mėnesius derasimės su nuomotoju."
+			},
+			"128 - in Verhandlungen treten":{
+				de: " Nach der Einigung können wir über die Details in Verhandlungen treten.",
+				hu: " Kai susitarsime, galėsime derėtis dėl detalių."
+			},
+			"129 - ein Versprechen geben":{
+				de: " Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+				hu: " Pažadu, kad atvyksiu laiku."
+			},
+			"130 - einen Vertrag abschließen mit":{
+				de: " Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+				hu: " Pasirašėme naują sutartį su savo tiekėju."
+			},
+			"131 - Vertrauen herstellen":{
+				de: " Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+				hu: " Reikia laiko, kad tarp kolegų užmegztume pasitikėjimą."
+			},
+			"132 - Vorbereitungen treffen":{
+				de: " Wir müssen Vorbereitungen für die Konferenz treffen.",
+				hu: " Turime pasiruošti konferencijai."
+			},
+			"133 - im Vordergrund stehen":{
+				de: " Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+				hu: " Šiame projekte svarbiausia yra efektyvumas, o ne kaina."
+			},
+			"134 - einen Vorschlag machen":{
+				de: " Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+				hu: " Ar galiu pasiūlyti, kaip galėtume išspręsti šią problemą?"
+			},
+			"135 - einen Vorschlag unterbreiten":{
+				de: " Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+				hu: " Prašau pateikti savo pasiūlymą raštu iki kitos savaitės."
+			},
+			"136 - Vorsorge treffen für":{
+				de: " Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+				hu: " Turime numatyti nenumatytų išlaidų rezervus."
+			},
+			"137 - eine Wahl treffen":{
+				de: " Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+				hu: " Jam teko rinktis tarp karjeros ir šeimos."
+			},
+			"138 - im Wettbewerb stehen mit":{
+				de: " Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+				hu: " Mūsų įmonė konkuruoja su daugeliu tarptautinių įmonių."
+			},
+			"139 - Wert legen auf":{
+				de: " Unsere Firma legt viel Wert auf die Sicherheit.",
+				hu: " Mūsų įmonė skiria didelį dėmesį saugai."
+			},
+			"140 - Wertschätzung genießen":{
+				de: " In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+				hu: " Vokietijoje darbuotojai vertinami už savo darbą."
+			},
+			"141 - Widerstand leisten gegen":{
+				de: " Ich leiste Widerstand gegen viele Süßigkeiten.",
+				hu: " Aš atsisakau per daug saldumynų."
+			},
+			"142 - Wirkung zeigen":{
+				de: " Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+				hu: " Prezidento kreipimasis, deja, turėjo mažai įtakos."
+			},
+			"143 - das Wort ergreifen":{
+				de: " Nach einer langen Pause ergriff der Moderator das Wort.",
+				hu: " Po ilgos pauzės žodį perėmė moderatorius."
+			},
+			"144 - ein Ziel setzen":{
+				de: " Ich setze mir eine Ziel.",
+				hu: " Aš išsikėliau tikslą."
+			},
+			"145 - ein Ziel verfolgen":{
+				de: " Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+				hu: " Nepaisant daugelio kliūčių, jis atkakliai siekė savo tikslo."
+			},
+			"146 - eine Zusage erhalten":{
+				de: " Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+				hu: " Prieš pradėdami planuoti, turime gauti patvirtinimą iš buto savininko."
+			},
+			"147 - im Zusammenhang stehen mit":{
+				de: " Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+				hu: " Kainų padidėjimas yra tiesiogiai susijęs su infliacija."
+			},
+
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="pastu0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - pastunisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - Abschied nehmen von": " الوداع ووایی - 001",
+			"002 - die Absicht haben": " اراده لري - 002",
+			"003 - eine Absprache treffen mit": " سره یو تړون وکړي - 003",
+			"004 - eine Ahnung haben von": " د - 004",
+			"005 - eine Andeutung machen": " یو اشاره ولرئ - 005",
+			"006 - Anerkennung finden bei/für": " د پیژندنې موندنه له/لپاره - 006",
+			"007 - einen Anfang machen mit": " سره پیل وکړئ - 007",
+			"008 - eine Anforderung erfüllen": " یوه اړتیا پوره کړئ - 008",
+			"009 - ein Angebot machen": " وړاندیز وکړئ - 009",
+			"010 - ein Angebot unterbreiten": " وړاندیز وسپارئ - 010",
+			"011 - etwas im Angebot haben": " د یو څه وړاندیز کول - 011",
+			"012 - etwas in Anspruch nehmen": " د یو څه څخه ګټه پورته کول - 012",
+			"013 - einen Antrag stellen auf": " د غوښتنلیک سپارل - 013",
+			"014 - eine Antwort geben": " د ځواب ورکولو لپاره - 014",
+			"015 - eine Anweisung geben": " د لارښوونې ورکولو لپاره - 015",
+			"016 - zur Anwendung kommen": " د پلي کیدو لپاره - 016",
+			"017 - einen Auftrag erteilen": " امر ورکول - 017",
+			"018 - in Auftrag geben zu": " د یو څه کمیشن کول - 018",
+			"019 - aus den Augen verlieren": " د لید له لاسه ورکول - 019",
+			"020 - zum Ausdruck bringen": " څرګندول - 020",
+			"021 - zum Ausdruck kommen": " د څرګندولو لپاره - 021",
+			"022 - Auskunft geben": " د معلوماتو چمتو کولو لپاره - 022",
+			"023 - eine Äußerung machen": " د بیان ورکولو لپاره - 023",
+			"024 - Beachtung finden bei/für": " د / لپاره په پام کې نیول کیږي - 024",
+			"025 - Beachtung schenken": " پاملرنه کول - 025",
+			"026 - einen Beitrag leisten für/zu": " د / لپاره په برخه کې ونډه اخیستل - 026",
+			"027 - Berücksichtigung finden": " په پام کې نیول کیږي - 027",
+			"028 - bei/wegen Bescheid geben": " د خبر ورکولو / په اړه - 028",
+			"029 - eine Bestellung aufgeben": " د امر ورکولو لپاره - 029",
+			"030 - in Betracht kommen": " په پام کې نیول کیږي - 030",
+			"031 - in Betracht ziehen": " په پام کې ونیسئ - 031",
+			"032 - in Betrieb nehmen": " په کار اچول شوی - 032",
+			"033 - Bezug nehmen auf": " ته مراجعه وکړئ - 033",
+			"034 - im Blick haben": " په پام کې ونیسئ - 034",
+			"035 - die Daumen drücken für": "ګوتې یې سره تیرې کړې - 035",
+			"036 - zur Debatte stehen": " د بحث لپاره چمتو اوسئ - 036",
+			"037 - eine Diskussion führen über/mit": " په اړه/سره بحث وکړئ - 037",
+			"038 - zur Diskussion stellen": " د فشار لاندې راشئ - 038",
+			"039 - unter Druck setzen": " د تاثیر ترلاسه کول - 039",
+			"040 - einen Eindruck bekommen von": " په اړه یو تاثر جوړ کړئ - 040",
+			"041 - Eindruck machen auf": " په اړه یو تاثیر جوړ کړئ - 041",
+			"042 - Einfluss nehmen auf": " پریکړه وکړئ - 042",
+			"043 - eine Entscheidung treffen": " پریکړې ته راوړئ - 043",
+			"044 - zur Entscheidung bringen": " پریکړې ته وسپارئ - 044",
+			"045 - zur Entscheidung stellen": " تجربه ترلاسه کړئ - 045",
+			"046 - eine Erfahrung machen mit": " په اړه معلومات ترلاسه کړئ - 046",
+			"047 - in Erfahrung bringen": " راشئ - 047",
+			"048 - in Erfüllung gehen": " د وضاحت لپاره ومومئ - 048",
+			"049 - eine Erklärung finden für": " د دې لپاره یو بدیل جوړ کړئ - 049",
+			"050 - Ersatz leisten für": " نظر ترلاسه کړئ - 050",
+			"051 - Feedback bekommen": " نظر ورکړئ - 051",
+			"052 - Feedback geben": " یوه ستونزه حل کړئ - 052",
+			"053 - einen Fehler beheben": " پایلې ولرئ - 053",
+			"054 - zur Folge haben": " غوښتنه وکړئ - 054",
+			"055 - eine Forderung stellen": " پوښتنه وکړئ - 055",
+			"056 - eine Frage stellen": " یو ښه کار وکړئ - 056",
+			"057 - eine Freude bereiten": " سوداګري وکړئ - 057",
+			"058 - ins Geschäft kommen mit": " د/سره خبرې اترې وکړئ - 058",
+			"059 - ein Gespräch führen über/mit": " خبرې اترې راپورته کړئ - 059",
+			"060 - ins Gespräch bringen": " باور له لاسه ورکول - 060",
+			"061 - den Glauben verlieren": " یو څه تر کنټرول لاندې راوستل - 061",
+			"062 - etwas im Griff haben": " یو څه تر کنټرول لاندې راوستل - 062",
+			"063 - etwas in den Griff bekommen": " د شیانو تر پایه رسیدل - 063",
+			"064 - auf den Grund gehen": " یو چا ته ننګونه ورکول - 064",
+			"065 - jemanden vor eine Herausforderung stellen": " د مرستې وړاندیز کول - 065",
+			"066 - Hilfe leisten": " د مرستې غوښتنه کول - 066",
+			"067 - zu Hilfe nehmen": " هیله پریښودل - 067",
+			"068 - die Hoffnung aufgeben": " هیله درلودل - 068",
+			"069 - sich Hoffnung machen": " د یوې مفکورې سره راتلل - 069",
+			"070 - auf eine Idee kommen": " باید په پام کې ونیول شي - 070",
+			"071 - infrage kommen": " پوښتنې ته - 071",
+			"072 - infrage stellen": " د لیوالتیا راپارولو لپاره - 072",
+			"073 - Interesse wecken an/für": " د لیوالتیا ښودلو لپاره/لپاره - 073",
+			"074 - Interesse zeigen an/für": " د خبر ورکولو لپاره - 074",
+			"075 - in Kenntnis setzen von": " د یادښت اخیستلو لپاره - 075",
+			"076 - zur Kenntnis nehmen": " سره اړیکه ونیسئ - 076",
+			"077 - Kontakt aufnehmen mit": " د وضاحت ترلاسه کولو لپاره - 077",
+			"078 - Klarheit gewinnen über": " د اړیکې ساتلو لپاره - 078",
+			"079 - Kontakt halten": " د اړیکې ټینګولو لپاره - 079",
+			"080 - Kontakt knüpfen mit": " سره اړیکه ونیسي - 080",
+			"081 - Kontakt knüpfen zu": " سره اړیکه ونیسي - 081",
+			"082 - in Kontakt stehen mit": " سره اړیکه ونیسي - 082",
+			"083 - in Kontakt treten mit": " د لګښتونو برداشت کول - 083",
+			"084 - die Kosten tragen für": " د لګښتونو پوښلو لپاره - 084",
+			"085 - die Kosten übernehmen für": " نافذېږي - 085",
+			"086 - in Kraft treten": " د جګړې پر وړاندې/سره/له امله - 086",
+			"087 - Krieg führen gegen/mit/wegen": " نیوکه/لپاره - 087",
+			"088 - Kritik üben an/für": " په بایلونکي پای کې راووځي - 088",
+			"089 - den Kürzeren ziehen": " د بایلونکي پای ته رسیدو لپاره - 089",
+			"090 - jemanden auf dem Laufenden halten": " د یو چا خبر ساتلو لپاره - 090",
+			"091 - auf dem Laufenden sein": " تازه اوسئ - 091",
+			"092 - der Meinung sein": " نظر ولرئ - 092",
+			"093 - in Ordnung bringen": " اصلاح کړئ - 093",
+			"094 - ein Profil anlegen": " پروفایل جوړ کړئ - 094",
+			"095 - eine Prüfung bestehen": " ازموینه پاس کړئ - 095",
+			"096 - durch eine Prüfung fallen": " ازموینه کې ناکام شئ - 096",
+			"097 - eine Qualifikation mitbringen": " وړتیا ولرئ - 097",
+			"098 - einen Rat geben": " مشوره ورکړئ - 098",
+			"099 - Rechenschaft ablegen über": " حساب ورکړئ - 099",
+			"100 - zur Rechenschaft ziehen für": " د دې لپاره مسؤل اوسئ - 100",
+			"101 - in Rechnung stellen": " د بل کولو لپاره - 101",
+			"102 - eine Rede halten über": " د خبرو کولو لپاره - 102",
+			"103 - in eine Reihenfolge bringen": " ترتیب کول - 103",
+			"104 - den Respekt verlieren vor": " د درناوي له لاسه ورکول - 104",
+			"105 - Rückmeldung geben": " د نظر ورکول - 105",
+			"106 - Rücksicht nehmen auf": " د پاملرنې وړ وي - 106",
+			"107 - die Ruhe bewahren": " ارام پاتې کیدل - 107",
+			"108 - Schluss machen mit": " د جلا کیدو لپاره - 108",
+			"109 - zur Sprache bringen": " راوړل - 109",
+			"110 - Stellung nehmen zu": " د دریځ نیولو لپاره - 110",
+			"111 - unter Strafe stehen": " د سزا سره مخ شي - 111",
+			"112 - unter Strafe stellen": " د جریمې لګول - 112",
+			"113 - in Streik treten": " په اعتصاب لاس پورې کړي - 113",
+			"114 - Stress haben mit": " ستونزې ولري - 114",
+			"115 - unter Stress stehen": " تر فشار لاندې وي - 115",
+			"116 - eine Tätigkeit ausüben": " د فعالیت ترسره کولو لپاره - 116",
+			"117 - im Trend liegen": " د فیشن وړ وي - 117",
+			"118 - einen Überblick bekommen": " د یوې لنډې کتنې ترلاسه کولو لپاره - 118",
+			"119 - einen Überblick geben": " د یوې لنډې کتنې ورکولو لپاره - 119",
+			"120 - einen Unterschied machen": " د یوې بدلون راوستلو لپاره - 120",
+			"121 - eine Verabredung treffen": " د ملاقات وخت ټاکلو لپاره - 121",
+			"122 - die Verantwortung übernehmen für": " مسؤلیت په غاړه اخیستل - 122",
+			"123 - sich in Verbindung setzen mit": " اړیکه نیول - 123",
+			"124 - eine Vereinbarung treffen zu": " د تړون کولو لپاره - 124",
+			"125 - zur Verfügung stehen": " ته د شتون لپاره - 125",
+			"126 - zur Verfügung stellen": " د شتون لپاره - 126",
+			"127 - in Verhandlungen stehen": " په خبرو اترو کې د ګډون لپاره - 127",
+			"128 - in Verhandlungen treten": " په خبرو اترو کې د ګډون لپاره - 128",
+			"129 - ein Versprechen geben": " ژمنه کول - 129",
+			"130 - einen Vertrag abschließen mit": " د تړون پای ته رسولو لپاره - 130",
+			"131 - Vertrauen herstellen": " باور رامنځته کړئ - 131",
+			"132 - Vorbereitungen treffen": " چمتووالی ونیسئ - 132",
+			"133 - im Vordergrund stehen": " په مخکینۍ برخه کې اوسئ - 133",
+			"134 - einen Vorschlag machen": " وړاندیز وکړئ - 134",
+			"135 - einen Vorschlag unterbreiten": " وړاندیز وسپارئ - 135",
+			"136 - Vorsorge treffen für": " د دې لپاره شرایط جوړ کړئ - 136",
+			"137 - eine Wahl treffen": " انتخاب وکړئ - 137",
+			"138 - im Wettbewerb stehen mit": " سیالي وکړئ - 138",
+			"139 - Wert legen auf": " ارزښت - 139",
+			"140 - Wertschätzung genießen": " د ستاینې څخه خوند واخلئ - 140",
+			"141 - Widerstand leisten gegen": " مقاومت وکړئ - 141",
+			"142 - Wirkung zeigen": " اغیزه وکړئ - 142",
+			"143 - das Wort ergreifen": " خبرې وکړئ - 143",
+			"144 - ein Ziel setzen": " هدف وټاکئ - 144",
+			"145 - ein Ziel verfolgen": " هدف تعقیب کړئ - 145",
+			"146 - eine Zusage erhalten": " ژمنتیا ترلاسه کړئ - 146",
+			"147 - im Zusammenhang stehen mit": " ورسره تړاو ولرئ - 147",
+
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von":{
+				de: " Ich werde von dir Abschied nehmen.",
+				hu: " زه به تاسو ته الوداع ووایم."
+			},
+			"002 - die Absicht haben":{
+				de: " Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: " زه هیڅ اراده نه لرم چې هغه ته حقیقت ووایم."
+			},
+			"003 - eine Absprache treffen mit":{
+				de: " Wir haben mit der Firma keine Absprache getroffen.",
+				hu: " موږ د شرکت سره هیڅ ډول ترتیبات نه دي نیولي."
+			},
+			"004 - eine Ahnung haben von":{
+				de: " Er hat keine Ahnung von moderner Technologie.",
+				hu: " هغه د عصري ټیکنالوژۍ په اړه هیڅ پوهه نلري."
+			},
+			"005 - eine Andeutung machen":{
+				de: " Er hat eine klare Andeutung über seine Kündigung gemacht. ",
+				hu: " هغه د استعفا ورکولو لپاره د خپل نیت څرګند اشاره کړې ده."
+			},
+			"006 - Anerkennung finden bei/für":{
+				de: " Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit. ",
+				hu: " نوی کارمند په چټکۍ سره د هغه د اعتبار لپاره د خپلو همکارانو څخه پیژندل کیږي."
+			},
+			"007 - einen Anfang machen mit":{
+				de: " Wir sollten endlich einen Anfang mit den Vorbereitungen machen. ",
+				hu: " موږ باید په پای کې د چمتووالي سره پیل وکړو."
+			},
+			"008 - eine Anforderung erfüllen":{
+				de: " Das Produkt muss alle Sicherheitsanforderungen erfüllen. ",
+				hu: " محصول باید د خوندیتوب ټولې اړتیاوې پوره کړي."
+			},
+			"009 - ein Angebot machen":{
+				de: " Die Firma machte dem Kunden ein sehr attraktives Angebot. ",
+				hu: " شرکت پیرودونکي ته یو ډیر زړه راښکونکی وړاندیز وکړ."
+			},
+			"010 - ein Angebot unterbreiten":{
+				de: " Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten. ",
+				hu: " پراختیا کونکی به سبا موږ ته یو لیکلی وړاندیز وسپاري."
+			},
+			"011 - etwas im Angebot haben":{
+				de: " Der Supermarkt hat diese Woche frische Erdbeeren im Angebot. ",
+				hu: " په دې اونۍ کې په سوپر مارکیټ کې تازه سټرابري شتون لري."
+			},
+			"012 - etwas in Anspruch nehmen":{
+				de: " Die Reparatur nahm viel Zeit in Anspruch. ",
+				hu: " ترمیم ډیر وخت ونیو."
+			},
+			"013 - einen Antrag stellen auf":{
+				de: " Viele Studenten stellen einen Antrag auf BAföG. ",
+				hu: " ډیری زده کونکي د BAföG (د جرمني زده کونکو مالي مرستې) لپاره غوښتنه کوي."
+			},
+			"014 - eine Antwort geben":{
+				de: " Ich konnte noch keine Antwort auf die Aufgabe geben.",
+				hu: " زه تر اوسه پورې د دې پوښتنې ځواب نه شم ورکولی."
+			},
+			"015 - eine Anweisung geben":{
+				de: " Wir haben im Computerprogramm eine Anweisung gegeben.",
+				hu: " موږ په کمپیوټر پروګرام کې لارښوونه ورکړې."
+			},
+			"016 - zur Anwendung kommen":{
+				de: " Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+				hu: " دا اپلیکیشن یوازې په آی فون کې کارول کیدی شي."
+			},
+			"017 - einen Auftrag erteilen":{
+				de: " Er hat einen Auftrag für eine kleine Firma erteilt.",
+				hu: " هغه د یوې کوچنۍ شرکت سره امر ورکړ."
+			},
+			"018 - in Auftrag geben zu":{
+				de: " Die Schule hat zu Renovieren in Auftrag gegeben.",
+				hu: " ښوونځي د ترمیم امر وکړ."
+			},
+			"019 - aus den Augen verlieren":{
+				de: " Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+				hu: " ما په سوداګریز مرکز کې خپله مور له لاسه ورکړه."
+			},
+			"020 - zum Ausdruck bringen":{
+				de: " In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen. ",
+				hu: " په دې لیک کې، تاسو باید په څرګنده توګه خپلې اندیښنې څرګندې کړئ."
+			},
+			"021 - zum Ausdruck kommen":{
+				de: " Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck. ",
+				hu: " د ټیم مزاج په لوړ غږ سره څرګند شو."
+			},
+			"022 - Auskunft geben":{
+				de: " Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+				hu: " ښوونکي موږ ته د ازموینې په اړه معلومات راکړل."
+			},
+			"023 - eine Äußerung machen":{
+				de: " Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+				hu: " وزیر پدې اړه هیڅ بیان ورنکړ."
+			},
+			"024 - Beachtung finden bei/für":{
+				de: " Mein Vorschlag fand bei der Klasse keine Beachtung.",
+				hu: " زما وړاندیز د ټولګي لخوا له پامه غورځول شوی و."
+			},
+			"025 - Beachtung schenken":{
+				de: " Wir können nicht alle Punkten Beachtung schenken.",
+				hu: " موږ نشو کولی ټولو ټکو ته پام وکړو."
+			},
+			"026 - einen Beitrag leisten für/zu":{
+				de: " Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+				hu: " شرکت ستاسو په مسلکي پرمختګ کې مرسته نه کوي."
+			},
+			"027 - Berücksichtigung finden":{
+				de: " Die Firma hat deine Überstunden die Berücksichtigung finden.",
+				hu: " شرکت باید ستاسو اضافي وخت په پام کې ونیسي."
+			},
+			"028 - bei/wegen Bescheid geben":{
+				de: " Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+				hu: " زه نشم کولی تاسو ته خبر درکړم ځکه چې زه به آفلاین یم."
+			},
+			"029 - eine Bestellung aufgeben":{
+				de: " Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+				hu: " زه نه غواړم امر ورکړم ځکه چې زه پیسې نلرم."
+			},
+			"030 - in Betracht kommen":{
+				de: " Diese Lösung kommt für uns nicht in Betracht.",
+				hu: " دا حل زموږ لپاره اختیار نه دی."
+			},
+			"031 - in Betracht ziehen":{
+				de: " Wir müssen die Verspätung in Betracht ziehen.",
+				hu: " موږ باید ځنډ په پام کې ونیسو."
+			},
+			"032 - in Betrieb nehmen":{
+				de: " Der Techniker hat der Computer in Betrieb genommen.",
+				hu: " تخنیکر کمپیوټر په کار اچولی دی."
+			},
+			"033 - Bezug nehmen auf":{
+				de: " Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+				hu: " زه هغه خبرو ته اشاره کوم چې موږ پرون کړې وه."
+			},
+			"034 - im Blick haben":{
+				de: " Die Firma hat die Konkurrenz immer im Blick.",
+				hu: " شرکت تل په سیالۍ سترګې پټوي."
+			},
+			"035 - die Daumen drücken für":{
+				de: " Wir drücken dir die Daumen für deine Prüfung.",
+				hu: " موږ ستاسو د ازموینې لپاره خپلې ګوتې کراس کوو."
+			},
+			"036 - zur Debatte stehen":{
+				de: " Die neuen Vorschläge stehen zur Debatte.",
+				hu: " نوي وړاندیزونه د بحث لپاره دي."
+			},
+			"037 - eine Diskussion führen über/mit":{
+				de: " Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+				hu: " ما د خپلې میرمنې سره د راتلونکي په اړه بحث وکړ."
+			},
+			"038 - zur Diskussion stellen":{
+				de: " Dieses Thema möchte ich zur Diskussion stellen.",
+				hu: " زه غواړم دا موضوع د بحث لپاره وړاندې کړم."
+			},
+			"039 - unter Druck setzen":{
+				de: " Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+				hu: " د ازموینې وضعیت هغه تر ډیر فشار لاندې راوست."
+			},
+			"040 - einen Eindruck bekommen von":{
+				de: " Ich habe von dir einen guten Eindruck bekommen.",
+				hu: " ما ستاسو په اړه ښه تاثر ترلاسه کړ."
+			},
+			"041 - Eindruck machen auf":{
+				de: " Das neue Auto macht einen guten Eindruck auf mich.",
+				hu: " نوې موټر په ما ښه تاثیر کوي."
+			},
+			"042 - Einfluss nehmen auf":{
+				de: " Sie nimmt Einfluss auf ihren Partner.",
+				hu: " هغه په ​​خپل ملګري اغیزه کوي."
+			},
+			"043 - eine Entscheidung treffen":{
+				de: " Wir haben noch keine endgültige Entscheidung getroffen.",
+				hu: " موږ لا تر اوسه وروستۍ پریکړه نه ده کړې."
+			},
+			"044 - zur Entscheidung bringen":{
+				de: " Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+				hu: " هغه لا تر اوسه د خپلې رخصتۍ په اړه پریکړه نه ده کړې."
+			},
+			"045 - zur Entscheidung stellen":{
+				de: " Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+				hu: " ته به اجازه ورنکړې چې زما هیلې ستا په پریکړه اغیزه وکړي."
+			},
+			"046 - eine Erfahrung machen mit":{
+				de: " Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+				hu: " ته کولی شې د دې دندې سره ښه تجربه ولرې."
+			},
+			"047 - in Erfahrung bringen":{
+				de: " Wir müssen in Erfahrung bringen, wer das getan hat.",
+				hu: " موږ باید معلومه کړو چې دا چا کړی دی."
+			},
+			"048 - in Erfüllung gehen":{
+				de: " Endlich ist mein Traum in Erfüllung gegangen.",
+				hu: " زما خوب بالاخره ریښتیا شو."
+			},
+			"049 - eine Erklärung finden für":{
+				de: " Ich muss dringend eine Erklärung für mein Fehlen finden.",
+				hu: " زه په بیړني ډول د خپلې نه شتون لپاره وضاحت موندلو ته اړتیا لرم."
+			},
+			"050 - Ersatz leisten für":{
+				de: " Die Versicherung muss Ersatz für den Schaden leisten. ",
+				hu: " د بیمې شرکت باید د زیان جبران وکړي."
+			},
+			"051 - Feedback bekommen":{
+				de: " Hast du schon Feedback von deinem Chef bekommen",
+				hu: " آیا تاسو تر اوسه د خپل مشر څخه نظر ترلاسه کړی دی؟"
+			},
+			"052 - Feedback geben":{
+				de: " Kannst du mir bitte Feedback zu meinem Entwurf geben ",
+				hu: " مهرباني وکړئ زما د مسودې په اړه نظر راکړئ؟"
+			},
+			"053 - einen Fehler beheben":{
+				de: " Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+				hu: " تخنیکر وکولای شول چې زما په لیپ ټاپ کې ستونزه ژر تر ژره حل کړي."
+			},
+			"054 - zur Folge haben":{
+				de: " Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+				hu: " زما کمزورې پریکړې به جدي پایلې ولري."
+			},
+			"055 - eine Forderung stellen":{
+				de: " Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+				hu: " کارمندانو د لوړ معاش غوښتنه وکړه."
+			},
+			"056 - eine Frage stellen":{
+				de: " Darf ich dir eine Frage stellen?",
+				hu: " ایا زه له تاسو څخه یوه پوښتنه کولی شم؟"
+			},
+			"057 - eine Freude bereiten":{
+				de: " Sie wollte ihren Eltern eine Freude bereiten.",
+				hu: " هغه غوښتل چې خپل مور او پلار ته یو څه ډالۍ ورکړي."
+			},
+			"058 - ins Geschäft kommen mit":{
+				de: " Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+				hu: " زما مشر له بل شرکت سره تړون وکړ."
+			},
+			"059 - ein Gespräch führen über/mit":{
+				de: " Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+				hu: " مشر زما سره زما د مسلکي پرمختګ په اړه خبرې وکړې."
+			},
+			"060 - ins Gespräch bringen":{
+				de: " Mein Kollege hat seine Idee ins Gespräch gebracht.",
+				hu: " زما همکار خپل نظر وړاندې کړ."
+			},
+			"061 - den Glauben verlieren":{
+				de: " Er ist Atheist, weil er den Glauben verloren hat.",
+				hu: " هغه ملحد دی ځکه چې هغه خپل باور له لاسه ورکړی دی."
+			},
+			"062 - etwas im Griff haben":{
+				de: " Ich habe die Situation im Griff.",
+				hu: " زه وضعیت تر کنټرول لاندې لرم."
+			},
+			"063 - etwas in den Griff bekommen":{
+				de: " Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+				hu: " نوی مشر کولی شي کارمندان اداره کړي."
+			},
+			"064 - auf den Grund gehen":{
+				de: " Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+				hu: " ارواپوه غواړي د انسان د ذهن تر ژورو پورې ورسیږي."
+			},
+			"065 - jemanden vor eine Herausforderung stellen":{
+				de: " Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+				hu: " نوې دنده ماته د یوې لویې ننګونې سره مخ کوي."
+			},
+			"066 - Hilfe leisten":{
+				de: " Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+				hu: " زما ملګرو ما سره د جرمني په بیوروکراسۍ کې مرسته وکړه."
+			},
+			"067 - zu Hilfe nehmen":{
+				de: " Ich habe einen Freund zu Hilfe genommen.",
+				hu: " ما له یو ملګري څخه د مرستې غوښتنه وکړه."
+			},
+			"068 - die Hoffnung aufgeben":{
+				de: " Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+				hu: " سیاستوال په سیاست کې هیله پریښوده."
+			},
+			"069 - sich Hoffnung machen":{
+				de: " Du solltest dir keine falschen Hoffnungen machen.",
+				hu: " تاسو باید خپلې هیلې لوړې نه کړئ."
+			},
+			"070 - auf eine Idee kommen":{
+				de: " Ich bin plötzlich auf eine gute Idee gekommen.",
+				hu: " ما ناڅاپه یو ښه نظر درلود."
+			},
+			"071 - infrage kommen":{
+				de: " Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+				hu: " زما لپاره کوچني اپارتمان ته کډه کول له پوښتنې بهر دي."
+			},
+			"072 - infrage stellen":{
+				de: " Er stellt die Entscheidung des Chefs infrage.",
+				hu: " هغه د مشر د پریکړې په اړه پوښتنې کوي."
+			},
+			"073 - Interesse wecken an/für":{
+				de: " Die Werbung weckt Interesse für das neue Produkt.",
+				hu: " اعلان په نوي محصول کې لیوالتیا رامینځته کوي."
+			},
+			"074 - Interesse zeigen an/für":{
+				de: " Viele Studenten zeigen Interesse an diesem Kurs.",
+				hu: " ډیری زده کونکي پدې کورس کې لیوالتیا ښیې."
+			},
+			"075 - in Kenntnis setzen von":{
+				de: " Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+				hu: " خدمت ماته د بیارغونې لګښتونو په اړه خبر ورکوي."
+			},
+			"076 - zur Kenntnis nehmen":{
+				de: " Ich nehme Ihre Beschwerde zur Kenntnis.",
+				hu: " زه ستاسو شکایت منم."
+			},
+			"077 - Kontakt aufnehmen mit":{
+				de: " Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+				hu: " ایا تاسو غواړئ له خپلو زړو ملګرو سره اړیکه ونیسئ؟"
+			},
+			"078 - Klarheit gewinnen über":{
+				de: " Ich muss Klarheit über die Lösung gewinnen.",
+				hu: " زه اړتیا لرم چې د حل په اړه وضاحت ترلاسه کړم."
+			},
+			"079 - Kontakt halten":{
+				de: " Ich halte Kontakt zu meinen alten Freunden.",
+				hu: " زه له خپلو زړو ملګرو سره په اړیکه کې یم."
+			},
+			"080 - Kontakt knüpfen mit":{
+				de: " Der Administrator knüpft Kontakte mit der Entwicklungen.",
+				hu: " مدیر د پراختیایی ټیم سره اړیکه نیسي."
+			},
+			"081 - Kontakt knüpfen zu":{
+				de: " Sie will mehrere Kontakte im Internet zu knüpfen.",
+				hu: " هغه غواړي چې په آنلاین ډول څو اړیکې ونیسي."
+			},
+			"082 - in Kontakt stehen mit":{
+				de: " Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+				hu: " شرکت د څو شریکو شرکتونو سره په تماس کې دی."
+			},
+			"083 - in Kontakt treten mit":{
+				de: " Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+				hu: " پرون د پیرودونکو خدماتو له ما سره اړیکه ونیوله."
+			},
+			"084 - die Kosten tragen für":{
+				de: " Die Saga trägt die Kosten für die Renovierung.",
+				hu: " ساګا د بیارغونې لګښتونه پوښي."
+			},
+			"085 - die Kosten übernehmen für":{
+				de: " Die Versicherung übernimmt die Kosten für die Behandlung.",
+				hu: " د بیمې شرکت د درملنې لګښتونه پوښي."
+			},
+			"086 - in Kraft treten":{
+				de: " Das neue Gesetz wird morgen in Kraft treten.",
+				hu: " نوی قانون به سبا نافذ شي."
+			},
+			"087 - Krieg führen gegen/mit/wegen":{
+				de: " Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+				hu: " موږ نه غواړو چې د خپلو ګاونډیانو په وړاندې جګړه پیل کړو."
+			},
+			"088 - Kritik üben an/für":{
+				de: " Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+				hu: " هغه د مشر په پریکړه نیوکه ونه کړه."
+			},
+			"089 - den Kürzeren ziehen":{
+				de: " Er hat den Kürzeren gezogen.",
+				hu: " هغه په ​​بایلونکي پای کې راغی."
+			},
+			"090 - jemanden auf dem Laufenden halten":{
+				de: " Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+				hu: " د اورګاډي سټیشن مسافرینو ته د ځنډ په اړه خبر ورکوي."
+			},
+			"091 - auf dem Laufenden sein":{
+				de: " In der IT muss man auf dem Laufenden sein.",
+				hu: " په معلوماتي ټکنالوژۍ کې، تاسو باید تازه معلومات ولرئ."
+			},
+			"092 - der Meinung sein":{
+				de: " Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+				hu: " زه فکر کوم چې موږ باید ډیری دندې ترسره کړو."
+			},
+			"093 - in Ordnung bringen":{
+				de: " Ich muss meine Wohnung in Ordnung bringen.",
+				hu: " زه اړتیا لرم چې خپل اپارتمان پاک وساتو."
+			},
+			"094 - ein Profil anlegen":{
+				de: " Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+				hu: " ما پرون په لینډ ان کې یو نوی پروفایل جوړ کړ."
+			},
+			"095 - eine Prüfung bestehen":{
+				de: " Ich will die B2 Prüfung bestehen.",
+				hu: " زه غواړم د B2 ازموینه پاس کړم."
+			},
+			"096 - durch eine Prüfung fallen":{
+				de: " Ich bin durch meine letzte B2 Prüfung gefallen.",
+				hu: " زه خپله وروستۍ B2 ازموینه کې ناکام شوم."
+			},
+			"097 - eine Qualifikation mitbringen":{
+				de: " Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+				hu: " هغه ډیره تجربه او ښه وړتیاوې راوړي."
+			},
+			"098 - einen Rat geben":{
+				de: " Können Sie mir einen guten Rat geben?",
+				hu: " ایا تاسو ماته یو څه ښه مشوره راکولی شئ؟"
+			},
+			"099 - Rechenschaft ablegen über":{
+				de: " Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+				hu: " تاسو د خپلو سفر پلانونو حساب ورکړی دی."
+			},
+			"100 - zur Rechenschaft ziehen für":{
+				de: " Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+				hu: " تاسو نشئ کولی ما د خپلو غلطیو لپاره مسؤل وګڼئ."
+			},
+			"101 - in Rechnung stellen":{
+				de: " Der Zahnarzt stellt mir die Kosten in Rechnung.",
+				hu: " غاښونو ډاکټر ماته بلونه راکوي."
+			},
+			"102 - eine Rede halten über":{
+				de: " Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+				hu: " ولسمشر د نویو پلانونو په اړه وینا وکړه."
+			},
+			"103 - in eine Reihenfolge bringen":{
+				de: " Ich bringe meine Dokumente immer in eine Reihenfolge.",
+				hu: " زه تل خپل اسناد په ترتیب سره تنظیموم."
+			},
+			"104 - den Respekt verlieren vor":{
+				de: " Man sollte vor der Natur nicht den Respekt verlieren",
+				hu: " باید د طبیعت درناوی له لاسه ورنکړم."
+			},
+			"105 - Rückmeldung geben":{
+				de: " Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten. ",
+				hu: " استاد زده کونکو ته د دوی د کار په اړه مفصل نظر ورکړ."
+			},
+			"106 - Rücksicht nehmen auf":{
+				de: " Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn! ",
+				hu: " مهرباني وکړئ د ګاونډیانو خوب ته پام وکړئ!"
+			},
+			"107 - die Ruhe bewahren":{
+				de: " Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe. ",
+				hu: " که څه هم وضعیت نازک و، کپتان ارام پاتې شو."
+			},
+			"108 - Schluss machen mit":{
+				de: " Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht. ",
+				hu: " هغه له پنځو کلونو وروسته له خپلې ملګرې سره جلا شو."
+			},
+			"109 - zur Sprache bringen":{
+				de: " Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen. ",
+				hu: " موږ به په راتلونکې غونډه کې ستونزې حل کړو."
+			},
+			"110 - Stellung nehmen zu":{
+				de: " Ich möchte zu diesem komplizierten Fall keine Stellung nehmen. ",
+				hu: " زه نه غواړم په دې پیچلې قضیه تبصره وکړم."
+			},
+			"111 - unter Strafe stehen":{
+				de: " Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig. ",
+				hu: " دا عمل په مستقیم ډول د سزا وړ نه دی، مګر دا په اخلاقي لحاظ د پوښتنې وړ دی."
+			},
+			"112 - unter Strafe stellen":{
+				de: " Man sollte das unnötige Töten von Tieren unter Strafe stellen. ",
+				hu: " د څارویو غیر ضروري وژنه باید د سزا وړ وي."
+			},
+			"113 - in Streik treten":{
+				de: " Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten. ",
+				hu: " کارګرانو نن سهار د کم معاش له امله اعتصاب وکړ."
+			},
+			"114 - Stress haben mit":{
+				de: " Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms. ",
+				hu: " ما د شور له امله د یو څه وخت لپاره له خپل ګاونډي سره ستونزه درلوده."
+			},
+			"115 - unter Stress stehen":{
+				de: " Aufgrund der Abgabetermine steht das gesamte Team unter Stress. ",
+				hu: " ټوله ټیم د ضرب الاجل له امله تر فشار لاندې ده."
+			},
+			"116 - eine Tätigkeit ausüben":{
+				de: " Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus. ",
+				hu: " هغه له ډیرو کلونو راهیسې د آزاد ژباړونکي په توګه کار کوي."
+			},
+			"117 - im Trend liegen":{
+				de: " Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt. ",
+				hu: " دا ټیکنالوژي پنځه کاله دمخه رجحاني وه، مګر اوس زوړ شوی دی."
+			},
+			"118 - einen Überblick bekommen":{
+				de: " Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+				hu: " زه اړتیا لرم چې اسناد ولولم ترڅو عمومي کتنه ترلاسه کړم."
+			},
+			"119 - einen Überblick geben":{
+				de: " Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+				hu: " مشر به ټولو کارمندانو ته د درې میاشتني ارقامو لنډیز ورکړي."
+			},
+			"120 - einen Unterschied machen":{
+				de: " Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+				hu: " دا هیڅ توپیر نلري چې موږ نن سهار پیل کوو."
+			},
+			"121 - eine Verabredung treffen":{
+				de: " Möchten Sie mit mir eine Verabredung zu treffen?",
+				hu: " ایا تاسو غواړئ چې له ما سره د ملاقات وخت ونیسئ؟"
+			},
+			"122 - die Verantwortung übernehmen für":{
+				de: " Er musste die Verantwortung für den Fehler übernehmen.",
+				hu: " هغه باید د غلطۍ مسؤلیت په غاړه واخلي."
+			},
+			"123 - sich in Verbindung setzen mit":{
+				de: " Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+				hu: " زه به سبا سهار د پیرودونکو خدماتو سره اړیکه ونیسم."
+			},
+			"124 - eine Vereinbarung treffen zu":{
+				de: " Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+				hu: " موږ هیله لرو چې ژر تر ژره د شرایطو په اړه یوې موافقې ته ورسیږو."
+			},
+			"125 - zur Verfügung stehen":{
+				de: " Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+				hu: " که تاسو کومه پوښتنه لرئ نو مهرباني وکړئ له ما سره اړیکه ونیسئ."
+			},
+			"126 - zur Verfügung stellen":{
+				de: " Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+				hu: " شرکت به اړین فنډونه چمتو کړي."
+			},
+			"127 - in Verhandlungen stehen":{
+				de: " Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+				hu: " موږ د میاشتو راهیسې د کور مالک سره په خبرو اترو بوخت یو."
+			},
+			"128 - in Verhandlungen treten":{
+				de: " Nach der Einigung können wir über die Details in Verhandlungen treten.",
+				hu: " یوځل چې موږ یوې موافقې ته ورسیږو، موږ کولی شو د جزیاتو په اړه خبرې اترې وکړو."
+			},
+			"129 - ein Versprechen geben":{
+				de: " Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+				hu: " زه ژمنه کوم چې زه به په وخت راشم."
+			},
+			"130 - einen Vertrag abschließen mit":{
+				de: " Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+				hu: " موږ د خپل عرضه کوونکي سره یو نوی تړون لاسلیک کړی دی."
+			},
+			"131 - Vertrauen herstellen":{
+				de: " Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+				hu: " د همکارانو ترمنځ د باور جوړولو لپاره وخت نیسي."
+			},
+			"132 - Vorbereitungen treffen":{
+				de: " Wir müssen Vorbereitungen für die Konferenz treffen.",
+				hu: " موږ باید د کنفرانس لپاره چمتووالی ونیسو."
+			},
+			"133 - im Vordergrund stehen":{
+				de: " Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+				hu: " پدې پروژه کې، موثریت خورا مهم دی، نه لګښت."
+			},
+			"134 - einen Vorschlag machen":{
+				de: " Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+				hu: " ایا زه کولی شم د ستونزې د حل کولو په اړه یو وړاندیز وکړم؟"
+			},
+			"135 - einen Vorschlag unterbreiten":{
+				de: " Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+				hu: " مهرباني وکړئ خپل وړاندیز د راتلونکې اونۍ پورې په لیکلي بڼه راته وسپارئ."
+			},
+			"136 - Vorsorge treffen für":{
+				de: " Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+				hu: " موږ اړتیا لرو چې د ناڅاپي لګښتونو لپاره شرایط برابر کړو."
+			},
+			"137 - eine Wahl treffen":{
+				de: " Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+				hu: " هغه باید د خپل مسلک او خپلې کورنۍ ترمنځ انتخاب وکړي."
+			},
+			"138 - im Wettbewerb stehen mit":{
+				de: " Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+				hu: " زموږ شرکت د ډیری نړیوالو شرکتونو سره سیالي کوي."
+			},
+			"139 - Wert legen auf":{
+				de: " Unsere Firma legt viel Wert auf die Sicherheit.",
+				hu: " زموږ شرکت په خوندیتوب ډیر ټینګار کوي."
+			},
+			"140 - Wertschätzung genießen":{
+				de: " In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+				hu: " په جرمني کې، کارمندانو ته د دوی د کار لپاره ارزښت ورکول کیږي."
+			},
+			"141 - Widerstand leisten gegen":{
+				de: " Ich leiste Widerstand gegen viele Süßigkeiten.",
+				hu: " زه د ډیرو خوږو په وړاندې مقاومت کوم."
+			},
+			"142 - Wirkung zeigen":{
+				de: " Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+				hu: " له بده مرغه د ولسمشر غوښتنې لږ اغیز درلود."
+			},
+			"143 - das Wort ergreifen":{
+				de: " Nach einer langen Pause ergriff der Moderator das Wort.",
+				hu: " د اوږدې وقفې وروسته، منځګړی خپله خبره وکړه."
+			},
+			"144 - ein Ziel setzen":{
+				de: " Ich setze mir eine Ziel.",
+				hu: " ما ځان ته یو هدف وټاکه."
+			},
+			"145 - ein Ziel verfolgen":{
+				de: " Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+				hu: " د ډیرو خنډونو سره سره، هغه د خپل هدف په تعقیب کې ثابت قدم پاتې شو."
+			},
+			"146 - eine Zusage erhalten":{
+				de: " Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+				hu: " مخکې له دې چې موږ پلان جوړ کړو، موږ اړتیا لرو چې د اپارتمان څخه تایید ترلاسه کړو."
+			},
+			"147 - im Zusammenhang stehen mit":{
+				de: " Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+				hu: " د نرخ زیاتوالی په مستقیم ډول د انفلاسیون سره تړاو لري."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

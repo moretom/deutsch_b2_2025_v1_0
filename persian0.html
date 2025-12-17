@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>MocsiWeb - PERSISCH</h1>
+	<div class="div1">
+		<a href="index.html">Home</a><br><br>
+		<a href="persian1.html">Präpositionen</a><br><br>
+		<a href="persian2.html">Nomen-Verb Vergindungen</a><br><br>
+	</div>
+<!--
+    <label for="nemet">Válassz egy német szót:</label><br>
+    <select id="nemet">
+        <option value="">-- Válassz --</option>
+    </select><br><br>
+
+    <label for="magyar">Válassz egy magyar szót:</label><br>
+    <select id="magyar">
+        <option value="">-- Válassz --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Ellenőrzés</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+-->
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+		"001 - Abschied nehmen von": "001 - попрощатися з",
+		"002 - die Absicht haben": "002 - мати намір",
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von": {
+				de: "Ich werde von dir Abschied nehmen.",
+				hu: "Я збираюся з тобою прощатися."
+			},
+			"002 - die Absicht haben": {
+				de: "Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: "Я не маю наміру говорити йому правду."
+			},
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

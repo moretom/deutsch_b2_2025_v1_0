@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="arab0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutsch - arabisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+			"001 -  abhängen von + D": " تعتمد على + د - 001",
+			"002 -  achten auf + A": " انتبه إلى + أ - 002",
+			"003 -  anfangen mit + D": " ابدأ بـ + د - 003",
+			"004 -  ankommen auf + A": " الوصول إلى + A - 004",
+			"005 -  antworten auf + A": " الرد على + أ - 005",
+			"006 -  sich ärgern über + A": " أن تنزعج من + A - 006",
+			"007 -  aufhören mit + D": " توقف عند + د - 007",
+			"008 -  aufpassen auf + A": " انتبه + أ - 008",
+			"009 -  sich aufregen über + A": " انزعج من + أ - 009",
+			"010 -  ausgeben für + A": " أنفق لـ + أ - 010",
+			"011 -  sich bedanken bei + D": " شكرا + د - 011",
+			"012 -  sich bedanken für + A": " شكرًا لك على + أ - 012",
+			"013 -  beginnen mit + D": " ابدأ بـ + د - 013",
+			"014 -  sich bemühen um + A": " السعي من أجل + أ - 014",
+			"015 -  berichten über. + A": " تقرير عن. + أ - 015",
+			"016 -  sich beschäftigen mit + D": " التعامل مع + د - 016",
+			"017 -  sich beschweren bei + D": " شكوى إلى + د - 017",
+			"018 -  bestehen aus + D": " تتكون من + د - 018",
+			"019 -  bestehen auf + A": " يصر + أ - 019",
+			"020 -  sich beteiligen an + D": " المشاركة في + د - 020",
+			"021 -  sich bewerben bei + D": " تنطبق على + د - 021",
+			"022 -  sich bewerben um + A": " التقدم بطلب للحصول على + أ - 022",
+			"023 -  sich beziehen auf + A": " راجع + أ - 023",
+			"024 -  bitten um + A": " اطلب + أ - 024",
+			"025 -  danken für + A": " شكرا لك على + أ - 025",
+			"026 -  denken an + A": " فكر في + أ - 026",
+			"027 -  diskutieren über + A": " مناقشة + أ - 027",
+			"028 -  einladen zu + D": " دعوة إلى + د - 028",
+			"029 -  sich entscheiden für + A": " اختر + أ - 029",
+			"030 -  sich entschließen zu + D": " قرر + د - 030",
+			"031 -  sich entschuldigen bei + D": " أعتذر إلى + د - 031",
+			"032 -  sich entschuldigen für + A": " أعتذر عن + أ - 032",
+			"033 -  erfahren von + D": " تعلمت من + د - 033",
+			"034 -  sich erholen von + D": " التعافي من + د - 034",
+			"035 -  sich erinnern an + A": " تذكر + أ - 035",
+			"036 -  erkennen an + D": " التعرف + د - 036",
+			"037 -  sich erkundigen nach + D": " استعلام عن + د - 037",
+			"038 -  erschrecken über + A": " خائف من + أ - 038",
+			"039 -  erzählen über + A": " أخبر عن + أ - 039",
+			"040 -  erzählen von + D": " أخبر عن + د - 040",
+			"041 -  fragen nach + D": " اطلب + د - 041",
+			"042 -  sich freuen auf + A": " نتطلع إلى + أ - 042",
+			"043 -  sich freuen über + A": " كن سعيدا + أ - 043",
+			"044 -  gehen um + A": " اذهب إلى + أ - 044",
+			"045 -  gehören zu + D": " تنتمي إلى + د - 045",
+			"046 -  sich gewöhnen an + A": " التعود على + أ - 046",
+			"047 -  glauben an + A": " آمن + أ - 047",
+			"048 -  gratulieren zu + D": " مبروك على + د - 048",
+			"049 -  halten für + A": " اضغط مع الاستمرار على + A - 049",
+			"050 -  halten von + D": " اضغط من + D - 050",
+			"051 -  sich handeln um + A": " حوالي + أ - 051",
+			"052 -  handeln von + D": " الفعل من + د - 052",
+			"053 -  helfen bei + D": " مساعدة في + د - 053",
+			"054 -  hindern an + D": " منع + د - 054",
+			"055 -  hoffen auf + A": " الأمل + أ - 055",
+			"056 -  hören von + D": " سماع من + د - 056",
+			"057 -  sich informieren über + A": " اكتشف المزيد عن + أ - 057",
+			"058 -  sich interessieren für + A": " اهتم بـ + أ - 058",
+			"059 -  klagen über + A": " شكوى من + أ - 059",
+			"060 -  kämpfen für + A": " الكفاح من أجل + أ - 060",
+			"061 -  kommen zu + D": " تعال إلى + د - 061",
+			"062 -  sich konzentrieren auf + A": " التركيز على + أ - 062",
+			"063 -  sich kümmern um + A": " اعتني بـ + أ - 063",
+			"064 -  lachen über + A": " اضحك على + أ - 064",
+			"065 -  leiden an + D": " تعاني من + د - 065",
+			"066 -  leiden unter + A": " تعاني من + أ - 066",
+			"067 -  nachdenken über + A": " فكر في + أ - 067",
+			"068 -  protestieren gegen + A": " احتجاج على + أ - 068",
+			"069 -  rechnen mit + D": " احسب باستخدام + د - 069",
+			"070 -  reden über + A": " الحديث عن + أ - 070",
+			"071 -  reden von + D": " الحديث عن + د - 071",
+			"072 -  riechen nach + D": " رائحة مثل + د - 072",
+			"073 -  sagen über + A": " قل عن + أ - 073",
+			"074 -  sagen zu + D": " قل ل+ د - 074",
+			"075 -  schicken an + A": " أرسل إلى + أ - 075",
+			"076 -  schicken zu + D": " أرسل إلى + د - 076",
+			"077 -  schimpfen über + A": " شكوى من + أ - 077",
+			"078 -  schmecken nach + D": " طعم مثل + د - 078",
+			"079 -  schreiben an + A": " اكتب إلى + أ - 079",
+			"080 -  sich schützen vor + D": " احمي نفسك من + د - 080",
+			"081 -  sein für + A": " يكون ل + أ - 081",
+			"082 -  sein gegen  + A": " له ضد + أ - 082",
+			"083 -  sorgen für + A": " تقديم + أ - 083",
+			"084 -  sprechen mit + D": " تحدث مع + د - 084",
+			"085 -  sprechen über + A": " حديث عن + أ - 085",
+			"086 -  sterben an + D": " الموت ل + د - 086",
+			"087 -  streiten mit + D": " يجادل مع + د - 087",
+			"088 -  streiten über + A": " يجادل حول + أ - 088",
+			"089 -  teilnehmen an + D": " المشاركة في + د - 089",
+			"090 -  telefonieren mit + D": " اتصل بـ + د - 090",
+			"091 -  sich treffen mit + D": " لقاء مع + د - 091",
+			"092 -  sich treffen zu + D": " لقاء + د - 092",
+			"093 -  überreden zu + D": " الإقناع بـ + د - 093",
+			"094 -  sich unterhalten mit + D": " تحدث إلى + د - 094",
+			"095 -  sich unterhalten über + A": " الحديث عن + أ - 095",
+			"096 -  sich verabreden mit + D": " ترتيب موعد مع + د - 096",
+			"097 -  sich verabschieden von + D": " قل وداعًا لـ + د - 097",
+			"098 -  vergleichen mit + D": " قارن مع + د - 098",
+			"099 -  sich verlassen auf + A": " اعتمد على + أ - 099",
+			"100 -  sich verlieben in + A": " الوقوع في حب + أ - 100",
+			"101 -  sich verstehen mit + D": " توافق مع + د - 101",
+			"102 -  verstehen von + D": " فهم من + د - 102",
+			"103 -  sich vorbereiten auf + A": " الاستعداد ل+ أ - 103",
+			"104 -  warnen vor + D": " تحذير من + د - 104",
+			"105 -  warten auf + A": " انتظار + أ - 105",
+			"106 -  sich wenden an + A": " أنتقل إلى + أ - 106",
+			"107 -  werden zu + D": " أصبح + د - 107",
+			"108 -  wissen von + D": " معرفة + د - 108",
+			"109 -  sich wundern über + A": " العجب من + أ - 109",
+			"110 -  zuschauen bei + D": " شاهد في + د - 110",
+			"111 -  zusehen bei + D": " شاهد في + د - 111",
+			"112 -  zweifeln an + D": " شك + د - 112",
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+				"001 -  abhängen von + D":{
+				de: "Ob wir fahren, hängt vom Wetter ab.",
+				hu: "سواء ذهبنا يعتمد على الطقس."
+			},
+				"002 -  achten auf + A":{
+				de: "Bitte achte auf den neuen Mantel.",
+				hu: "يرجى الانتباه إلى المعطف الجديد."
+			},
+				"003 -  anfangen mit + D":{
+				de: "Ich fange mit der Übung an.",
+				hu: "سأبدأ بالتمرين."
+			},
+				"004 -  ankommen auf + A":{
+				de: "Es kommt auf den richtigen Preis an.",
+				hu: "الأمر كله يتعلق بالسعر المناسب."
+			},
+				"005 -  antworten auf + A":{
+				de: "Bitte antworten Sie heute auf den Brief.",
+				hu: "يرجى الرد على الرسالة اليوم."
+			},
+				"006 -  sich ärgern über + A":{
+				de: "Wir ärgern uns über den Regen.",
+				hu: "نحن منزعجون من المطر."
+			},
+				"007 -  aufhören mit + D":{
+				de: "Er hört um 17.00 Uhr mit der Arbeit auf.",
+				hu: "يتوقف عن العمل في الخامسة مساءً."
+			},
+				"008 -  aufpassen auf + A":{
+				de: "Ein Babysitter passt auf kleine Kinder auf. ",
+				hu: "جليسة أطفال تعتني بالأطفال الصغار."
+			},
+				"009 -  sich aufregen über + A":{
+				de: "Deutsche regen sich über Unpünktlichkeit auf.",
+				hu: "الألمان منزعجون من عدم الالتزام بالمواعيد."
+			},
+				"010 -  ausgeben für + A":{
+				de: "Frauen geben viel Geld für Schuhe aus.",
+				hu: "تنفق النساء الكثير من المال على الأحذية."
+			},
+				"011 -  sich bedanken bei + D":{
+				de: "Ich bedanke mich herzlich bei dir.",
+				hu: "أود أن أشكرك كثيرًا."
+			},
+				"012 -  sich bedanken für + A":{
+				de: "Martin bedankt sich für das Geschenk.",
+				hu: "مارتن يشكرك على الهدية."
+			},
+				"013 -  beginnen mit + D":{
+				de: "Wir beginnen pünktlich mit dem Deutschkurs.",
+				hu: "نبدأ دورة اللغة الألمانية في الوقت المحدد."
+			},
+				"014 -  sich bemühen um + A":{
+				de: "Karla bemüht sich um eine Arbeit.",
+				hu: "تحاول كارلا العثور على وظيفة."
+			},
+				"015 -  berichten über. + A":{
+				de: "Der Reporter berichtet über die Wahlen.",
+				hu: "المراسل يتحدث عن الانتخابات."
+			},
+				"016 -  sich beschäftigen mit + D":{
+				de: "Ich beschäftige mich gern mit Pflanzen.",
+				hu: "أحب العمل مع النباتات."
+			},
+				"017 -  sich beschweren bei + D":{
+				de: "Der Gast beschwert sich beim Kellner.",
+				hu: "الضيف يشتكي للنادل."
+			},
+				"018 -  bestehen aus + D":{
+				de: "Eheringe bestehen aus Gold.",
+				hu: "خواتم الزفاف مصنوعة من الذهب."
+			},
+				"019 -  bestehen auf + A":{
+				de: "Ich bestehe auf sofortige Bezahlung des Autos.",
+				hu: "أصر على دفع ثمن السيارة على الفور."
+			},
+				"020 -  sich beteiligen an + D":{
+				de: "Viele Studenten beteiligen sich an den Streiks.",
+				hu: "ويشارك العديد من الطلاب في الإضرابات."
+			},
+				"021 -  sich bewerben bei + D":{
+				de: "Er bewirbt sich bei einer Bäckerei.",
+				hu: "يتقدم لوظيفة في مخبز."
+			},
+				"022 -  sich bewerben um + A":{
+				de: "Sie bewirbt sich um eine Stelle als Sekretärin.",
+				hu: "تتقدم لوظيفة سكرتيرة."
+			},
+				"023 -  sich beziehen auf + A":{
+				de: "Meine Frage bezieht sich auf Ihr Angebot.",
+				hu: "سؤالي يتعلق بعرضك."
+			},
+				"024 -  bitten um + A":{
+				de: "Der Redner bittet um Aufmerksamkeit.",
+				hu: "المتحدث يطلب الاهتمام."
+			},
+				"025 -  danken für + A":{
+				de: "Sam dankt für Ritas Hilfe.",
+				hu: "سام يشكر ريتا على مساعدتها."
+			},
+				"026 -  denken an + A":{
+				de: "Maria denkt oft an den Urlaub.",
+				hu: "كثيرا ما تفكر ماريا في الإجازة."
+			},
+				"027 -  diskutieren über + A":{
+				de: "Das Kabinett diskutiert über eine neue Steuer.",
+				hu: "مجلس الوزراء يناقش فرض ضريبة جديدة."
+			},
+				"028 -  einladen zu + D":{
+				de: "Ich lade dich zu meinem Geburtstag ein.",
+				hu: "أدعوك إلى عيد ميلادي."
+			},
+				"029 -  sich entscheiden für + A":{
+				de: "Frauen entscheiden sich gern für Gold. ",
+				hu: "تحب النساء اختيار الذهب."
+			},
+				"030 -  sich entschließen zu + D":{
+				de: "Karl entschließt sich zu einem Studium. ",
+				hu: "يقرر كارل الدراسة."
+			},
+				"031 -  sich entschuldigen bei + D":{
+				de: "Mia entschuldigt sich bei ihrem Mann.",
+				hu: "ميا تعتذر لزوجها."
+			},
+				"032 -  sich entschuldigen für + A":{
+				de: "Ich entschuldige mich für das Verhalten meiner Tochter.",
+				hu: "أعتذر عن سلوك ابنتي."
+			},
+				"033 -  erfahren von + D":{
+				de: "Heute haben wir von dem Bauprojekt erfahren.",
+				hu: "اليوم اكتشفنا عن مشروع البناء."
+			},
+				"034 -  sich erholen von + D":{
+				de: "Von dem Schock muss ich mich erst erholen.",
+				hu: "يجب أن أتعافى من الصدمة أولاً."
+			},
+				"035 -  sich erinnern an + A":{
+				de: "Wir erinnern uns gern an unser erstes Ehejahr.",
+				hu: "نتذكر باعتزاز السنة الأولى من زواجنا."
+			},
+				"036 -  erkennen an + D":{
+				de: "Man erkennt Pinocchio an seiner langen Nase.",
+				hu: "يمكنك التعرف على بينوكيو من أنفه الطويل."
+			},
+				"037 -  sich erkundigen nach + D":{
+				de: "Oma erkundigt sich oft nach meinen Plänen.",
+				hu: "كثيرا ما تسأل الجدة عن خططي."
+			},
+				"038 -  erschrecken über + A":{
+				de: "Die Frau erschrickt über eine Maus.",
+				hu: "المرأة تخاف من الفأر."
+			},
+				"039 -  erzählen über + A":{
+				de: "Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+				hu: "أحد سكان برلين الشرقية يتحدث عن حياته في جمهورية ألمانيا الديمقراطية السابقة."
+			},
+				"040 -  erzählen von + D":{
+				de: "Der Bischoff erzählt von der Reise nach Rom.",
+				hu: "يتحدث الأسقف عن الرحلة إلى روما."
+			},
+				"041 -  fragen nach + D":{
+				de: "Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+				hu: "يسأل الصحفي عن عواقب التغيير في القانون."
+			},
+				"042 -  sich freuen auf + A":{
+				de: "Kinder freuen sich auf Weihnachten.",
+				hu: "الأطفال يتطلعون إلى عيد الميلاد."
+			},
+				"043 -  sich freuen über + A":{
+				de: "Jeder freut sich über eine Gehaltserhöhung.",
+				hu: "الجميع سعداء بالزيادة."
+			},
+				"044 -  gehen um + A":{
+				de: "Immer geht es um Geld.",
+				hu: "يتعلق الأمر دائمًا بالمال."
+			},
+				"045 -  gehören zu + D":{
+				de: "Das Elsass gehört zu Frankreich.",
+				hu: "الألزاس تنتمي إلى فرنسا."
+			},
+				"046 -  sich gewöhnen an + A":{
+				de: "Ich kann mich nicht an den Euro gewöhnen.",
+				hu: "لا أستطيع التعود على اليورو."
+			},
+				"047 -  glauben an + A":{
+				de: "Teenager glauben an die große Liebe.",
+				hu: "المراهقون يؤمنون بالحب الحقيقي."
+			},
+				"048 -  gratulieren zu + D":{
+				de: "Wir gratulieren dir zum 18. Geburtstag.",
+				hu: "نهنئك بعيد ميلادك الثامن عشر."
+			},
+				"049 -  halten für + A":{
+				de: "Ich halte das für keine gute Idee.",
+				hu: "لا أعتقد أن هذه فكرة جيدة."
+			},
+				"050 -  halten von + D":{
+				de: "Kinder halten nicht viel von Ordnung.",
+				hu: "الأطفال لا يهتمون كثيرًا بالنظام."
+			},
+				"051 -  sich handeln um + A":{
+				de: "Bei der Kopie handelt es sich nicht um Originalsoftware.",
+				hu: "النسخة ليست البرمجيات الأصلية."
+			},
+				"052 -  handeln von + D":{
+				de: "Märchen handeln von Gut und Böse.",
+				hu: "الحكايات الخرافية تدور حول الخير والشر."
+			},
+				"053 -  helfen bei + D":{
+				de: "Kann ich dir beim Tischdecken helfen?",
+				hu: "هل يمكنني مساعدتك في إعداد الطاولة؟"
+			},
+				"054 -  hindern an + D":{
+				de: "Ein langsamer Fahrer hindert Greta am Überholen.",
+				hu: "السائق البطيء يمنع غريتا من التجاوز."
+			},
+				"055 -  hoffen auf + A":{
+				de: "Im März hoffen alle auf warme Frühlingstage.",
+				hu: "في شهر مارس يأمل الجميع في أيام الربيع الدافئة."
+			},
+				"056 -  hören von + D":{
+				de: "Ich habe seit Sonntag nichts von Piet gehört.",
+				hu: "لم أسمع من بيت منذ يوم الأحد."
+			},
+				"057 -  sich informieren über + A":{
+				de: "Auf der Messe kann man sich über die neue Technologie informieren.",
+				hu: "يمكنك معرفة المزيد عن التكنولوجيا الجديدة في المعرض التجاري."
+			},
+				"058 -  sich interessieren für + A":{
+				de: "Monika interessiert sich für ein Smartphone.",
+				hu: "مونيكا مهتمة بالهاتف الذكي."
+			},
+				"059 -  klagen über + A":{
+				de: "Frauen klagen häufig über Kopfschmerzen.",
+				hu: "كثيرا ما تشتكي النساء من الصداع."
+			},
+				"060 -  kämpfen für + A":{
+				de: "Die Gewerkschaft kämpft für höhere Löhne.",
+				hu: "النقابة تكافح من أجل رفع الأجور."
+			},
+				"061 -  kommen zu + D":{
+				de: "In der Besprechung kam es zu einem Streit.",
+				hu: "واندلع جدال في الاجتماع."
+			},
+				"062 -  sich konzentrieren auf + A":{
+				de: "Karl konzentriert sich auf seine Hausaufgaben.",
+				hu: "يركز كارل على واجباته المدرسية."
+			},
+				"063 -  sich kümmern um + A":{
+				de: "Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+				hu: "تقوم دور رعاية المسنين برعاية كبار السن المرضى."
+			},
+				"064 -  lachen über + A":{
+				de: "Über einen guten Witz muss man laut lachen.",
+				hu: "عليك أن تضحك بصوت عالٍ على نكتة جيدة."
+			},
+				"065 -  leiden an + D":{
+				de: "Jeder fünfte Manager leidet an Burn-out.",
+				hu: "يعاني واحد من كل خمسة مديرين من الإرهاق."
+			},
+				"066 -  leiden unter + A":{
+				de: "Kaffeetrinker leiden unter Schlafproblemen.",
+				hu: "يعاني شاربي القهوة من مشاكل في النوم."
+			},
+				"067 -  nachdenken über + A":{
+				de: "Beamte müssen nicht über ihre Rente nachdenken.",
+				hu: "لا يتعين على موظفي الخدمة المدنية أن يفكروا في معاشاتهم التقاعدية."
+			},
+				"068 -  protestieren gegen + A":{
+				de: "Viele Menschen protestieren gegen Atomkraft.",
+				hu: "كثير من الناس يحتجون ضد الطاقة النووية."
+			},
+				"069 -  rechnen mit + D":{
+				de: "Im Januar muss man mit Schnee rechnen.",
+				hu: "في يناير عليك أن تتوقع تساقط الثلوج."
+			},
+				"070 -  reden über + A":{
+				de: "Deine Mutter redet gern über Krankheiten.",
+				hu: "والدتك تحب التحدث عن الأمراض."
+			},
+				"071 -  reden von + D":{
+				de: "Großvater redet von den guten alten Zeiten.",
+				hu: "الجد يتحدث عن الأيام الخوالي."
+			},
+				"072 -  riechen nach + D":{
+				de: "Hier riecht es nach Kuchen.",
+				hu: "رائحتها مثل الكعكة هنا."
+			},
+				"073 -  sagen über + A":{
+				de: "Brigitte sagt über Dietmar, dass er oft lügt.",
+				hu: "تقول بريجيت عن ديتمار إنه كثيرًا ما يكذب."
+			},
+				"074 -  sagen zu + D":{
+				de: "Was sagst du zu meinem neuen Haarschnitt?",
+				hu: "ما رأيكم بقصة شعري الجديدة؟"
+			},
+				"075 -  schicken an + A":{
+				de: "Die E-Mail schicke ich dir morgen.",
+				hu: "سأرسل لك البريد الإلكتروني غدا."
+			},
+				"076 -  schicken zu + D":{
+				de: "Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+				hu: "يقوم الممارس العام بإرسال المريض إلى أخصائي."
+			},
+				"077 -  schimpfen über + A":{
+				de: "Alle schimpfen über den Regen.",
+				hu: "الجميع يشتكي من المطر."
+			},
+				"078 -  schmecken nach + D":{
+				de: "Muscheln schmecken nach Meerwasser.",
+				hu: "طعم بلح البحر مثل مياه البحر."
+			},
+				"079 -  schreiben an + A":{
+				de: "Bitte schreibe noch heute an deine Mutter.",
+				hu: "يرجى الكتابة إلى والدتك اليوم."
+			},
+				"080 -  sich schützen vor + D":{
+				de: "Den Computer des Ministers muss man vor Hackern schützen.",
+				hu: "يجب حماية جهاز الكمبيوتر الخاص بالوزير من المتسللين."
+			},
+				"081 -  sein für + A":{
+				de: "Ich bin für die Abschaffung der Kinderarbeit.",
+				hu: "أنا مع إلغاء عمالة الأطفال."
+			},
+				"082 -  sein gegen  + A":{
+				de: "Viele sind gegen Steuererhöhungen.",
+				hu: "كثيرون ضد زيادة الضرائب."
+			},
+				"083 -  sorgen für + A":{
+				de: "Kinder müssen im Alter für ihre Eltern sorgen.",
+				hu: "يجب على الأطفال رعاية والديهم في سن الشيخوخة."
+			},
+				"084 -  sprechen mit + D":{
+				de: "Ich spreche noch einmal mit deinem Vater.",
+				hu: "سأتحدث مع والدك مرة أخرى."
+			},
+				"085 -  sprechen über + A":{
+				de: "Lass uns über deine Zukunft sprechen.",
+				hu: "دعونا نتحدث عن مستقبلك."
+			},
+				"086 -  sterben an + D":{
+				de: "Zwei Deutsche sind an der Grippe gestorben.",
+				hu: "توفي اثنان من الألمان بسبب الأنفلونزا."
+			},
+				"087 -  streiten mit + D":{
+				de: "Ich möchte nicht mit dir streiten.",
+				hu: "لا أريد أن أتجادل معك."
+			},
+				"088 -  streiten über + A":{
+				de: "Die USA und Deutschland streiten über eine neue Strategie.",
+				hu: "تتجادل الولايات المتحدة وألمانيا حول استراتيجية جديدة."
+			},
+				"089 -  teilnehmen an + D":{
+				de: "Nordkorea nimmt an der Fußball-WM teil.",
+				hu: "كوريا الشمالية تشارك في كأس العالم."
+			},
+				"090 -  telefonieren mit + D":{
+				de: "Hast du schon mit dem Arzt telefoniert?",
+				hu: "هل تحدثت بالفعل مع الطبيب عبر الهاتف؟"
+			},
+				"091 -  sich treffen mit + D":{
+				de: "Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+				hu: "وتجتمع المستشارة يوميا مع المتحدث الصحفي باسمها."
+			},
+				"092 -  sich treffen zu + D":{
+				de: "Sie treffen sich nur zu einem kurzen Gespräch.",
+				hu: "يجتمعون فقط لمحادثة قصيرة."
+			},
+				"093 -  überreden zu + D":{
+				de: "Kann ich dich zu einem Glas Wein überreden?",
+				hu: "هل يمكنني إقناعك بشرب كأس من النبيذ؟"
+			},
+				"094 -  sich unterhalten mit + D":{
+				de: "Der Sänger unterhält sich mit dem Bassisten.",
+				hu: "المغني يتحدث إلى عازف الباص."
+			},
+				"095 -  sich unterhalten über + A":{
+				de: "Die Modedesigner unterhalten sich über die neuesten Trends.",
+				hu: "يتحدث مصممو الأزياء عن أحدث الاتجاهات."
+			},
+				"096 -  sich verabreden mit + D":{
+				de: "Heute verabrede ich mich mit einer Freundin.",
+				hu: "اليوم سأقابل صديقًا."
+			},
+				"097 -  sich verabschieden von + D":{
+				de: "Nun wollen wir uns von euch verabschieden.",
+				hu: "الآن نريد أن نقول وداعا لك."
+			},
+				"098 -  vergleichen mit + D":{
+				de: "Vergleichen Sie München mit Berlin.",
+				hu: "قارن ميونيخ مع برلين."
+			},
+				"099 -  sich verlassen auf + A":{
+				de: "Auf mich kann man sich verlassen.",
+				hu: "يمكنك الاعتماد علي."
+			},
+				"100 -  sich verlieben in + A":{
+				de: "Britta hat sich in das alte Bauernhaus verliebt.",
+				hu: "وقعت بريتا في حب المزرعة القديمة."
+			},
+				"101 -  sich verstehen mit + D":{
+				de: "Daniel versteht sich gut mit seinem Chef.",
+				hu: "دانيال يتماشى بشكل جيد مع رئيسه."
+			},
+				"102 -  verstehen von + D":{
+				de: "Verstehst du etwas von Elektrik?",
+				hu: "هل تعرف شيئا عن الكهرباء؟"
+			},
+				"103 -  sich vorbereiten auf + A":{
+				de: "Karl bereitet sich auf eine Präsentation vor.",
+				hu: "يستعد كارل لتقديم عرض تقديمي."
+			},
+				"104 -  warnen vor + D":{
+				de: "Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+				hu: "وقد تم تحذيره من ارتفاع تكلفة السيارة القديمة."
+			},
+				"105 -  warten auf + A":{
+				de: "In Namibia wartet man lange auf einen Bus.",
+				hu: "في ناميبيا تنتظر الحافلة لفترة طويلة."
+			},
+				"106 -  sich wenden an + A":{
+				de: "Bitte wenden Sie sich an die Buchhaltung.",
+				hu: "يرجى الاتصال بالمحاسبة."
+			},
+				"107 -  werden zu + D":{
+				de: "Unter null Grad wird Eis zu Wasser.",
+				hu: "تحت الصفر يتحول الجليد إلى ماء."
+			},
+				"108 -  wissen von + D":{
+				de: "Ich weiß nichts von neuen Computern für unser Team.",
+				hu: "لا أعرف شيئًا عن أي أجهزة كمبيوتر جديدة لفريقنا."
+			},
+				"109 -  sich wundern über + A":{
+				de: "Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+				hu: "يتفاجأ الكثير من الألمان بالارتفاع المفاجئ لتكاليف الكهرباء."
+			},
+				"110 -  zuschauen bei + D":{
+				de: "Kann ich dir bei der Reparatur zuschauen?",
+				hu: "هل يمكنني مشاهدتك وأنت تقوم بإصلاحه؟"
+			},
+				"111 -  zusehen bei + D":{
+				de: "Willst du mir beim Kochen zusehen?",
+				hu: "هل تريد أن تشاهدني أطبخ؟"
+			},
+				"112 -  zweifeln an + D":{
+				de: "John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+				hu: "يشك جون في أن ابنه كان يقول الحقيقة."
+			},
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

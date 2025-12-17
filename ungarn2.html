@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen - DE - UNG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="ungarn0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - ungarisch</h1>
+
+    <label for="nemet">Válassz egy német szót:</label><br>
+    <select id="nemet">
+        <option value="">-- Válassz --</option>
+    </select><br><br>
+
+    <label for="magyar">Válassz egy magyar szót:</label><br>
+    <select id="magyar">
+        <option value="">-- Válassz --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Ellenőrzés</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+        "001 - Abschied nehmen von": "001 - búcsút venni vkitől,vmitől",
+        "002 - die Absicht haben": "002 - szándékában áll",
+        "003 - eine Absprache treffen mit": "003 - megállapodást kötni vkivel",
+        "004 - eine Ahnung haben von": "004 - fogalma lenni vmiről",
+        "005 - eine Andeutung machen": "005 - egy célzást tenni",
+        "006 - Anerkennung finden bei/für": "006 - elismerést találni",
+        "007 - einen Anfang machen mit": "007 - kezdést csinálni",
+        "008 - eine Anforderung erfüllen": "008 - követelményeknek megfelelni",
+        "009 - ein Angebot machen": "009 - ajánlatot tenni",
+        "010 - ein Angebot unterbreiten": "010 - ajánlatot tenni",
+        "011 - etwas im Angebot haben": "011 - ajánlatnak vmi lenni",
+        "012 - etwas in Anspruch nehmen": "012 - igényt venni",
+        "013 - einen Antrag stellen auf": "013 - jelentkezést állítani",
+        "014 - eine Antwort geben": "014 - választ adni",
+        "015 - eine Anweisung geben": "015 - utasítást adni",
+        "016 - zur Anwendung kommen": "016 - alkalmazásra kerül",
+        "017 - einen Auftrag erteilen": "017 - megbízást adni",
+        "018 - in Auftrag geben zu": "018 - megbízni vmivel",
+        "019 - aus den Augen verlieren": "019 - szem elől téveszteni",
+        "020 - zum Ausdruck bringen": "020 - kifejezni, kifejezésre juttat",
+        "021 - zum Ausdruck kommen": "021 - kifejezni",
+        "022 - Auskunft geben": "022 - tájékoztatást adni",
+        "023 - eine Äußerung machen": "023 - nyilatkozatot/megjegyzést tenni",
+        "024 - Beachtung finden bei/für": "024 - figyelemre találni vkinél/vmiért",
+        "025 - Beachtung schenken": "025 - figyelembe venni",
+        "026 - einen Beitrag leisten für/zu": "026 - hozzájárulást/befizetést teljesíteni vmihez",
+        "027 - Berücksichtigung finden": "027 - figyelembe vétetik, számításba jön",
+        "028 - bei/wegen Bescheid geben": "028 - értesítést adni vkiről/vmi miatt",
+        "029 - eine Bestellung aufgeben": "029 - megrendelés feladni",
+        "030 - in Betracht kommen": "030 - szóba jönni, tekintetbe jönni",
+        "031 - in Betracht ziehen": "031 - figyelembe venni",
+        "032 - in Betrieb nehmen": "032 - üzembe helyezni, beindítani",
+        "033 - Bezug nehmen auf": "033 - hivatkozni valamire",
+        "034 - im Blick haben": "034 - szemmel tartani",
+        "035 - die Daumen drücken für": "035 - drukkolni vminek",
+        "036 - zur Debatte stehen": "036 - vita tárgyon áll",
+        "037 - eine Diskussion führen über/mit": "037 - vitát folytat",
+        "038 - zur Diskussion stellen": "038 - vitára bocsájt",
+        "039 - unter Druck setzen": "039 - nyomás alá helyezni",
+        "040 - einen Eindruck bekommen von": "040 - benyomást szerezni vkiről",
+        "041 - Eindruck machen auf": "041 - benyomást tesz vkire/vmire",
+        "042 - Einfluss nehmen auf": "042 - befolyást gyakorol vkire/mire",
+        "043 - eine Entscheidung treffen": "043 - döntést hoz",
+        "044 - zur Entscheidung bringen": "044 - döntésre vinni",
+        "045 - zur Entscheidung stellen": "045 - döntésre bocsájt/állít",
+        "046 - eine Erfahrung machen mit": "046 - tapasztalatot szerez vmit/vmvel",
+        "047 - in Erfahrung bringen": "047 - tudomására hoz, megtud",
+        "048 - in Erfüllung gehen": "048 - teljesül, valóra válik ",
+        "049 - eine Erklärung finden für": "049 - magyarázatot talál valamire",
+        "050 - Ersatz leisten für": "050 - kárpótlást nyújt, pótol valamit ",
+        "051 - Feedback bekommen": "051 - visszajelzést kap",
+        "052 - Feedback geben": "052 - visszajelzést ad ",
+        "053 - einen Fehler beheben": "053 - hibát kijavít",
+        "054 - zur Folge haben": "054 - maga után von, az a következménye",
+        "055 - eine Forderung stellen": "055 - követelést támaszt",
+        "056 - eine Frage stellen": "056 - kérdést feltesz",
+        "057 - eine Freude bereiten": "057 - örömet szerez",
+        "058 - ins Geschäft kommen mit": "058 - üzletet köt valakivel / üzleti kapcsolatba kerül",
+        "059 - ein Gespräch führen über/mit": "059 - beszélgetést folytatni vmiről/vkivel",
+        "060 - ins Gespräch bringen": "060 - szóba hoz, beszéd téma lesz belőle",
+        "061 - den Glauben verlieren": "061 - elveszíteni a hitet",
+        "062 - etwas im Griff haben": "062 - vmit kézben tartani",
+        "063 - etwas in den Griff bekommen": "063 - vmit rendbe hozni, kezelni, urrá lenni",
+        "064 - auf den Grund gehen": "064 - mélyére járni vminek",
+        "065 - jemanden vor eine Herausforderung stellen": "065 - kihívás elé állít vkit",
+        "066 - Hilfe leisten": "066 - segítség nyújtás",
+        "067 - zu Hilfe nehmen": "067 - igénybe venni a segítségét",
+        "068 - die Hoffnung aufgeben": "068 - feladni a reményt",
+        "069 - sich Hoffnung machen": "069 - reményt táplálni",
+        "070 - auf eine Idee kommen": "070 - ötletet kapni",
+        "071 - infrage kommen": "071 - szóba jönni",
+        "072 - infrage stellen": "072 - megkérdőjelez",
+        "073 - Interesse wecken an/für": "073 - érdeklődést felkelt",
+        "074 - Interesse zeigen an/für": "074 - érdeklődést mutat",
+        "075 - in Kenntnis setzen von": "075 - tudomására hoz vmit",
+        "076 - zur Kenntnis nehmen": "076 - tudomásul vesz",
+        "077 - Kontakt aufnehmen mit": "077 - kapcsolatba lép vkivel",
+        "078 - Klarheit gewinnen über": "078 - tisztán lát vmiben, világosságot nyer vmiben",
+        "079 - Kontakt halten": "079 - kapcsolatot tart",
+        "080 - Kontakt knüpfen mit": "080 - kapcsolatot létesít",
+        "081 - Kontakt knüpfen zu": "081 - kapcsolatot létesít",
+        "082 - in Kontakt stehen mit": "082 - kapcsolatban áll",
+        "083 - in Kontakt treten mit": "083 - kapcsolatot létesít",
+        "084 - die Kosten tragen für": "084 - viseli a költségeket",
+        "085 - die Kosten übernehmen für": "085 - átvállalja a költségeket",
+        "086 - in Kraft treten": "086 - hatályba lép",
+        "087 - Krieg führen gegen/mit/wegen": "087 - háborút vív, folytat, szít",
+        "088 - Kritik üben an/für": "088 - kritizál vki/mit",
+        "089 - den Kürzeren ziehen": "089 - alulmarad, vesztésre áll, hátrányba kerül",
+        "090 - jemanden auf dem Laufenden halten": "090 - tájékoztat vkit, folyamatosan informál vkit",
+        "091 - auf dem Laufenden sein": "091 - naprakésznek lenni",
+        "092 - der Meinung sein": "092 - véleményen lenni",
+        "093 - in Ordnung bringen": "093 - rendbe hozni",
+        "094 - ein Profil anlegen": "094 - profilt létrehozni",
+        "095 - eine Prüfung bestehen": "095 - vizsgán letenni",
+        "096 - durch eine Prüfung fallen": "096 - vizsgán megbukni",
+        "097 - eine Qualifikation mitbringen": "097 - képesítés magával hozni",
+        "098 - einen Rat geben": "098 - tanácsod adni",
+        "099 - Rechenschaft ablegen über": "099 - számot ad, beszámol vmiről",
+        "100 - zur Rechenschaft ziehen für": "100 - felelősségre vonni",
+        "101 - in Rechnung stellen": "101 - kiszámlázni",
+        "102 - eine Rede halten über": "102 - beszédet tartani vmiről",
+        "103 - in eine Reihenfolge bringen": "103 - sorrendbe rakni",
+        "104 - den Respekt verlieren vor": "104 - elveszíteni a tisztelete",
+        "105 - Rückmeldung geben": "105 - visszajelzést adni",
+        "106 - Rücksicht nehmen auf": "106 - figyelemmel, tekintettel lenni",
+        "107 - die Ruhe bewahren": "107 - nyugalmat megőzini",
+        "108 - Schluss machen mit": "108 - szakítani vkivel, felhagyni valamivel",
+        "109 - zur Sprache bringen": "109 - szóba hozni",
+        "110 - Stellung nehmen zu": "110 - állást foglalni, véleményt nyílvánítani",
+        "111 - unter Strafe stehen": "111 - büntetés alatt állni, büntetendő",
+        "112 - unter Strafe stellen": "112 - büntetés alá állítani",
+        "113 - in Streik treten": "113 - sztrájkba lépni",
+        "114 - Stress haben mit": "114 - stresszelni vki,vmi miatt",
+        "115 - unter Stress stehen": "115 - stressz alatt állni",
+        "116 - eine Tätigkeit ausüben": "116 - tevékenységet-munkát folytatni",
+        "117 - im Trend liegen": "117 - divatosnak lenni",
+        "118 - einen Überblick bekommen": "118 - áttekintést kap",
+        "119 - einen Überblick geben": "119 - áttekintést ad",
+        "120 - einen Unterschied machen": "120 - különbséget tesz",
+        "121 - eine Verabredung treffen": "121 - találkozót megbeszél, egyeztet",
+        "122 - die Verantwortung übernehmen für": "122 - felelősséget vállal vmiért",
+        "123 - sich in Verbindung setzen mit": "123 - kapcsolatba lép vkivel, felveszi a kapcsolatot",
+        "124 - eine Vereinbarung treffen zu": "124 - megállapodásra jut/köt vmivel",
+        "125 - zur Verfügung stehen": "125 - rendelkezésre áll",
+        "126 - zur Verfügung stellen": "126 - rendelkezésre bocsát",
+        "127 - in Verhandlungen stehen": "127 - tárgyalásban van/folytat",
+        "128 - in Verhandlungen treten": "128 - tárgyalásokat kezd/indít",
+        "129 - ein Versprechen geben": "129 - ígéretet tenni/adni",
+        "130 - einen Vertrag abschließen mit": "130 - szerződés kötni vkivel",
+        "131 - Vertrauen herstellen": "131 - bizalmat építeni/kialakítani",
+        "132 - Vorbereitungen treffen": "132 - előkészületeket tenni",
+        "133 - im Vordergrund stehen": "133 - előtérben állni",
+        "134 - einen Vorschlag machen": "134 - javaslatot tenni",
+        "135 - einen Vorschlag unterbreiten": "135 - javaslatot előterjeszteni",
+        "136 - Vorsorge treffen für": "136 - óvintézkedést tenni/gondoskodni vmiről előre",
+        "137 - eine Wahl treffen": "137 - döntést hozni/választani",
+        "138 - im Wettbewerb stehen mit": "138 - versenyben állni vkivel/versenyezni vkivel",
+        "139 - Wert legen auf": "139 - hangsúlyt fektet/fontosnak tart",
+        "140 - Wertschätzung genießen": "140 - megbecsülést/elismerést élvezni",
+        "141 - Widerstand leisten gegen": "141 - ellenállást tanúsítani vmi ellen",
+        "142 - Wirkung zeigen": "142 - hatást mutatni/hatni",
+        "143 - das Wort ergreifen": "143 - szót kérni/megszólalni",
+        "144 - ein Ziel setzen": "144 - célt kitűzni/meghatározni",
+        "145 - ein Ziel verfolgen": "145 - egy célt követni",
+        "146 - eine Zusage erhalten": "146 - ígéretet, visszaigazolást kapni",
+        "147 - im Zusammenhang stehen mit": "147 - összefüggésben állni vmivel"
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+			"001 - Abschied nehmen von": {
+				de: "Ich werde von dir Abschied nehmen.",
+				hu: "Én fogok tőled elbúcsúzni."
+			},
+			"002 - die Absicht haben": {
+				de: "Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: "Nem nincs szándékom, neki az igazat elmondani."
+			},
+			"003 - eine Absprache treffen mit": {
+				de: "Wir haben mit der Firma keine Absprache getroffen.",
+				hu: "Mi a céggel megállapodást nem kötöttünk."
+			},
+			"004 - eine Ahnung haben von": {
+				de: "Er hat keine Ahnung von moderner Technologie.",
+				hu: "Ő neki nincs fogalma a modern technológiáról."
+			},
+			"005 - eine Andeutung machen": {
+				de: "Er hat eine klare Andeutung über seine Kündigung gemacht. ",
+				hu: "Egyértelmű utalást tett a felmondására."
+			},
+			"006 - Anerkennung finden bei/für": {
+				de: "Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit. ",
+				hu: "Az új munkatárs gyorsan elismerést talál a kollégái körében a megbízhatóságáért."
+			},
+			"007 - einen Anfang machen mit": {
+				de: "Wir sollten endlich einen Anfang mit den Vorbereitungen machen. ",
+				hu: "Végre el kellene kezdenünk az előkészületeket."
+			},
+			"008 - eine Anforderung erfüllen": {
+				de: "Das Produkt muss alle Sicherheitsanforderungen erfüllen. ",
+				hu: "A terméknek minden biztonsági követelménynek eleget kell tennie."
+			},
+			"009 - ein Angebot machen": {
+				de: "Die Firma machte dem Kunden ein sehr attraktives Angebot. ",
+				hu: "A cég egy nagyon vonzó ajánlatot tett az ügyfélnek."
+			},
+			"010 - ein Angebot unterbreiten": {
+				de: "Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten. ",
+				hu: "Az építtető holnap írásos ajánlatot fog benyújtani nekünk."
+			},
+			"011 - etwas im Angebot haben": {
+				de: "Der Supermarkt hat diese Woche frische Erdbeeren im Angebot. ",
+				hu: "A szupermarket ezen a héten friss epret kínál (akciósan)."
+			},
+			"012 - etwas in Anspruch nehmen": {
+				de: "Die Reparatur nahm viel Zeit in Anspruch. ",
+				hu: "A javítás sok időt vett igénybe."
+			},
+			"013 - einen Antrag stellen auf": {
+				de: "Viele Studenten stellen einen Antrag auf BAföG. ",
+				hu: "Sok diák nyújt be BAföG (állami diáktámogatás) kérelmet."
+			},
+			"014 - eine Antwort geben": {
+				de: "Ich konnte noch keine Antwort auf die Aufgabe geben.",
+				hu: "Én nem tudtam még választ a feladatra adni."
+			},
+			"015 - eine Anweisung geben": {
+				de: "Wir haben im Computerprogramm eine Anweisung gegeben.",
+				hu: "Mi a számítógépnek egy utasítást adtunk."
+			},
+			"016 - zur Anwendung kommen": {
+				de: "Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+				hu: "Ez az App csak Iphone telefonra alkalmazható."
+			},
+			"017 - einen Auftrag erteilen": {
+				de: "Er hat einen Auftrag für eine kleine Firma erteilt.",
+				hu: "Ő egy megbízást egy kis cégnek adott."
+			},
+			"018 - in Auftrag geben zu": {
+				de: "Die Schule hat zu Renovieren in Auftrag gegeben.",
+				hu: "Az iskola a felújításért megbízást adott."
+			},
+			"019 - aus den Augen verlieren": {
+				de: "Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+				hu: "Én az anyámat a bevásárlóközpontban szem elől tévesztettem."
+			},
+			"020 - zum Ausdruck bringen": {
+				de: "In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen. ",
+				hu: "Ebben a levélben világosan ki kell fejeznie az aggodalmait."
+			},
+			"021 - zum Ausdruck kommen": {
+				de: "Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck. ",
+				hu: "A csapat hangulata a hangos ujjongásban jutott kifejezésre."
+			},
+			"022 - Auskunft geben": {
+				de: "Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+				hu: "A tanárnő nekünk a vizsgáról tájékoztatást adott."
+			},
+			"023 - eine Äußerung machen": {
+				de: "Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+				hu: "A miniszter ebben a témában nem tett nyilatkozatot."
+			},
+			"024 - Beachtung finden bei/für": {
+				de: "Mein Vorschlag fand bei der Klasse keine Beachtung.",
+				hu: "A javaslatom nem talált figyelemre az osztályban."
+			},
+			"025 - Beachtung schenken": {
+				de: "Wir können nicht alle Punkten Beachtung schenken.",
+				hu: "Nem tudunk minden pontot figyelembe venni."
+			},
+			"026 - einen Beitrag leisten für/zu": {
+				de: "Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+				hu: "A cég nem járul hozzá a te továbbképzésedhez."
+			},
+			"027 - Berücksichtigung finden": {
+				de: "Die Firma hat deine Überstunden die Berücksichtigung finden.",
+				hu: "A cég a te túlóráidat figyelembe veszik."
+			},
+			"028 - bei/wegen Bescheid geben": {
+				de: "Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+				hu: "Nem tudok neked értesítést adni, mert Offline-ban leszek."
+			},
+			"029 - eine Bestellung aufgeben": {
+				de: "Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+				hu: "Nem szeretnék megrendelést feladni, mivel nincs pénzem."
+			},
+			"030 - in Betracht kommen": {
+				de: "Diese Lösung kommt für uns nicht in Betracht.",
+				hu: "Ez a megoldás számunkra nem jön szóba."
+			},
+			"031 - in Betracht ziehen": {
+				de: "Wir müssen die Verspätung in Betracht ziehen.",
+				hu: "Muszáj a késéseket figyelembe vennünk."
+			},
+			"032 - in Betrieb nehmen": {
+				de: "Der Techniker hat der Computer in Betrieb genommen.",
+				hu: "A technikus a számítógépet üzembe helyezte."
+			},
+			"033 - Bezug nehmen auf": {
+				de: "Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+				hu: "Hivatkozunk a beszélgetésre, amit tegnap folytattunk."
+			},
+			"034 - im Blick haben": {
+				de: "Die Firma hat die Konkurrenz immer im Blick.",
+				hu: "A cég szem előtt tartja a konkurenciát."
+			},
+			"035 - die Daumen drücken für": {
+				de: "Wir drücken dir die Daumen für deine Prüfung.",
+				hu: "Szorítunk neked a vizsgához."
+			},
+			"036 - zur Debatte stehen": {
+				de: "Die neuen Vorschläge stehen zur Debatte.",
+				hu: "Az új javaslatok megvitatás alatt állnak."
+			},
+			"037 - eine Diskussion führen über/mit": {
+				de: "Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+				hu: "Mi egy vitát folytattunk a feleségemmel a jövőről."
+			},
+			"038 - zur Diskussion stellen": {
+				de: "Dieses Thema möchte ich zur Diskussion stellen.",
+				hu: "Ezt a témát szeretném vitára bocsájtani."
+			},
+			"039 - unter Druck setzen": {
+				de: "Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+				hu: "A vizsgahelyzet erősen nyomás alá helyezte őt."
+			},
+			"040 - einen Eindruck bekommen von": {
+				de: "Ich habe von dir einen guten Eindruck bekommen.",
+				hu: "Én nekem van jó benyomásom tőled."
+			},
+			"041 - Eindruck machen auf": {
+				de: "Das neue Auto macht einen guten Eindruck auf mich.",
+				hu: "Az új autó tesz nekem egy jó benyomás."
+			},
+			"042 - Einfluss nehmen auf": {
+				de: "Sie nimmt Einfluss auf ihren Partner.",
+				hu: "Ő befolyásolja a partnerét."
+			},
+			"043 - eine Entscheidung treffen": {
+				de: "Wir haben noch keine endgültige Entscheidung getroffen.",
+				hu: "Még nem hoztunk végleges döntést."
+			},
+			"044 - zur Entscheidung bringen": {
+				de: "Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+				hu: "Ő a nyaralás célt még nem tudta döntésre vinni."
+			},
+			"045 - zur Entscheidung stellen": {
+				de: "Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+				hu: "Ők nem fogják a kívánságomat döntésre állítani."
+			},
+			"046 - eine Erfahrung machen mit": {
+				de: "Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+				hu: "Ti tudtok ezzel a munkával egy jó tapasztalatot csinálni."
+			},
+			"047 - in Erfahrung bringen": {
+				de: "Wir müssen in Erfahrung bringen, wer das getan hat.",
+				hu: "Meg kell tudnunk, ki tette ezt."
+			},
+			"048 - in Erfüllung gehen": {
+				de: "Endlich ist mein Traum in Erfüllung gegangen.",
+				hu: "Végre valóra vált az álmom. "
+			},
+			"049 - eine Erklärung finden für": {
+				de: "Ich muss dringend eine Erklärung für mein Fehlen finden.",
+				hu: "Sürgősen magyarázatot kell találnom a hiányzásomra."
+			},
+			"050 - Ersatz leisten für": {
+				de: "Die Versicherung muss Ersatz für den Schaden leisten. ",
+				hu: "A biztosítónak kárpótlást kell nyújtania a kárért."
+			},
+			"051 - Feedback bekommen": {
+				de: "Hast du schon Feedback von deinem Chef bekommen",
+				hu: "Kaptál már visszajelzést a főnöködtől?"
+			},
+			"052 - Feedback geben": {
+				de: "Kannst du mir bitte Feedback zu meinem Entwurf geben ",
+				hu: "Tudnál nekem visszajelzést adni a tervemhez, kérlek?"
+			},
+			"053 - einen Fehler beheben": {
+				de: "Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+				hu: "A technikus gyorsan ki tudta javítani a laptopomban a hibát."
+			},
+			"054 - zur Folge haben": {
+				de: "Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+				hu: "A döntéseimnek komoly következményei lesznek."
+			},
+			"055 - eine Forderung stellen": {
+				de: "Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+				hu: "A munkavállalók magasabb béreket követelt."
+			},
+			"056 - eine Frage stellen": {
+				de: "Darf ich dir eine Frage stellen?",
+				hu: "Feltehetek Önnek egy kérdést?"
+			},
+			"057 - eine Freude bereiten": {
+				de: "Sie wollte ihren Eltern eine Freude bereiten.",
+				hu: "Örömet akart szerezni a szüleinek."
+			},
+			"058 - ins Geschäft kommen mit": {
+				de: "Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+				hu: "A főnököm egy másik céggel üzletet kötött."
+			},
+			"059 - ein Gespräch führen über/mit": {
+				de: "Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+				hu: "A főnök velem az én előléptetésemről beszélgetést folytat."
+			},
+			"060 - ins Gespräch bringen": {
+				de: "Mein Kollege hat seine Idee ins Gespräch gebracht.",
+				hu: "A kollégám az ötleteit szóba hozza."
+			},
+			"061 - den Glauben verlieren": {
+				de: "Er ist Atheist, weil er den Glauben verloren hat.",
+				hu: "Ő ateista mert elveszítette a hitét."
+			},
+			"062 - etwas im Griff haben": {
+				de: "Ich habe die Situation im Griff.",
+				hu: "Én kézben tartom a helyzetet."
+			},
+			"063 - etwas in den Griff bekommen": {
+				de: "Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+				hu: "Az új főnök a munkavezetést rendbe tudja hozni."
+			},
+			"064 - auf den Grund gehen": {
+				de: "Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+				hu: "A pszichológus az emberi lélek mélyére akar látni."
+			},
+			"065 - jemanden vor eine Herausforderung stellen": {
+				de: "Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+				hu: "Az új munka nagyobb kihívás elé állít engem."
+			},
+			"066 - Hilfe leisten": {
+				de: "Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+				hu: "A barátaim segítséget nyújtottak nekem a német bürokráciában."
+			},
+			"067 - zu Hilfe nehmen": {
+				de: "Ich habe einen Freund zu Hilfe genommen.",
+				hu: "Egy barátom segítségét vettem igénybe"
+			},
+			"068 - die Hoffnung aufgeben": {
+				de: "Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+				hu: "A politikus feladta a reményt a politika iránt."
+			},
+			"069 - sich Hoffnung machen": {
+				de: "Du solltest dir keine falschen Hoffnungen machen.",
+				hu: "Ne táplálj hiú reményeket."
+			},
+			"070 - auf eine Idee kommen": {
+				de: "Ich bin plötzlich auf eine gute Idee gekommen.",
+				hu: "Hirtelen eszembe jutott egy jó ötlet."
+			},
+			"071 - infrage kommen": {
+				de: "Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+				hu: "Egy kisebb lakásba költözés szóba sem jöhet számomra."
+			},
+			"072 - infrage stellen": {
+				de: "Er stellt die Entscheidung des Chefs infrage.",
+				hu: "Ő megkérdőjelezi a főnök döntését."
+			},
+			"073 - Interesse wecken an/für": {
+				de: "Die Werbung weckt Interesse für das neue Produkt.",
+				hu: "A reklám felkelti az érdeklődést az új termék iránt."
+			},
+			"074 - Interesse zeigen an/für": {
+				de: "Viele Studenten zeigen Interesse an diesem Kurs.",
+				hu: "Sok diák érdeklődést mutat a kurzus iránt."
+			},
+			"075 - in Kenntnis setzen von": {
+				de: "Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+				hu: "A szerviz tudatja velem a javítás költségét."
+			},
+			"076 - zur Kenntnis nehmen": {
+				de: "Ich nehme Ihre Beschwerde zur Kenntnis.",
+				hu: "Tudomásul veszem az ön panaszát"
+			},
+			"077 - Kontakt aufnehmen mit": {
+				de: "Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+				hu: "Szeretnéd a kapcsolatot a régi barátaiddal felvenni?"
+			},
+			"078 - Klarheit gewinnen über": {
+				de: "Ich muss Klarheit über die Lösung gewinnen.",
+				hu: "Világosságot kell nyernem a megoldással kapcsolatban."
+			},
+			"079 - Kontakt halten": {
+				de: "Ich halte Kontakt zu meinen alten Freunden.",
+				hu: "Tartom a kapcsolatot a régi barátaimmal."
+			},
+			"080 - Kontakt knüpfen mit": {
+				de: "Der Administrator knüpft Kontakte mit der Entwicklungen.",
+				hu: "Az adminisztrátor kapcsolatot létesít a fejlesztőkkel."
+			},
+			"081 - Kontakt knüpfen zu": {
+				de: "Sie will mehrere Kontakte im Internet zu knüpfen.",
+				hu: "Több kapcsolatot szeretne kialakítani az interneten."
+			},
+			"082 - in Kontakt stehen mit": {
+				de: "Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+				hu: "A cég kapcsolatban áll több partnercéggel."
+			},
+			"083 - in Kontakt treten mit": {
+				de: "Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+				hu: "Tegnap az ügyfélszolgálat kapcsolatba lépett velem."
+			},
+			"084 - die Kosten tragen für": {
+				de: "Die Saga trägt die Kosten für die Renovierung.",
+				hu: "A Saga viseli a költségeket a felújításnak."
+			},
+			"085 - die Kosten übernehmen für": {
+				de: "Die Versicherung übernimmt die Kosten für die Behandlung.",
+				hu: "A biztosító átvállalja a kezelés költségeit."
+			},
+			"086 - in Kraft treten": {
+				de: "Das neue Gesetz wird morgen in Kraft treten.",
+				hu: "Az új törvény holnap hatályba lép."
+			},
+			"087 - Krieg führen gegen/mit/wegen": {
+				de: "Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+				hu: "Nem akarunk háborít vívni a szomszédainkkal."
+			},
+			"088 - Kritik üben an/für": {
+				de: "Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+				hu: "Ő a főnök döntését nem kritizálta."
+			},
+			"089 - den Kürzeren ziehen": {
+				de: "Er hat den Kürzeren gezogen.",
+				hu: "Ő nem éri el a célját."
+			},
+			"090 - jemanden auf dem Laufenden halten": {
+				de: "Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+				hu: "Az állomás tájékoztatja a késésekről az utasokat folyamatosan."
+			},
+			"091 - auf dem Laufenden sein": {
+				de: "In der IT muss man auf dem Laufenden sein.",
+				hu: "Az IT-ben naprakésznek kell lenni."
+			},
+			"092 - der Meinung sein": {
+				de: "Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+				hu: "Az a véleményem, hogy sok feladatot kellene csinálnunk."
+			},
+			"093 - in Ordnung bringen": {
+				de: "Ich muss meine Wohnung in Ordnung bringen.",
+				hu: "Rendbe kell hoznom a lakásomat."
+			},
+			"094 - ein Profil anlegen": {
+				de: "Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+				hu: "Tegnap egy új profilt a linkedIn-en létrehoztam."
+			},
+			"095 - eine Prüfung bestehen": {
+				de: "Ich will die B2 Prüfung bestehen.",
+				hu: "Le akarom a B2 vizsgát tenni."
+			},
+			"096 - durch eine Prüfung fallen": {
+				de: "Ich bin durch meine letzte B2 Prüfung gefallen.",
+				hu: "Én az utóbbi B2 vizsgán megbuktam."
+			},
+			"097 - eine Qualifikation mitbringen": {
+				de: "Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+				hu: "Sok tapasztalatot és végzettséget hoz magával."
+			},
+			"098 - einen Rat geben": {
+				de: "Können Sie mir einen guten Rat geben?",
+				hu: "Tud nekem egy jó tanácsot adni?"
+			},
+			"099 - Rechenschaft ablegen über": {
+				de: "Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+				hu: "Ő beszámolót tart az utazási tervről."
+			},
+			"100 - zur Rechenschaft ziehen für": {
+				de: "Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+				hu: "Te engem nem vonhatsz felelősségre a te hibádért."
+			},
+			"101 - in Rechnung stellen": {
+				de: "Der Zahnarzt stellt mir die Kosten in Rechnung.",
+				hu: "A fogorvos kiszámlázta nekem a költségeket."
+			},
+			"102 - eine Rede halten über": {
+				de: "Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+				hu: "Az elnök egy beszédet tartott az új tervekről."
+			},
+			"103 - in eine Reihenfolge bringen": {
+				de: "Ich bringe meine Dokumente immer in eine Reihenfolge.",
+				hu: "Én mindig a dokumentumaimat sorrendbe rakom."
+			},
+			"104 - den Respekt verlieren vor": {
+				de: "Man sollte vor der Natur nicht den Respekt verlieren",
+				hu: "Nem kellene a természet iránt a tiszteletet elveszíteni."
+			},
+			"105 - Rückmeldung geben": {
+				de: "Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten. ",
+				hu: "Az oktató részletes visszajelzést adott a hallgatóknak a munkájukról."
+			},
+			"106 - Rücksicht nehmen auf": {
+				de: "Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn! ",
+				hu: "Kérem, vegyen figyelembe a szomszédok éjszakai pihenését!"
+			},
+			"107 - die Ruhe bewahren": {
+				de: "Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe. ",
+				hu: "Annak ellenére, hogy a helyzet kritikus volt, a kapitány megőrizte a nyugalmát."
+			},
+			"108 - Schluss machen mit": {
+				de: "Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht. ",
+				hu: "Öt év után szakított a barátnőjével."
+			},
+			"109 - zur Sprache bringen": {
+				de: "Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen. ",
+				hu: "A problémákat a következő megbeszélésen fogjuk szóba hozni."
+			},
+			"110 - Stellung nehmen zu": {
+				de: "Ich möchte zu diesem komplizierten Fall keine Stellung nehmen. ",
+				hu: "Nem szeretnék véleményt nyilvánítani ebben a bonyolult ügyben."
+			},
+			"111 - unter Strafe stehen": {
+				de: "Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig. ",
+				hu: "Ez a tett nem áll közvetlenül büntetés alatt, de erkölcsileg megkérdőjelezhető."
+			},
+			"112 - unter Strafe stellen": {
+				de: "Man sollte das unnötige Töten von Tieren unter Strafe stellen. ",
+				hu: "Büntetendővé kellene tenni az állatok felesleges elpusztítását."
+			},
+			"113 - in Streik treten": {
+				de: "Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten. ",
+				hu: "Az alacsony bérek miatt a munkások ma reggel sztrájkba léptek."
+			},
+			"114 - Stress haben mit": {
+				de: "Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms. ",
+				hu: "Volt egy ideig stresszem a szomszédommal a zaj miatt."
+			},
+			"115 - unter Stress stehen": {
+				de: "Aufgrund der Abgabetermine steht das gesamte Team unter Stress. ",
+				hu: "A határidők miatt az egész csapat stressz alatt áll."
+			},
+			"116 - eine Tätigkeit ausüben": {
+				de: "Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus. ",
+				hu: "Sok éve folytat fordítói tevékenységet szabadúszóként."
+			},
+			"117 - im Trend liegen": {
+				de: "Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt. ",
+				hu: "Ez a technológia öt éve trendben volt, de ma már elavult."
+			},
+			"118 - einen Überblick bekommen": {
+				de: "Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+				hu: "El kell olvasnom a dokumentumokat, hogy áttekintést kapjak."
+			},
+			"119 - einen Überblick geben": {
+				de: "Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+				hu: "A főnök áttekintést fog adni minden munkatársnak a negyedéves számokról."
+			},
+			"120 - einen Unterschied machen": {
+				de: "Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+				hu: "Ez nem tesz különbséget, hogy mi ma vagy holnap kezdjük el."
+			},
+			"121 - eine Verabredung treffen": {
+				de: "Möchten Sie mit mir eine Verabredung zu treffen?",
+				hu: "Szeretnél velem egy találkozót megbeszélni."
+			},
+			"122 - die Verantwortung übernehmen für": {
+				de: "Er musste die Verantwortung für den Fehler übernehmen.",
+				hu: "Neki kellett a felelősséget vállalnia a hibájáért"
+			},
+			"123 - sich in Verbindung setzen mit": {
+				de: "Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+				hu: "Holnap reggel felveszem a kapcsolatot az ügyfélszolgálattal."
+			},
+			"124 - eine Vereinbarung treffen zu": {
+				de: "Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+				hu: "Reméljük, hamarosan megállapodást tudunk kötni a feltételekről. "
+			},
+			"125 - zur Verfügung stehen": {
+				de: "Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+				hu: "Kérdések esetén örömmel állok rendelkezésre."
+			},
+			"126 - zur Verfügung stellen": {
+				de: "Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+				hu: "A cég fogja a szükséges forrásokat rendelkezésre bocsátani."
+			},
+			"127 - in Verhandlungen stehen": {
+				de: "Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+				hu: "Hónapok óta tárgyalásban állunk a főbérlővel"
+			},
+			"128 - in Verhandlungen treten": {
+				de: "Nach der Einigung können wir über die Details in Verhandlungen treten.",
+				hu: "A megegyezés után tárgyalásokat kezdhetünk a részletekről."
+			},
+			"129 - ein Versprechen geben": {
+				de: "Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+				hu: "Ígéretet teszek neked, hogy pontos leszek."
+			},
+			"130 - einen Vertrag abschließen mit": {
+				de: "Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+				hu: "Mi egy új szerződés a szállítónkkal kötöttünk."
+			},
+			"131 - Vertrauen herstellen": {
+				de: "Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+				hu: "Idő kell a bizalom kiépítése a kollégák között."
+			},
+			"132 - Vorbereitungen treffen": {
+				de: "Wir müssen Vorbereitungen für die Konferenz treffen.",
+				hu: "Nekünk muszáj előkészületeket a konferenciára tenni."
+			},
+			"133 - im Vordergrund stehen": {
+				de: "Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+				hu: "Ebben a projektben a hatékonyság az előtérben áll, nem a költségek."
+			},
+			"134 - einen Vorschlag machen": {
+				de: "Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+				hu: "Tehetek én egy javaslatot, hogy mi a problémát megoldani tudnánk?"
+			},
+			"135 - einen Vorschlag unterbreiten": {
+				de: "Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+				hu: "Kérem terjessze elő nekem az ön javaslatát írásban a jövő hétig."
+			},
+			"136 - Vorsorge treffen für": {
+				de: "Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+				hu: "Nekünk muszáj előre óvintézkedést az előre nem látható költségekre tennünk."
+			},
+			"137 - eine Wahl treffen": {
+				de: "Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+				hu: "Neki kellett egy döntést a karrierje és a családja között hoznia."
+			},
+			"138 - im Wettbewerb stehen mit": {
+				de: "Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+				hu: "A mi cégünk áll versenyben sok nemzetközi céggel."
+			},
+			"139 - Wert legen auf": {
+				de: "Unsere Firma legt viel Wert auf die Sicherheit.",
+				hu: "A mi cégünk fontosnak tartja a biztonságot."
+			},
+			"140 - Wertschätzung genießen": {
+				de: "In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+				hu: "Németországban a munkavállalók megbecsülést élveznek a munkájukért."
+			},
+			"141 - Widerstand leisten gegen": {
+				de: "Ich leiste Widerstand gegen viele Süßigkeiten.",
+				hu: "Én tanúsítok ellenállás a sok cukor ellen."
+			},
+			"142 - Wirkung zeigen": {
+				de: "Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+				hu: "Az elnök felhívása sajnos alig mutatott hatást/hatott."
+			},
+			"143 - das Wort ergreifen": {
+				de: "Nach einer langen Pause ergriff der Moderator das Wort.",
+				hu: "Hosszú szünet után a moderátor szót kért/szólalt meg."
+			},
+			"144 - ein Ziel setzen": {
+				de: "Ich setze mir eine Ziel.",
+				hu: "Én kitűztem egy célt."
+			},
+			"145 - ein Ziel verfolgen": {
+				de: "Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+				hu: "Sok akadály ellenére is kitartóan követte a célját."
+			},
+			"146 - eine Zusage erhalten": {
+				de: "Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+				hu: "Mielőtt tervezünk, kapnunk kell egy visszaigazolást az apartmantól."
+			},
+			"147 - im Zusammenhang stehen mit": {
+				de: "Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+				hu: "Az árak emelkedése közvetlen összefüggésben áll az inflációval."
+			}
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Helyes!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Példa:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Helytelen!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen - DE - HU</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="ungarn0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutshc - ungarisch</h1>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+        "001 - abhängen -- abhängen von + D": "001 - függ valamitől",
+        "002 - achten -- achten auf + A": "002 - figyelni valamire",
+        "003 - anfangen -- anfangen mit + D": "003 - kezdeni valamivel",
+        "004 - ankommen -- ankommen auf + A": "004 - megérkezni valamihez",
+        "005 - antworten -- antworten auf + A": "005 - válaszolni valamire",
+        "006 - ärgern -- sich ärgern über + A": "006 - bosszankodni valami miatt",
+        "007 - aufhören -- aufhören mit + D": "007 - abbahagyni valamivel",
+        "008 - aufpassen -- aufpassen auf + A": "008 - figyelni valamire",
+        "009 - aufregen -- sich aufregen über + A": "009 - felháborodni valami miatt",
+        "010 - ausgeben -- ausgeben für + A": "010 - költeni valamire",
+        "011 - bedanken bei -- sich bedanken bei + D": "011 - megköszönni valamiért",
+        "012 - bedanken für -- sich bedanken für + A": "012 - megköszönni valamiért",
+        "013 - beginnen -- beginnen mit + D": "013 - kezdeni valamivel",
+        "014 - bemühen -- sich bemühen um + A": "014 - erőfeszítést tenni valamire",
+        "015 - berichten -- berichten über. + A": "015 - tudósít valamiről",
+        "016 - beschäftigen -- sich beschäftigen mit + D": "016 - ragaszkodik valamihez",
+        "017 - beschweren -- sich beschweren bei + D": "017 - panaszkodni valami miatt",
+        "018 - bestehen aus -- bestehen aus + D": "018 - valamiből áll",
+        "019 - bestehen auf -- bestehen auf + A": "019 - ragaszkodik valamihez",
+        "020 - beteiligen -- sich beteiligen an + D": "020 - részt venni valamiben",
+        "021 - bewerben bei -- sich bewerben bei + D": "021 - jelentkezni valamire",
+        "022 - bewerben um -- sich bewerben um + A": "022 - jelentkezni,pályázni valamire",
+        "023 - beziehen -- sich beziehen auf + A": "023 - utalni valamire",
+        "024 - bitten -- bitten um + A": "024 - kérni valamire",
+        "025 - danken -- danken für + A": "025 - megköszönni valamire",
+        "026 - denken -- denken an + A": "026 - gondolkodni valamiről",
+        "027 - diskutieren -- diskutieren über + A": "027 - megbeszélni valamiről",
+        "028 - einladen -- einladen zu + D": "028 - meghívni valamire",
+        "029 - entscheiden -- sich entscheiden für + A": "029 - dönteni valamiről",
+        "030 - entschließen -- sich entschließen zu + D": "030 - elhatározni valamiről",
+        "031 - entschuldigen bei -- sich entschuldigen bei + D": "031 - bocsánatot kérni valamiről",
+        "032 - entschuldigen für -- sich entschuldigen für + A": "032 - bocsánatot kérni",
+        "033 - erfahren -- erfahren von + D": "033 - tapasztalat valamiből",
+        "034 - erholen -- sich erholen von + D": "034 - felépülni valamiből",
+        "035 - erinnern -- sich erinnern an + A": "035 - emlékezni",
+        "036 - erkennen -- erkennen an + D": "036 - elismerni",
+        "037 - erkundigen -- sich erkundigen nach + D": "037 - érdeklődik valamiről",
+        "038 - erschrecken -- erschrecken über + A": "038 - megijedni valamiről",
+        "039 - erzählen über -- erzählen über + A": "039 - mesélni valamiről",
+        "040 - erzählen von -- erzählen von + D": "040 - beszélni valamiről",
+        "041 - fragen -- fragen nach + D": "041 - kérdezni valamiről",
+        "042 - freuen auf -- sich freuen auf + A": "042 - várom,hogy",
+        "043 - freuen über -- sich freuen über + A": "043 - várom,hogy",
+        "044 - gehen -- gehen um + A": "044 - menni valamihez",
+        "045 - gehören -- gehören zu + D": "045 - tartozni valamihez",
+        "046 - gewöhnen -- sich gewöhnen an + A": "046 - megszokni valamit",
+        "047 - glauben -- glauben an + A": "047 - hinni valamiben",
+        "048 - gratulieren -- gratulieren zu + D": "048 - gratulálni",
+        "049 - halten für -- halten für + A": "049 - tartani valamiért",
+        "050 - halten von -- halten von + D": "050 - tartani valamit",
+        "051 - handeln um -- sich handeln um + A": "051 - szó van valamiről",
+        "052 - handeln von -- handeln von + D": "052 - szólni vmiről",
+        "053 - helfen -- helfen bei + D": "053 - segíteni valamivel",
+        "054 - hindern -- hindern an + D": "054 - akadályozni valamiben",
+        "055 - hoffen -- hoffen auf + A": "055 - reménykedni valamiben",
+        "056 - hören -- hören von + D": "056 - hallani valamiről",
+        "057 - informieren -- sich informieren über + A": "057 - informálódni",
+        "058 - interessieren -- sich interessieren für + A": "058 - érdeklődik valamiről",
+        "059 - klagen -- klagen über + A": "059 - panaszkodni valamiről",
+        "060 - kämpfen -- kämpfen für + A": "060 - harcolni valamiért",
+        "061 - kommen -- kommen zu + D": "061 - jönni valamire",
+        "062 - konzentrieren -- sich konzentrieren auf + A": "062 - koncentrálni valamire",
+        "063 - kümmern -- sich kümmern um + A": "063 - törődni valamiről",
+        "064 - lachen -- lachen über + A": "064 - nevetni valamiről",
+        "065 - leiden an -- leiden an + D": "065 - szenvedni vmin",
+        "066 - leiden unter -- leiden unter + A": "066 - szenvedni vmitől",
+        "067 - nachdenken -- nachdenken über + A": "067 - gondolkodni valamiről",
+        "068 - protestieren -- protestieren gegen + A": "068 - tiltakozik ellene",
+        "069 - rechnen -- rechnen mit + D": "069 - számolni valamivel",
+        "070 - reden über -- reden über + A": "070 - beszélni valamin",
+        "071 - reden von -- reden von + D": "071 - beszélni valamiről",
+        "072 - riechen -- riechen nach + D": "072 - vmilyen illata,szaga van",
+        "073 - sagen über -- sagen über + A": "073 - mondani valamiről",
+        "074 - sagen zu -- sagen zu + D": "074 - mondani vhova",
+        "075 - schicken an -- schicken an + A": "075 - elküldeni vmit.",
+        "076 - schicken zu -- schicken zu + D": "076 - elküldeni vhova",
+        "077 - schimpfen -- schimpfen über + A": "077 - szidalmazni,panaszkodni",
+        "078 - schmecken -- schmecken nach + D": "078 - vmilyen íze van",
+        "079 - schreiben -- schreiben an + A": "079 - írni",
+        "080 - schützen -- sich schützen vor + D": "080 - védelmezni",
+        "081 - sein für -- sein für + A": "081 - vmi-nek vmi-ért lenni",
+        "082 - sein gegen -- sein gegen  + A": "082 - vmi ellen",
+        "083 - sorgen -- sorgen für + A": "083 - gondoskodni",
+        "084 - sprechen mit -- sprechen mit + D": "084 - beszélni valamivel",
+        "085 - sprechen über -- sprechen über + A": "085 - beszélni valamiről",
+        "086 - sterben -- sterben an + D": "086 - meghalni",
+        "087 - streiten mit -- streiten mit + D": "087 - vitázni vmi miatt",
+        "088 - streiten über -- streiten über + A": "088 - veszekedni valamin",
+        "089 - teilnehmen -- teilnehmen an + D": "089 - részt venni valamin",
+        "090 - telefonieren -- telefonieren mit + D": "090 - telefonálni vele",
+        "091 - treffen mit -- sich treffen mit + D": "091 - találkozni vkivel",
+        "092 - treffen zu -- sich treffen zu + D": "092 - találkozni vmire",
+        "093 - überreden -- überreden zu + D": "093 - rábeszél",
+        "094 - unterhalten -- sich unterhalten mit + D": "094 - beszélgetni vkivel",
+        "095 - unterhalten -- sich unterhalten über + A": "095 - beszélgetni vmiről",
+        "096 - verabreden -- sich verabreden mit + D": "096 - megbeszélni vmit",
+        "097 - verabschieden -- sich verabschieden von + D": "097 - elbúcsúzni",
+        "098 - vergleichen -- vergleichen mit + D": "098 - összehasonlít",
+        "099 - verlassen -- sich verlassen auf + A": "099 - számítani,hagyatkozni",
+        "100 - verlieben -- sich verlieben in + A": "100 - beleszeretni",
+        "101 - verstehen -- sich verstehen mit + D": "101 - megérteni",
+        "102 - verstehen -- verstehen von + D": "102 - megérteni vmit v. vmiről",
+        "103 - vorbereiten -- sich vorbereiten auf + A": "103 - felkészülni",
+        "104 - warnen -- warnen vor + D": "104 - figyelmeztet",
+        "105 - warten -- warten auf + A": "105 - várni",
+        "106 - wenden -- sich wenden an + A": "106 - fordul,megcéloz",
+        "107 - werden -- werden zu + D": "107 - válik vmivé",
+        "108 - wissen -- wissen von + D": "108 - tudni",
+        "109 - wundern -- sich wundern über + A": "109 - csodálkozni",
+        "110 - zuschauen -- zuschauen bei + D": "110 - megnézni",
+        "111 - zusehen -- zusehen bei + D": "111 - odafigyel,szemlél",
+        "112 - zweifeln -- zweifeln an + D": "112 - kételkedni"
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+            "001 - abhängen -- abhängen von + D": {
+	 	 	 	 de:"Ob wir fahren, hängt vom Wetter ab.",
+	 	 	 	 hu:"Az időjárástól függ, hogy megyünk."}, 
+            "002 - achten -- achten auf + A": {
+	 	 	 	 de:"Bitte achte auf den neuen Mantel.",
+	 	 	 	 hu:"Kérlek, vigyázz az új kabátra."}, 
+            "003 - anfangen -- anfangen mit + D": {
+	 	 	 	 de:"Ich fange mit der Übung an.",
+	 	 	 	 hu:"Elkezdem a gyakorlatot."}, 
+            "004 - ankommen -- ankommen auf + A": {
+	 	 	 	 de:"Es kommt auf den richtigen Preis an.",
+	 	 	 	 hu:"A lényeg a megfelelő ár."}, 
+            "005 - antworten -- antworten auf + A": {
+	 	 	 	 de:"Bitte antworten Sie heute auf den Brief.",
+	 	 	 	 hu:"Kérlek, válaszolj a levélre még ma."}, 
+            "006 - ärgern -- sich ärgern über + A": {
+	 	 	 	 de:"Wir ärgern uns über den Regen.",
+	 	 	 	 hu:"Bosszankodunk az eső miatt."}, 
+            "007 - aufhören -- aufhören mit + D": {
+	 	 	 	 de:"Er hört um 17.00 Uhr mit der Arbeit auf.",
+	 	 	 	 hu:"Délután 5-kor abbahagyja a munkát."}, 
+            "008 - aufpassen -- aufpassen auf + A": {
+	 	 	 	 de:"Ein Babysitter passt auf kleine Kinder auf. ",
+	 	 	 	 hu:"Egy bébiszitter vigyáz a kisgyerekekre."}, 
+            "009 - aufregen -- sich aufregen über + A": {
+	 	 	 	 de:"Deutsche regen sich über Unpünktlichkeit auf.",
+	 	 	 	 hu:"A németek felháborodnak, ha késnek."}, 
+            "010 - ausgeben -- ausgeben für + A": {
+	 	 	 	 de:"Frauen geben viel Geld für Schuhe aus.",
+	 	 	 	 hu:"A nők sok pénzt költenek cipőre."}, 
+            "011 - bedanken bei -- sich bedanken bei + D": {
+	 	 	 	 de:"Ich bedanke mich herzlich bei dir.",
+	 	 	 	 hu:"Nagyon köszönöm."}, 
+            "012 - bedanken für -- sich bedanken für + A": {
+	 	 	 	 de:"Martin bedankt sich für das Geschenk.",
+	 	 	 	 hu:"Martin köszöni az ajándékot."}, 
+            "013 - beginnen -- beginnen mit + D": {
+	 	 	 	 de:"Wir beginnen pünktlich mit dem Deutschkurs.",
+	 	 	 	 hu:"Pontosan elkezdjük a német tanfolyamot."}, 
+            "014 - bemühen -- sich bemühen um + A": {
+	 	 	 	 de:"Karla bemüht sich um eine Arbeit.",
+	 	 	 	 hu:"Karla próbál munkát találni."}, 
+            "015 - berichten -- berichten über. + A": {
+	 	 	 	 de:"Der Reporter berichtet über die Wahlen.",
+	 	 	 	 hu:"A riporter a választásokról tudósít."}, 
+            "016 - beschäftigen -- sich beschäftigen mit + D": {
+	 	 	 	 de:"Ich beschäftige mich gern mit Pflanzen.",
+	 	 	 	 hu:"Foglalkozok szívesen a növényekkel."}, 
+            "017 - beschweren -- sich beschweren bei + D": {
+	 	 	 	 de:"Der Gast beschwert sich beim Kellner.",
+	 	 	 	 hu:"A vendég panaszkodik a pincérnél."}, 
+            "018 - bestehen aus -- bestehen aus + D": {
+	 	 	 	 de:"Eheringe bestehen aus Gold.",
+	 	 	 	 hu:"Az esküvői gyűrűk aranyból készülnek."}, 
+            "019 - bestehen auf -- bestehen auf + A": {
+	 	 	 	 de:"Ich bestehe auf sofortige Bezahlung des Autos.",
+	 	 	 	 hu:"Ragaszkodom az autó azonnali kifizetéséhez."}, 
+            "020 - beteiligen -- sich beteiligen an + D": {
+	 	 	 	 de:"Viele Studenten beteiligen sich an den Streiks.",
+	 	 	 	 hu:"Sok diák vesz részt a sztrájkokban."}, 
+            "021 - bewerben bei -- sich bewerben bei + D": {
+	 	 	 	 de:"Er bewirbt sich bei einer Bäckerei.",
+	 	 	 	 hu:"Ő jelentkezik egy pékségben."}, 
+            "022 - bewerben um -- sich bewerben um + A": {
+	 	 	 	 de:"Sie bewirbt sich um eine Stelle als Sekretärin.",
+	 	 	 	 hu:"A nő titkárnői állásra jelentkezik."}, 
+            "023 - beziehen -- sich beziehen auf + A": {
+	 	 	 	 de:"Meine Frage bezieht sich auf Ihr Angebot.",
+	 	 	 	 hu:"A kérdésem az ön ajánlatára vonatkozik."}, 
+            "024 - bitten -- bitten um + A": {
+	 	 	 	 de:"Der Redner bittet um Aufmerksamkeit.",
+	 	 	 	 hu:"A beszélő figyelmet kér."}, 
+            "025 - danken -- danken für + A": {
+	 	 	 	 de:"Sam dankt für Ritas Hilfe.",
+	 	 	 	 hu:"Sam megköszöni Ritának a segítségét."}, 
+            "026 - denken -- denken an + A": {
+	 	 	 	 de:"Maria denkt oft an den Urlaub.",
+	 	 	 	 hu:"Maria gyakran gondol a nyaralására."}, 
+            "027 - diskutieren -- diskutieren über + A": {
+	 	 	 	 de:"Das Kabinett diskutiert über eine neue Steuer.",
+	 	 	 	 hu:"A kabinet egy új adóról tárgyal."}, 
+            "028 - einladen -- einladen zu + D": {
+	 	 	 	 de:"Ich lade dich zu meinem Geburtstag ein.",
+	 	 	 	 hu:"Meghívlak a születésnapi bulira."}, 
+            "029 - entscheiden -- sich entscheiden für + A": {
+	 	 	 	 de:"Frauen entscheiden sich gern für Gold. ",
+	 	 	 	 hu:"A nők gyakran választják az aranyat."}, 
+            "030 - entschließen -- sich entschließen zu + D": {
+	 	 	 	 de:"Karl entschließt sich zu einem Studium. ",
+	 	 	 	 hu:"Karl úgy dönt, hogy egyetemre megy."}, 
+            "031 - entschuldigen bei -- sich entschuldigen bei + D": {
+	 	 	 	 de:"Mia entschuldigt sich bei ihrem Mann.",
+	 	 	 	 hu:"Mia bocsánatot kér a férjétől."}, 
+            "032 - entschuldigen für -- sich entschuldigen für + A": {
+	 	 	 	 de:"Ich entschuldige mich für das Verhalten meiner Tochter.",
+	 	 	 	 hu:"Elnézést kérek a lányom viselkedéséért."}, 
+            "033 - erfahren -- erfahren von + D": {
+	 	 	 	 de:"Heute haben wir von dem Bauprojekt erfahren.",
+	 	 	 	 hu:"Ma értesültünk az építkezésről."}, 
+            "034 - erholen -- sich erholen von + D": {
+	 	 	 	 de:"Von dem Schock muss ich mich erst erholen.",
+	 	 	 	 hu:"Még mindig épülök fel a sokkból."}, 
+            "035 - erinnern -- sich erinnern an + A": {
+	 	 	 	 de:"Wir erinnern uns gern an unser erstes Ehejahr.",
+	 	 	 	 hu:"Mi megemlékezünk szívesen az első házzasági évünkre."}, 
+            "036 - erkennen -- erkennen an + D": {
+	 	 	 	 de:"Man erkennt Pinocchio an seiner langen Nase.",
+	 	 	 	 hu:"Felismerhető Pinokkió hosszú orráról."}, 
+            "037 - erkundigen -- sich erkundigen nach + D": {
+	 	 	 	 de:"Oma erkundigt sich oft nach meinen Plänen.",
+	 	 	 	 hu:"A nagymama gyakran érdeklődik a terveimről."}, 
+            "038 - erschrecken -- erschrecken über + A": {
+	 	 	 	 de:"Die Frau erschrickt über eine Maus.",
+	 	 	 	 hu:"A feleségemet megijeszti egy egér."}, 
+            "039 - erzählen über -- erzählen über + A": {
+	 	 	 	 de:"Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+	 	 	 	 hu:"Egy kelet-berlini az egykori NDK-ban töltött életéről beszél."}, 
+            "040 - erzählen von -- erzählen von + D": {
+	 	 	 	 de:"Der Bischoff erzählt von der Reise nach Rom.",
+	 	 	 	 hu:"A püspök a római útjáról beszél."}, 
+            "041 - fragen -- fragen nach + D": {
+	 	 	 	 de:"Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+	 	 	 	 hu:"Az újságíró a törvényváltozás következményeiről kérdez."}, 
+            "042 - freuen auf -- sich freuen auf + A": {
+	 	 	 	 de:"Kinder freuen sich auf Weihnachten.",
+	 	 	 	 hu:"A gyerekek izgatottak a karácsonyról."}, 
+            "043 - freuen über -- sich freuen über + A": {
+	 	 	 	 de:"Jeder freut sich über eine Gehaltserhöhung.",
+	 	 	 	 hu:"Mindenki örül a fizetésemeléseknek."}, 
+            "044 - gehen -- gehen um + A": {
+	 	 	 	 de:"Immer geht es um Geld.",
+	 	 	 	 hu:"Mindig a pénzről van szó."}, 
+            "045 - gehören -- gehören zu + D": {
+	 	 	 	 de:"Das Elsass gehört zu Frankreich.",
+	 	 	 	 hu:"Elzász Franciaország része."}, 
+            "046 - gewöhnen -- sich gewöhnen an + A": {
+	 	 	 	 de:"Ich kann mich nicht an den Euro gewöhnen.",
+	 	 	 	 hu:"Nem tudok megszokni az euróhoz."}, 
+            "047 - glauben -- glauben an + A": {
+	 	 	 	 de:"Teenager glauben an die große Liebe.",
+	 	 	 	 hu:"A tinédzserek hisznek az igaz szerelemben."}, 
+            "048 - gratulieren -- gratulieren zu + D": {
+	 	 	 	 de:"Wir gratulieren dir zum 18. Geburtstag.",
+	 	 	 	 hu:"Mi gratulálunk a 18. születésnapodhoz!"}, 
+            "049 - halten für -- halten für + A": {
+	 	 	 	 de:"Ich halte das für keine gute Idee.",
+	 	 	 	 hu:"Én tartok attól az nem jó ötlet."}, 
+            "050 - halten von -- halten von + D": {
+	 	 	 	 de:"Kinder halten nicht viel von Ordnung.",
+	 	 	 	 hu:"A gyerekek nem tartanak sokat a rendről."}, 
+            "051 - handeln um -- sich handeln um + A": {
+	 	 	 	 de:"Bei der Kopie handelt es sich nicht um Originalsoftware.",
+	 	 	 	 hu:"A másolat arról szól ez nem eredeti szoftver."}, 
+            "052 - handeln von -- handeln von + D": {
+	 	 	 	 de:"Märchen handeln von Gut und Böse.",
+	 	 	 	 hu:"A mesék a szólnak a jóról és rosszról."}, 
+            "053 - helfen -- helfen bei + D": {
+	 	 	 	 de:"Kann ich dir beim Tischdecken helfen?",
+	 	 	 	 hu:"Segíthetek megteríteni?"}, 
+            "054 - hindern -- hindern an + D": {
+	 	 	 	 de:"Ein langsamer Fahrer hindert Greta am Überholen.",
+	 	 	 	 hu:"Egy lassú sofőr megakadályozza Gretát az előzésben."}, 
+            "055 - hoffen -- hoffen auf + A": {
+	 	 	 	 de:"Im März hoffen alle auf warme Frühlingstage.",
+	 	 	 	 hu:"Márciusban mindenki meleg tavaszi napokra remél."}, 
+            "056 - hören -- hören von + D": {
+	 	 	 	 de:"Ich habe seit Sonntag nichts von Piet gehört.",
+	 	 	 	 hu:"Vasárnap óta nem hallottam Pietről."}, 
+            "057 - informieren -- sich informieren über + A": {
+	 	 	 	 de:"Auf der Messe kann man sich über die neue Technologie informieren.",
+	 	 	 	 hu:"A kiállításon új technológiákról lehet tájékozódni."}, 
+            "058 - interessieren -- sich interessieren für + A": {
+	 	 	 	 de:"Monika interessiert sich für ein Smartphone.",
+	 	 	 	 hu:"Monika érdeklődik egy okostelefon iránt."}, 
+            "059 - klagen -- klagen über + A": {
+	 	 	 	 de:"Frauen klagen häufig über Kopfschmerzen.",
+	 	 	 	 hu:"A nők gyakran panaszkodnak fejfájásra."}, 
+            "060 - kämpfen -- kämpfen für + A": {
+	 	 	 	 de:"Die Gewerkschaft kämpft für höhere Löhne.",
+	 	 	 	 hu:"A szakszervezet a magasabb bérekért küzd."}, 
+            "061 - kommen -- kommen zu + D": {
+	 	 	 	 de:"In der Besprechung kam es zu einem Streit.",
+	 	 	 	 hu:"A megbeszélés során vita alakult ki."}, 
+            "062 - konzentrieren -- sich konzentrieren auf + A": {
+	 	 	 	 de:"Karl konzentriert sich auf seine Hausaufgaben.",
+	 	 	 	 hu:"Karl a házi feladatára koncentrál."}, 
+            "063 - kümmern -- sich kümmern um + A": {
+	 	 	 	 de:"Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+	 	 	 	 hu:"Egy idősek otthonában gondoznak időseket, akik betegek."}, 
+            "064 - lachen -- lachen über + A": {
+	 	 	 	 de:"Über einen guten Witz muss man laut lachen.",
+	 	 	 	 hu:"Egy jó vicc hangosan megnevettet."}, 
+            "065 - leiden an -- leiden an + D": {
+	 	 	 	 de:"Jeder fünfte Manager leidet an Burn-out.",
+	 	 	 	 hu:"Minden ötödik vezető kiégéstől szenved."}, 
+            "066 - leiden unter -- leiden unter + A": {
+	 	 	 	 de:"Kaffeetrinker leiden unter Schlafproblemen.",
+	 	 	 	 hu:"A kávéfogyasztók alvásproblémákkal küzdenek."}, 
+            "067 - nachdenken -- nachdenken über + A": {
+	 	 	 	 de:"Beamte müssen nicht über ihre Rente nachdenken.",
+	 	 	 	 hu:"A köztisztviselőknek nem kell aggódniuk a nyugdíjuk miatt."}, 
+            "068 - protestieren -- protestieren gegen + A": {
+	 	 	 	 de:"Viele Menschen protestieren gegen Atomkraft.",
+	 	 	 	 hu:"Sokan tiltakoznak az atomenergia ellen."}, 
+            "069 - rechnen -- rechnen mit + D": {
+	 	 	 	 de:"Im Januar muss man mit Schnee rechnen.",
+	 	 	 	 hu:"Januárban havazásra kell számítani."}, 
+            "070 - reden über -- reden über + A": {
+	 	 	 	 de:"Deine Mutter redet gern über Krankheiten.",
+	 	 	 	 hu:"Az édesanyád szeret betegségekről beszélni."}, 
+            "071 - reden von -- reden von + D": {
+	 	 	 	 de:"Großvater redet von den guten alten Zeiten.",
+	 	 	 	 hu:"A nagyapa a régi szép időkről beszél."}, 
+            "072 - riechen -- riechen nach + D": {
+	 	 	 	 de:"Hier riecht es nach Kuchen.",
+	 	 	 	 hu:"Süteményillat van itt."}, 
+            "073 - sagen über -- sagen über + A": {
+	 	 	 	 de:"Brigitte sagt über Dietmar, dass er oft lügt.",
+	 	 	 	 hu:"Brigitte beszélt Dietmarról, hogy ő gyakran hazudik."}, 
+            "074 - sagen zu -- sagen zu + D": {
+	 	 	 	 de:"Was sagst du zu meinem neuen Haarschnitt?",
+	 	 	 	 hu:"Mit gondolsz az új frizurámról?"}, 
+            "075 - schicken an -- schicken an + A": {
+	 	 	 	 de:"Die E-Mail schicke ich dir morgen.",
+	 	 	 	 hu:"Holnap elküldöm az e-mailt."}, 
+            "076 - schicken zu -- schicken zu + D": {
+	 	 	 	 de:"Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+	 	 	 	 hu:"A háziorvos szakorvoshoz fogja utalni a beteget."}, 
+            "077 - schimpfen -- schimpfen über + A": {
+	 	 	 	 de:"Alle schimpfen über den Regen.",
+	 	 	 	 hu:"Mindenki panaszkodik az esőre."}, 
+            "078 - schmecken -- schmecken nach + D": {
+	 	 	 	 de:"Muscheln schmecken nach Meerwasser.",
+	 	 	 	 hu:"A kagylók íze olyan, mint a tengervíz."}, 
+            "079 - schreiben -- schreiben an + A": {
+	 	 	 	 de:"Bitte schreibe noch heute an deine Mutter.",
+	 	 	 	 hu:"Kérlek írj még ma édesanyádnak."}, 
+            "080 - schützen -- sich schützen vor + D": {
+	 	 	 	 de:"Den Computer des Ministers muss man vor Hackern schützen.",
+	 	 	 	 hu:"A miniszter számítógépét meg kell védeni a hekkerektől."}, 
+            "081 - sein für -- sein für + A": {
+	 	 	 	 de:"Ich bin für die Abschaffung der Kinderarbeit.",
+	 	 	 	 hu:"Támogatom a gyermekmunka eltörlését."}, 
+            "082 - sein gegen -- sein gegen  + A": {
+	 	 	 	 de:"Viele sind gegen Steuererhöhungen.",
+	 	 	 	 hu:"Sokan ellenzik az adóemeléseket."}, 
+            "083 - sorgen -- sorgen für + A": {
+	 	 	 	 de:"Kinder müssen im Alter für ihre Eltern sorgen.",
+	 	 	 	 hu:"A gyerekeknek gondoskodniuk kell a szüleikről idős korukban."}, 
+            "084 - sprechen mit -- sprechen mit + D": {
+	 	 	 	 de:"Ich spreche noch einmal mit deinem Vater.",
+	 	 	 	 hu:"Majd újra beszélek az apáddal."}, 
+            "085 - sprechen über -- sprechen über + A": {
+	 	 	 	 de:"Lass uns über deine Zukunft sprechen.",
+	 	 	 	 hu:"Beszéljünk a jövődről."}, 
+            "086 - sterben -- sterben an + D": {
+	 	 	 	 de:"Zwei Deutsche sind an der Grippe gestorben.",
+	 	 	 	 hu:"Két német halt meg influenzában."}, 
+            "087 - streiten mit -- streiten mit + D": {
+	 	 	 	 de:"Ich möchte nicht mit dir streiten.",
+	 	 	 	 hu:"Nem akarok veled vitatkozni."}, 
+            "088 - streiten über -- streiten über + A": {
+	 	 	 	 de:"Die USA und Deutschland streiten über eine neue Strategie.",
+	 	 	 	 hu:"Az USA és Németország egy új stratégiáról vitatkozik."}, 
+            "089 - teilnehmen -- teilnehmen an + D": {
+	 	 	 	 de:"Nordkorea nimmt an der Fußball-WM teil.",
+	 	 	 	 hu:"Észak-Korea részt vesz a világbajnokságon."}, 
+            "090 - telefonieren -- telefonieren mit + D": {
+	 	 	 	 de:"Hast du schon mit dem Arzt telefoniert?",
+	 	 	 	 hu:"Beszéltél már az orvossal?"}, 
+            "091 - treffen mit -- sich treffen mit + D": {
+	 	 	 	 de:"Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+	 	 	 	 hu:"A kancellár naponta találkozik sajtószóvivőjével."}, 
+            "092 - treffen zu -- sich treffen zu + D": {
+	 	 	 	 de:"Sie treffen sich nur zu einem kurzen Gespräch.",
+	 	 	 	 hu:"Csak egy rövid beszélgetésre találkoznak."}, 
+            "093 - überreden -- überreden zu + D": {
+	 	 	 	 de:"Kann ich dich zu einem Glas Wein überreden?",
+	 	 	 	 hu:"Rábeszélhetlek egy pohár borra?"}, 
+            "094 - unterhalten -- sich unterhalten mit + D": {
+	 	 	 	 de:"Der Sänger unterhält sich mit dem Bassisten.",
+	 	 	 	 hu:"Az énekesnő a basszusgitáral szórakoztat."}, 
+            "095 - unterhalten -- sich unterhalten über + A": {
+	 	 	 	 de:"Die Modedesigner unterhalten sich über die neuesten Trends.",
+	 	 	 	 hu:"A divattervezők a legújabb trendekről beszélgetnek."}, 
+            "096 - verabreden -- sich verabreden mit + D": {
+	 	 	 	 de:"Heute verabrede ich mich mit einer Freundin.",
+	 	 	 	 hu:"Ma egy barátnőmmel találkozom."}, 
+            "097 - verabschieden -- sich verabschieden von + D": {
+	 	 	 	 de:"Nun wollen wir uns von euch verabschieden.",
+	 	 	 	 hu:"Most pedig búcsúzzunk el tőled."}, 
+            "098 - vergleichen -- vergleichen mit + D": {
+	 	 	 	 de:"Vergleichen Sie München mit Berlin.",
+	 	 	 	 hu:"Hasonlítsd össze Münchent Berlinnel."}, 
+            "099 - verlassen -- sich verlassen auf + A": {
+	 	 	 	 de:"Auf mich kann man sich verlassen.",
+	 	 	 	 hu:"Rám lehet számítani."}, 
+            "100 - verlieben -- sich verlieben in + A": {
+	 	 	 	 de:"Britta hat sich in das alte Bauernhaus verliebt.",
+	 	 	 	 hu:"Britta beleszeretett a régi parasztházba."}, 
+            "101 - verstehen -- sich verstehen mit + D": {
+	 	 	 	 de:"Daniel versteht sich gut mit seinem Chef.",
+	 	 	 	 hu:"Daniel jól megért a főnökével."}, 
+            "102 - verstehen -- verstehen von + D": {
+	 	 	 	 de:"Verstehst du etwas von Elektrik?",
+	 	 	 	 hu:"Tudsz valamit az elektromosságról?"}, 
+            "103 - vorbereiten -- sich vorbereiten auf + A": {
+	 	 	 	 de:"Karl bereitet sich auf eine Präsentation vor.",
+	 	 	 	 hu:"Karl egy prezentációra készül."}, 
+            "104 - warnen -- warnen vor + D": {
+	 	 	 	 de:"Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+	 	 	 	 hu:"Figyelmeztették őt magas költségekről a régi autókról."}, 
+            "105 - warten -- warten auf + A": {
+	 	 	 	 de:"In Namibia wartet man lange auf einen Bus.",
+	 	 	 	 hu:"Namíbiában sokáig kell várni egy buszra."}, 
+            "106 - wenden -- sich wenden an + A": {
+	 	 	 	 de:"Bitte wenden Sie sich an die Buchhaltung.",
+	 	 	 	 hu:"Kérjük, vegye fel a kapcsolatot a könyvelési osztállyal."}, 
+            "107 - werden -- werden zu + D": {
+	 	 	 	 de:"Unter null Grad wird Eis zu Wasser.",
+	 	 	 	 hu:"Nulla fok alatt a jég vízzé változik."}, 
+            "108 - wissen -- wissen von + D": {
+	 	 	 	 de:"Ich weiß nichts von neuen Computern für unser Team.",
+	 	 	 	 hu:"Semmit sem tudok a csapatunk új számítógépeiről."}, 
+            "109 - wundern -- sich wundern über + A": {
+	 	 	 	 de:"Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+	 	 	 	 hu:"Sok német meglepődik a hirtelen megemelkedett áramköltségeken."}, 
+            "110 - zuschauen -- zuschauen bei + D": {
+	 	 	 	 de:"Kann ich dir bei der Reparatur zuschauen?",
+	 	 	 	 hu:"Megnézhetem, ahogy megjavítod?"}, 
+            "111 - zusehen -- zusehen bei + D": {
+	 	 	 	 de:"Willst du mir beim Kochen zusehen?",
+	 	 	 	 hu:"Akarsz engem nézni a főzésnél?"}, 
+            "112 - zweifeln -- zweifeln an + D": {
+	 	 	 	 de:"John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+	 	 	 	 hu:"John kételkedik arról, hogy az ő fia igazat mondott."
+			}
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

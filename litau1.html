@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="litau0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutsch - litauisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - abhängen von + D": "001 - priklausyti nuo + D.",
+			"002 - achten auf + A": "002 - atkreipti dėmesį į + A.",
+			"003 - anfangen mit + D": "003 - pradėti nuo + D.",
+			"004 - ankommen auf + A": "004 - atvykti į + A.",
+			"005 - antworten auf + A": "005 - atsakyti į + A.",
+			"006 - sich ärgern über + A": "006 - susiršti dėl + A.",
+			"007 - aufhören mit + D": "007 - nustoti ties + D.",
+			"008 - aufpassen auf + A": "008 - atkreipti dėmesį į + A.",
+			"009 - sich aufregen über + A": "009 - susirimti dėl + A.",
+			"010 - ausgeben für + A": "010 - išleisti + A.",
+			"011 - sich bedanken bei + D": "011 - padėkoti + D.",
+			"012 - sich bedanken für + A": "012 - padėkoti už + A.",
+			"013 - beginnen mit + D": "013 - pradėti nuo + D.",
+			"014 - sich bemühen um + A": "014 - pasistengti dėl + A.",
+			"015 - berichten über. + A": "015 - pranešti apie + A.",
+			"016 - sich beschäftigen mit + D": "016 - užimti + D.",
+			"017 - sich beschweren bei + D": "017 - skųstis + D.",
+			"018 - bestehen aus + D": "018 - susideda iš + D.",
+			"019 - bestehen auf + A": "019 - reikalauti + A.",
+			"020 - sich beteiligen an + D": "020 - dalyvauti + D.",
+			"021 - sich bewerben bei + D": "021 - teikti paraišką + D.",
+			"022 - sich bewerben um + A": "022 - teikti paraišką + A.",
+			"023 - sich beziehen auf + A": "023 - nurodyti + A.",
+			"024 - bitten um + A": "024 - prašyti + A.",
+			"025 - danken für + A": "025 - padėkoti už + A.",
+			"026 - denken an + A": "026 - pagalvoti apie + A.",
+			"027 - diskutieren über + A": "027 - aptarti + A.",
+			"028 - einladen zu + D": "028 - pakviesti + D.",
+			"029 - sich entscheiden für + A": "029 - nuspręsti dėl + A.",
+			"030 - sich entschließen zu + D": "030 - nuspręsti dėl + D.",
+			"031 - sich entschuldigen bei + D": "031 - atsiprašyti + D.",
+			"032 - sich entschuldigen für + A": "032 - atsiprašyti už + A.",
+			"033 - erfahren von + D": "033 - sužinoti apie + D.",
+			"034 - sich erholen von + D": "034 - atsigauti po + D.",
+			"035 - sich erinnern an + A": "035 - prisiminti + A.",
+			"036 - erkennen an + D": "036 - pripažinti + D.",
+			"037 - sich erkundigen nach + D": "037 - teirautis apie + D.",
+			"038 - erschrecken über + A": "038 - būti šokiruotam + A.",
+			"039 - erzählen über + A": "039 - papasakoti apie + A.",
+			"040 - erzählen von + D": "040 - papasakoti apie + D.",
+			"041 - fragen nach + D": "041 - klausti apie + D.",
+			"042 - sich freuen auf + A": "042 - laukti + A.",
+			"043 - sich freuen über + A": "043 - džiautis + A.",
+			"044 - gehen um + A": "044 - apeiti + A.",
+			"045 - gehören zu + D": "045 - priklausyti + D.",
+			"046 - sich gewöhnen an + A": "046 - priprasti prie + A.",
+			"047 - glauben an + A": "047 - tikėti + A.",
+			"048 - gratulieren zu + D": "048 - sveikinti su + D.",
+			"049 - halten für + A": "049 - svarstyti + A.",
+			"050 - halten von + D": "050 - tikėti + D.",
+			"051 - sich handeln um + A": "051 - veikti dėl + A.",
+			"052 - handeln von + D": "052 - veikti dėl + D.",
+			"053 - helfen bei + D": "053 - padėti su + D.",
+			"054 - hindern an + D": "054 - trukdyti + D.",
+			"055 - hoffen auf + A": "055 - tikėtis + A.",
+			"056 - hören von + D": "056 - išgirsti apie + D.",
+			"057 - sich informieren über + A": "057 - sužinoti apie + A.",
+			"058 - sich interessieren für + A": "058 - sidomėti + A.",
+			"059 - klagen über + A": "059 - skųstis dėl + A.",
+			"060 - kämpfen für + A": "060 - kovoti už + A.",
+			"061 - kommen zu + D": "061 - ateiti į + D.",
+			"062 - sich konzentrieren auf + A": "062 - susikaupti ties + A.",
+			"063 - sich kümmern um + A": "063 - rūpintis + A.",
+			"064 - lachen über + A": "064 - juoktis iš + A.",
+			"065 - leiden an + D": "065 - kenčia nuo + D.",
+			"066 - leiden unter + A": "066 - kenčia dėl + A.",
+			"067 - nachdenken über + A": "067 - galvoti apie + A.",
+			"068 - protestieren gegen + A": "068 - protestuoti prieš + A.",
+			"069 - rechnen mit + D": "069 - pasikliauti + D.",
+			"070 - reden über + A": "070 - kalbėti apie + A.",
+			"071 - reden von + D": "071 - kalbėti apie + D.",
+			"072 - riechen nach + D": "072 - kvepia + D.",
+			"073 - sagen über + A": "073 - pasakyti apie + A.",
+			"074 - sagen zu + D": "074 - pasakyti + D.",
+			"075 - schicken an + A": "075 - siųsti + A.",
+			"076 - schicken zu + D": "076 - siųsti + D.",
+			"077 - schimpfen über + A": "077 - skųstis dėl + A.",
+			"078 - schmecken nach + D": "078 - skonis + D.",
+			"079 - schreiben an + A": "079 - rašyti + A.",
+			"080 - sich schützen vor + D": "080 - saugoti nuo + D.",
+			"081 - sein für + A": "081 - būti už + A.",
+			"082 - sein gegen  + A": "082 - būti prieš + A.",
+			"083 - sorgen für + A": "083 - rūpintis + A.",
+			"084 - sprechen mit + D": "084 - kalbėtis su + D.",
+			"085 - sprechen über + A": "085 - kalbėti apie + A.",
+			"086 - sterben an + D": "086 - mirti nuo + D.",
+			"087 - streiten mit + D": "087 - ginčytis su + D.",
+			"088 - streiten über + A": "088 - ginčytis apie + A.",
+			"089 - teilnehmen an + D": "089 - dalyvauti + D.",
+			"090 - telefonieren mit + D": "090 - kalbėtis telefonu su + D.",
+			"091 - sich treffen mit + D": "091 - susitikti su + D.",
+			"092 - sich treffen zu + D": "092 - susitikti + D.",
+			"093 - überreden zu + D": "093 - įkalbinti + D.",
+			"094 - sich unterhalten mit + D": "094 - kalbėtis su + D.",
+			"095 - sich unterhalten über + A": "095 - kalbėtis apie + A.",
+			"096 - sich verabreden mit + D": "096 - susitarti dėl susitikimo su + D.",
+			"097 - sich verabschieden von + D": "097 - atsisveikinti su + D.",
+			"098 - vergleichen mit + D": "098 - palyginti su + D.",
+			"099 - sich verlassen auf + A": "099 - pasikliauti + A.",
+			"100 - sich verlieben in + A": "100 - įtikti meilė su + A.",
+			"101 - sich verstehen mit + D": "101 - suprasti + D.",
+			"102 - verstehen von + D": "102 - suprasti + D.",
+			"103 - sich vorbereiten auf + A": "103 - pasiruošti + A.",
+			"104 - warnen vor + D": "104 - įspėti apie + D.",
+			"105 - warten auf + A": "105 - laukti + A.",
+			"106 - sich wenden an + A": "106 - atsigręžti į + A.",
+			"107 - werden zu + D": "107 - tapti + D.",
+			"108 - wissen von + D": "108 - žinoti apie + D.",
+			"109 - sich wundern über + A": "109 - nustebti + A.",
+			"110 - zuschauen bei + D": "110 - stebėti + D.",
+			"111 - zusehen bei + D": "111 - stebėti + D.",
+			"112 - zweifeln an + D": "112 - abejoti + D.",
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+			"001 - abhängen von + D":{
+				de: "Ob wir fahren, hängt vom Wetter ab.",
+				hu: " Ar vyksime, priklauso nuo oro."
+			},
+			"002 - achten auf + A":{
+				de: "Bitte achte auf den neuen Mantel.",
+				hu: " Prašau pasirūpinti nauju paltu."
+			},
+			"003 - anfangen mit + D":{
+				de: "Ich fange mit der Übung an.",
+				hu: " Pradedu pratimą."
+			},
+			"004 - ankommen auf + A":{
+				de: "Es kommt auf den richtigen Preis an.",
+				hu: " Svarbiausia – tinkama kaina."
+			},
+			"005 - antworten auf + A":{
+				de: "Bitte antworten Sie heute auf den Brief.",
+				hu: " Prašau atsakyti į laišką šiandien."
+			},
+			"006 - sich ärgern über + A":{
+				de: "Wir ärgern uns über den Regen.",
+				hu: " Esame susierzinę dėl lietaus."
+			},
+			"007 - aufhören mit + D":{
+				de: "Er hört um 17.00 Uhr mit der Arbeit auf.",
+				hu: " Jis baigia darbą 17:00 val."
+			},
+			"008 - aufpassen auf + A":{
+				de: "Ein Babysitter passt auf kleine Kinder auf. ",
+				hu: " Auklė prižiūri mažus vaikus."
+			},
+			"009 - sich aufregen über + A":{
+				de: "Deutsche regen sich über Unpünktlichkeit auf.",
+				hu: " Vokiečiai skundžiasi nepunktualumu."
+			},
+			"010 - ausgeben für + A":{
+				de: "Frauen geben viel Geld für Schuhe aus.",
+				hu: " Moterys išleidžia daug pinigų batams."
+			},
+			"011 - sich bedanken bei + D":{
+				de: "Ich bedanke mich herzlich bei dir.",
+				hu: " Labai jums ačiū."
+			},
+			"012 - sich bedanken für + A":{
+				de: "Martin bedankt sich für das Geschenk.",
+				hu: " Martinas dėkoja už dovaną."
+			},
+			"013 - beginnen mit + D":{
+				de: "Wir beginnen pünktlich mit dem Deutschkurs.",
+				hu: " Vokiečių kalbos kursus pradedame laiku."
+			},
+			"014 - sich bemühen um + A":{
+				de: "Karla bemüht sich um eine Arbeit.",
+				hu: " Karla ieško darbo."
+			},
+			"015 - berichten über. + A":{
+				de: "Der Reporter berichtet über die Wahlen.",
+				hu: " Reporteris praneša apie rinkimus."
+			},
+			"016 - sich beschäftigen mit + D":{
+				de: "Ich beschäftige mich gern mit Pflanzen.",
+				hu: " Man patinka dirbti su augalais."
+			},
+			"017 - sich beschweren bei + D":{
+				de: "Der Gast beschwert sich beim Kellner.",
+				hu: " Svečias skundžiasi padavėjui."
+			},
+			"018 - bestehen aus + D":{
+				de: "Eheringe bestehen aus Gold.",
+				hu: " Vestuviniai žiedai pagaminti iš aukso."
+			},
+			"019 - bestehen auf + A":{
+				de: "Ich bestehe auf sofortige Bezahlung des Autos.",
+				hu: " Reikalauju nedelsiant sumokėti už automobilį."
+			},
+			"020 - sich beteiligen an + D":{
+				de: "Viele Studenten beteiligen sich an den Streiks.",
+				hu: " Streikuose dalyvauja daug studentų."
+			},
+			"021 - sich bewerben bei + D":{
+				de: "Er bewirbt sich bei einer Bäckerei.",
+				hu: " Jis pretenduoja į darbą kepykloje."
+			},
+			"022 - sich bewerben um + A":{
+				de: "Sie bewirbt sich um eine Stelle als Sekretärin.",
+				hu: " Ji pretenduoja į sekretorės pareigas."
+			},
+			"023 - sich beziehen auf + A":{
+				de: "Meine Frage bezieht sich auf Ihr Angebot.",
+				hu: " Mano klausimas susijęs su jūsų pasiūlymu."
+			},
+			"024 - bitten um + A":{
+				de: "Der Redner bittet um Aufmerksamkeit.",
+				hu: " Kalbėtojas prašo dėmesio."
+			},
+			"025 - danken für + A":{
+				de: "Sam dankt für Ritas Hilfe.",
+				hu: " Semas dėkoja Ritai už pagalbą."
+			},
+			"026 - denken an + A":{
+				de: "Maria denkt oft an den Urlaub.",
+				hu: " Marija dažnai galvoja apie atostogas."
+			},
+			"027 - diskutieren über + A":{
+				de: "Das Kabinett diskutiert über eine neue Steuer.",
+				hu: " Kabinetas svarsto naują mokestį."
+			},
+			"028 - einladen zu + D":{
+				de: "Ich lade dich zu meinem Geburtstag ein.",
+				hu: " Kviečiu jus į savo gimtadienio vakarėlį."
+			},
+			"029 - sich entscheiden für + A":{
+				de: "Frauen entscheiden sich gern für Gold. ",
+				hu: " Moterys dažnai renkasi auksą."
+			},
+			"030 - sich entschließen zu + D":{
+				de: "Karl entschließt sich zu einem Studium. ",
+				hu: " Karlas nusprendžia stoti į universitetą."
+			},
+			"031 - sich entschuldigen bei + D":{
+				de: "Mia entschuldigt sich bei ihrem Mann.",
+				hu: " Mia atsiprašo savo vyro."
+			},
+			"032 - sich entschuldigen für + A":{
+				de: "Ich entschuldige mich für das Verhalten meiner Tochter.",
+				hu: " Atsiprašau už dukters elgesį."
+			},
+			"033 - erfahren von + D":{
+				de: "Heute haben wir von dem Bauprojekt erfahren.",
+				hu: " Šiandien sužinojome apie statybų projektą."
+			},
+			"034 - sich erholen von + D":{
+				de: "Von dem Schock muss ich mich erst erholen.",
+				hu: " Man reikia atsigauti po šoko."
+			},
+			"035 - sich erinnern an + A":{
+				de: "Wir erinnern uns gern an unser erstes Ehejahr.",
+				hu: " Su meile prisimename pirmuosius santuokos metus."
+			},
+			"036 - erkennen an + D":{
+				de: "Man erkennt Pinocchio an seiner langen Nase.",
+				hu: " Pinokį galima atpažinti iš ilgos nosies."
+			},
+			"037 - sich erkundigen nach + D":{
+				de: "Oma erkundigt sich oft nach meinen Plänen.",
+				hu: " Močiutė dažnai klausia apie mano planus."
+			},
+			"038 - erschrecken über + A":{
+				de: "Die Frau erschrickt über eine Maus.",
+				hu: " Moterį išgąsdina pelė."
+			},
+			"039 - erzählen über + A":{
+				de: "Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+				hu: " Rytų Berlyno gyventojas pasakoja apie savo gyvenimą buvusioje VDR."
+			},
+			"040 - erzählen von + D":{
+				de: "Der Bischoff erzählt von der Reise nach Rom.",
+				hu: " Vyskupas pasakoja apie savo kelionę į Romą."
+			},
+			"041 - fragen nach + D":{
+				de: "Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+				hu: " Žurnalistas klausia apie įstatymo pakeitimo pasekmes."
+			},
+			"042 - sich freuen auf + A":{
+				de: "Kinder freuen sich auf Weihnachten.",
+				hu: " Vaikai laukia Kalėdų."
+			},
+			"043 - sich freuen über + A":{
+				de: "Jeder freut sich über eine Gehaltserhöhung.",
+				hu: " Visi džiaugiasi dėl atlyginimo padidinimo."
+			},
+			"044 - gehen um + A":{
+				de: "Immer geht es um Geld.",
+				hu: " Visada kalbama apie pinigus."
+			},
+			"045 - gehören zu + D":{
+				de: "Das Elsass gehört zu Frankreich.",
+				hu: " Elzasas priklauso Prancūzijai."
+			},
+			"046 - sich gewöhnen an + A":{
+				de: "Ich kann mich nicht an den Euro gewöhnen.",
+				hu: " Negaliu priprasti prie euro."
+			},
+			"047 - glauben an + A":{
+				de: "Teenager glauben an die große Liebe.",
+				hu: " Paaugliai tiki tikra meile."
+			},
+			"048 - gratulieren zu + D":{
+				de: "Wir gratulieren dir zum 18. Geburtstag.",
+				hu: " Sveikiname jus su 18-uoju gimtadieniu."
+			},
+			"049 - halten für + A":{
+				de: "Ich halte das für keine gute Idee.",
+				hu: " Nemanau, kad tai gera mintis."
+			},
+			"050 - halten von + D":{
+				de: "Kinder halten nicht viel von Ordnung.",
+				hu: " Vaikams nelabai rūpi tvarka."
+			},
+			"051 - sich handeln um + A":{
+				de: "Bei der Kopie handelt es sich nicht um Originalsoftware.",
+				hu: " Kopija nėra originali programinė įranga."
+			},
+			"052 - handeln von + D":{
+				de: "Märchen handeln von Gut und Böse.",
+				hu: " Pasakos yra apie gėrį ir blogį."
+			},
+			"053 - helfen bei + D":{
+				de: "Kann ich dir beim Tischdecken helfen?",
+				hu: " Ar galiu padėti padengti stalą?"
+			},
+			"054 - hindern an + D":{
+				de: "Ein langsamer Fahrer hindert Greta am Überholen.",
+				hu: " Lėtas vairuotojas neleidžia Gretai lenkti."
+			},
+			"055 - hoffen auf + A":{
+				de: "Im März hoffen alle auf warme Frühlingstage.",
+				hu: " Kovą visi tikisi šiltų pavasario dienų."
+			},
+			"056 - hören von + D":{
+				de: "Ich habe seit Sonntag nichts von Piet gehört.",
+				hu: " Nuo sekmadienio negirdėjau iš Pieto."
+			},
+			"057 - sich informieren über + A":{
+				de: "Auf der Messe kann man sich über die neue Technologie informieren.",
+				hu: " Apie naująją technologiją galite sužinoti parodoje."
+			},
+			"058 - sich interessieren für + A":{
+				de: "Monika interessiert sich für ein Smartphone.",
+				hu: " Monika domisi išmaniuoju telefonu."
+			},
+			"059 - klagen über + A":{
+				de: "Frauen klagen häufig über Kopfschmerzen.",
+				hu: " Moterys dažnai skundžiasi galvos skausmais."
+			},
+			"060 - kämpfen für + A":{
+				de: "Die Gewerkschaft kämpft für höhere Löhne.",
+				hu: " Profesinė sąjunga kovoja už didesnius atlyginimus."
+			},
+			"061 - kommen zu + D":{
+				de: "In der Besprechung kam es zu einem Streit.",
+				hu: " Susirinkimo metu kilo ginčas."
+			},
+			"062 - sich konzentrieren auf + A":{
+				de: "Karl konzentriert sich auf seine Hausaufgaben.",
+				hu: " Karlas susikaupęs ruošia namų darbus."
+			},
+			"063 - sich kümmern um + A":{
+				de: "Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+				hu: " Slaugos namuose rūpinamasi sergančiais pagyvenusiais žmonėmis."
+			},
+			"064 - lachen über + A":{
+				de: "Über einen guten Witz muss man laut lachen.",
+				hu: " Iš gero pokšto tenka garsiai juoktis."
+			},
+			"065 - leiden an + D":{
+				de: "Jeder fünfte Manager leidet an Burn-out.",
+				hu: " Kas penktas vadovas kenčia nuo perdegimo sindromo."
+			},
+			"066 - leiden unter + A":{
+				de: "Kaffeetrinker leiden unter Schlafproblemen.",
+				hu: " Kavos mėgėjai kenčia nuo miego problemų."
+			},
+			"067 - nachdenken über + A":{
+				de: "Beamte müssen nicht über ihre Rente nachdenken.",
+				hu: " Valstybės tarnautojams nereikia rūpintis savo pensijomis."
+			},
+			"068 - protestieren gegen + A":{
+				de: "Viele Menschen protestieren gegen Atomkraft.",
+				hu: " Daugelis žmonių protestuoja prieš atominę energetiką."
+			},
+			"069 - rechnen mit + D":{
+				de: "Im Januar muss man mit Schnee rechnen.",
+				hu: " Sausio mėnesį reikia tikėtis sniego."
+			},
+			"070 - reden über + A":{
+				de: "Deine Mutter redet gern über Krankheiten.",
+				hu: " Jūsų mama mėgsta kalbėti apie ligas."
+			},
+			"071 - reden von + D":{
+				de: "Großvater redet von den guten alten Zeiten.",
+				hu: " Senelis pasakoja apie senus gerus laikus."
+			},
+			"072 - riechen nach + D":{
+				de: "Hier riecht es nach Kuchen.",
+				hu: " Čia kvepia pyragais."
+			},
+			"073 - sagen über + A":{
+				de: "Brigitte sagt über Dietmar, dass er oft lügt.",
+				hu: " Brigitte sako, kad Dietmaras dažnai meluoja."
+			},
+			"074 - sagen zu + D":{
+				de: "Was sagst du zu meinem neuen Haarschnitt?",
+				hu: " Ką manai apie mano naują šukuoseną?"
+			},
+			"075 - schicken an + A":{
+				de: "Die E-Mail schicke ich dir morgen.",
+				hu: " Rytoj atsiųsiu tau el. laišką."
+			},
+			"076 - schicken zu + D":{
+				de: "Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+				hu: " Bendrosios praktikos gydytojas siunčia pacientą pas specialistą."
+			},
+			"077 - schimpfen über + A":{
+				de: "Alle schimpfen über den Regen.",
+				hu: " Visi skundžiasi lietumi."
+			},
+			"078 - schmecken nach + D":{
+				de: "Muscheln schmecken nach Meerwasser.",
+				hu: " Midijos skonis kaip jūros vanduo."
+			},
+			"079 - schreiben an + A":{
+				de: "Bitte schreibe noch heute an deine Mutter.",
+				hu: " Prašau, parašyk savo mamai šiandien."
+			},
+			"080 - sich schützen vor + D":{
+				de: "Den Computer des Ministers muss man vor Hackern schützen.",
+				hu: " Ministro kompiuteris turi būti apsaugotas nuo įsilaužėlių."
+			},
+			"081 - sein für + A":{
+				de: "Ich bin für die Abschaffung der Kinderarbeit.",
+				hu: " Aš pritariu vaikų darbo panaikinimui."
+			},
+			"082 - sein gegen  + A":{
+				de: "Viele sind gegen Steuererhöhungen.",
+				hu: " Daugelis yra prieš mokesčių didinimą."
+			},
+			"083 - sorgen für + A":{
+				de: "Kinder müssen im Alter für ihre Eltern sorgen.",
+				hu: " Vaikai privalo rūpintis savo tėvais senatvėje."
+			},
+			"084 - sprechen mit + D":{
+				de: "Ich spreche noch einmal mit deinem Vater.",
+				hu: " Aš dar kartą pasikalbėsiu su jūsų tėvu."
+			},
+			"085 - sprechen über + A":{
+				de: "Lass uns über deine Zukunft sprechen.",
+				hu: " Pakalbėkime apie jūsų ateitį."
+			},
+			"086 - sterben an + D":{
+				de: "Zwei Deutsche sind an der Grippe gestorben.",
+				hu: " Du vokiečiai mirė nuo gripo."
+			},
+			"087 - streiten mit + D":{
+				de: "Ich möchte nicht mit dir streiten.",
+				hu: " Nenoriu su jumis ginčytis."
+			},
+			"088 - streiten über + A":{
+				de: "Die USA und Deutschland streiten über eine neue Strategie.",
+				hu: " JAV ir Vokietija ginčijasi dėl naujos strategijos."
+			},
+			"089 - teilnehmen an + D":{
+				de: "Nordkorea nimmt an der Fußball-WM teil.",
+				hu: " Šiaurės Korėja dalyvauja pasaulio futbolo čempionate."
+			},
+			"090 - telefonieren mit + D":{
+				de: "Hast du schon mit dem Arzt telefoniert?",
+				hu: " Ar jau kalbėjote su gydytoju?"
+			},
+			"091 - sich treffen mit + D":{
+				de: "Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+				hu: " Kanclerė kasdien susitinka su savo spaudos sekretoriumi."
+			},
+			"092 - sich treffen zu + D":{
+				de: "Sie treffen sich nur zu einem kurzen Gespräch.",
+				hu: " Jie tik susitinka trumpam pokalbiui."
+			},
+			"093 - überreden zu + D":{
+				de: "Kann ich dich zu einem Glas Wein überreden?",
+				hu: " Ar galiu įkalbėti jus išgerti taurę vyno?"
+			},
+			"094 - sich unterhalten mit + D":{
+				de: "Der Sänger unterhält sich mit dem Bassisten.",
+				hu: " Dainininkas kalbasi su bosistu."
+			},
+			"095 - sich unterhalten über + A":{
+				de: "Die Modedesigner unterhalten sich über die neuesten Trends.",
+				hu: " Mados dizaineriai aptaria naujausias tendencijas."
+			},
+			"096 - sich verabreden mit + D":{
+				de: "Heute verabrede ich mich mit einer Freundin.",
+				hu: " Šiandien susitinku su drauge."
+			},
+			"097 - sich verabschieden von + D":{
+				de: "Nun wollen wir uns von euch verabschieden.",
+				hu: " Dabar norėtume atsisveikinti."
+			},
+			"098 - vergleichen mit + D":{
+				de: "Vergleichen Sie München mit Berlin.",
+				hu: " Palyginkite Miuncheną su Berlynu."
+			},
+			"099 - sich verlassen auf + A":{
+				de: "Auf mich kann man sich verlassen.",
+				hu: " Galite manimi pasikliauti."
+			},
+			"100 - sich verlieben in + A":{
+				de: "Britta hat sich in das alte Bauernhaus verliebt.",
+				hu: " Brita įsimylėjo seną sodybą."
+			},
+			"101 - sich verstehen mit + D":{
+				de: "Daniel versteht sich gut mit seinem Chef.",
+				hu: " Danielis gerai sutaria su savo viršininku."
+			},
+			"102 - verstehen von + D":{
+				de: "Verstehst du etwas von Elektrik?",
+				hu: " Ar ką nors išmanote apie elektros sistemas?"
+			},
+			"103 - sich vorbereiten auf + A":{
+				de: "Karl bereitet sich auf eine Präsentation vor.",
+				hu: " Karlas ruošiasi pristatymui."
+			},
+			"104 - warnen vor + D":{
+				de: "Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+				hu: " Jis buvo įspėtas apie dideles seno automobilio kainas."
+			},
+			"105 - warten auf + A":{
+				de: "In Namibia wartet man lange auf einen Bus.",
+				hu: " Namibijoje autobuso tenka ilgai laukti."
+			},
+			"106 - sich wenden an + A":{
+				de: "Bitte wenden Sie sich an die Buchhaltung.",
+				hu: " Prašome susisiekti su apskaitos skyriumi."
+			},
+			"107 - werden zu + D":{
+				de: "Unter null Grad wird Eis zu Wasser.",
+				hu: " Esant žemiau nulio laipsnių Celsijaus, ledas tirpsta."
+			},
+			"108 - wissen von + D":{
+				de: "Ich weiß nichts von neuen Computern für unser Team.",
+				hu: " Nieko nežinau apie naujus kompiuterius mūsų komandai."
+			},
+			"109 - sich wundern über + A":{
+				de: "Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+				hu: " Daugelis vokiečių stebisi staiga išaugusiomis elektros energijos kainomis."
+			},
+			"110 - zuschauen bei + D":{
+				de: "Kann ich dir bei der Reparatur zuschauen?",
+				hu: " Ar galiu stebėti, kaip atliekate remontą?"
+			},
+			"111 - zusehen bei + D":{
+				de: "Willst du mir beim Kochen zusehen?",
+				hu: " Ar nori stebėti, kaip aš gaminu?"
+			},
+			"112 - zweifeln an + D":{
+				de: "John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+				hu: " Džonas abejoja, ar jo sūnus pasakė tiesą."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

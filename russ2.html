@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="russ0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - russisch</h1>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+const szotar = {
+
+        "001 - Abschied nehmen von": "001 - попрощаться с чем-либо", 
+        "002 - die Absicht haben": "002 - намереваться", 
+        "003 - eine Absprache treffen mit": "003 - договориться с чем-либо", 
+        "004 - eine Ahnung haben von": "004 - иметь представление о чем-либо", 
+        "005 - eine Andeutung machen": "005 - намекнуть", 
+        "006 - Anerkennung finden bei/für": "006 - заслужить признание у кого-либо", 
+        "007 - einen Anfang machen mit": "007 - начать с чего-либо", 
+        "008 - eine Anforderung erfüllen": "008 - выполнить требование", 
+        "009 - ein Angebot machen": "009 - сделать предложение", 
+        "010 - ein Angebot unterbreiten": "010 - подать предложение", 
+        "011 - etwas im Angebot haben": "011 - иметь что-либо в предложении", 
+        "012 - etwas in Anspruch nehmen": "012 - использовать что-либо", 
+        "013 - einen Antrag stellen auf": "013 - подать заявку на что-либо", 
+        "014 - eine Antwort geben": "014 - дать ответ", 
+        "015 - eine Anweisung geben": "015 - дать указание", 
+        "016 - zur Anwendung kommen": "016 - ввести в эксплуатацию", 
+        "017 - einen Auftrag erteilen": "017 - издать приказ", 
+        "018 - in Auftrag geben zu": "018 - поручить что-либо", 
+        "019 - aus den Augen verlieren": "019 - упустить из виду", 
+        "020 - zum Ausdruck bringen": "020 - выразить", 
+        "021 - zum Ausdruck kommen": "021 - прийти к высказыванию", 
+        "022 - Auskunft geben": "022 - предоставить информацию", 
+        "023 - eine Äußerung machen": "023 - сделать заявление", 
+        "024 - Beachtung finden bei/für": "024 - привлечь внимание к чему-либо", 
+        "025 - Beachtung schenken": "025 - обратить внимание на что-либо", 
+        "026 - einen Beitrag leisten für/zu": "026 - внести вклад в что-либо", 
+        "027 - Berücksichtigung finden": "027 - быть принятым во внимание", 
+        "028 - bei/wegen Bescheid geben": "028 - информировать о чем-либо", 
+        "029 - eine Bestellung aufgeben": "029 - разместить заказ", 
+        "030 - in Betracht kommen": "030 - быть рассмотренным", 
+        "031 - in Betracht ziehen": "031 - рассмотреть", 
+        "032 - in Betrieb nehmen": "032 - ввести в эксплуатацию", 
+        "033 - Bezug nehmen auf": "033 - ссылаться на что-либо", 
+        "034 - im Blick haben": "034 - иметь в виду", 
+        "035 - die Daumen drücken für": "035 - держать кулаки за что-либо", 
+        "036 - zur Debatte stehen": "036 - быть предметом дебатов", 
+        "037 - eine Diskussion führen über/mit": "037 - проводить обсуждение о чем-либо", 
+        "038 - zur Diskussion stellen": "038 - выносить на обсуждение", 
+        "039 - unter Druck setzen": "039 - оказывать давление", 
+        "040 - einen Eindruck bekommen von": "040 - создать впечатление о чем-либо", 
+        "041 - Eindruck machen auf": "041 - произвести впечатление на что-либо", 
+        "042 - Einfluss nehmen auf": "042 - влиять на что-либо", 
+        "043 - eine Entscheidung treffen": "043 - принять решение", 
+        "044 - zur Entscheidung bringen": "044 - привести к решению", 
+        "045 - zur Entscheidung stellen": "045 - поставить к решению", 
+        "046 - eine Erfahrung machen mit": "046 - приобрести опыт", 
+        "047 - in Erfahrung bringen": "047 - узнать", 
+        "048 - in Erfüllung gehen": "048 - сбыться", 
+        "049 - eine Erklärung finden für": "049 - найти объяснение", 
+        "050 - Ersatz leisten für": "050 - предоставить замену", 
+        "051 - Feedback bekommen": "051 - получить обратную связь", 
+        "052 - Feedback geben": "052 - дать обратную связь", 
+        "053 - einen Fehler beheben": "053 - исправить ошибку", 
+        "054 - zur Folge haben": "054 - привести к", 
+        "055 - eine Forderung stellen": "055 - предъявить требование", 
+        "056 - eine Frage stellen": "056 - задать вопрос", 
+        "057 - eine Freude bereiten": "057 - принести радость", 
+        "058 - ins Geschäft kommen mit": "058 - вести дела с", 
+        "059 - ein Gespräch führen über/mit": "059 - поговорить о/с", 
+        "060 - ins Gespräch bringen": "060 - вступить в разговор", 
+        "061 - den Glauben verlieren": "061 - потерять веру", 
+        "062 - etwas im Griff haben": "062 - держать что-то под контролем", 
+        "063 - etwas in den Griff bekommen": "063 - взять что-то под контроль", 
+        "064 - auf den Grund gehen": "064 - докопаться до сути", 
+        "065 - jemanden vor eine Herausforderung stellen": "065 - бросить кому-то вызов", 
+        "066 - Hilfe leisten": "066 - предложить помощь", 
+        "067 - zu Hilfe nehmen": "067 - принять помощь", 
+        "068 - die Hoffnung aufgeben": "068 - отказаться от надежды", 
+        "069 - sich Hoffnung machen": "069 - надеяться", 
+        "070 - auf eine Idee kommen": "070 - придумать идею", 
+        "071 - infrage kommen": "071 - соответствовать", 
+        "072 - infrage stellen": "072 - вопросу", 
+        "073 - Interesse wecken an/für": "073 - вызвать интерес к/к", 
+        "074 - Interesse zeigen an/für": "074 - проявить интерес к/к", 
+        "075 - in Kenntnis setzen von": "075 - информировать о", 
+        "076 - zur Kenntnis nehmen": "076 - принять к сведению", 
+        "077 - Kontakt aufnehmen mit": "077 - связаться с", 
+        "078 - Klarheit gewinnen über": "078 - прояснить", 
+        "079 - Kontakt halten": "079 - поддерживать связь", 
+        "080 - Kontakt knüpfen mit": "080 - установить связь с", 
+        "081 - Kontakt knüpfen zu": "081 - установить связь с", 
+        "082 - in Kontakt stehen mit": "082 - быть в контакте с", 
+        "083 - in Kontakt treten mit": "083 - связаться с", 
+        "084 - die Kosten tragen für": "084 - нести расходы на", 
+        "085 - die Kosten übernehmen für": "085 - покрыть расходы на", 
+        "086 - in Kraft treten": "086 - вступить в силу", 
+        "087 - Krieg führen gegen/mit/wegen": "087 - вести войну против/с/из-за", 
+        "088 - Kritik üben an/für": "088 - критиковать/за", 
+        "089 - den Kürzeren ziehen": "089 - забыть о коротком конце палки", 
+        "090 - jemanden auf dem Laufenden halten": "090 - держать кого-то в курсе событий", 
+        "091 - auf dem Laufenden sein": "091 - быть в курсе", 
+        "092 - der Meinung sein": "092 - быть в курсе мнение", 
+        "093 - in Ordnung bringen": "093 - исправить", 
+        "094 - ein Profil anlegen": "094 - создать профиль", 
+        "095 - eine Prüfung bestehen": "095 - сдать экзамен", 
+        "096 - durch eine Prüfung fallen": "096 - провалить экзамен", 
+        "097 - eine Qualifikation mitbringen": "097 - предъявить квалификацию", 
+        "098 - einen Rat geben": "098 - дать совет", 
+        "099 - Rechenschaft ablegen über": "099 - подотчетность подать дело", 
+        "100 - zur Rechenschaft ziehen für": "100 - привлечь к ответственности", 
+        "101 - in Rechnung stellen": "101 - выставить счет", 
+        "102 - eine Rede halten über": "102 - выступить с речью", 
+        "103 - in eine Reihenfolge bringen": "103 - привести в порядок", 
+        "104 - den Respekt verlieren vor": "104 - потерять уважение", 
+        "105 - Rückmeldung geben": "105 - дать обратную связь", 
+        "106 - Rücksicht nehmen auf": "106 - быть внимательным", 
+        "107 - die Ruhe bewahren": "107 - сохранять спокойствие", 
+        "108 - Schluss machen mit": "108 - разорваться", 
+        "109 - zur Sprache bringen": "109 - поднять", 
+        "110 - Stellung nehmen zu": "110 - занять позицию", 
+        "111 - unter Strafe stehen": "111 - подвергнуться наказанию", 
+        "112 - unter Strafe stellen": "112 - подвергнуть бастованию", 
+        "113 - in Streik treten": "113 - испытывать трудности", 
+        "114 - Stress haben mit": "114 - находиться в состоянии стресса", 
+        "115 - unter Stress stehen": "115 - выполнять какое-либо действие", 
+        "116 - eine Tätigkeit ausüben": "116 - быть в тренде", 
+        "117 - im Trend liegen": "117 - получить обзор", 
+        "118 - einen Überblick bekommen": "118 - дать обзор", 
+        "119 - einen Überblick geben": "119 - изменить ситуацию", 
+        "120 - einen Unterschied machen": "120 - назначить встречу", 
+        "121 - eine Verabredung treffen": "121 - взять на себя ответственность", 
+        "122 - die Verantwortung übernehmen für": "122 - связаться с", 
+        "123 - sich in Verbindung setzen mit": "123 - договориться", 
+        "124 - eine Vereinbarung treffen zu": "124 - быть доступным", 
+        "125 - zur Verfügung stehen": "125 - предоставить доступность", 
+        "126 - zur Verfügung stellen": "126 - вести переговоры", 
+        "127 - in Verhandlungen stehen": "127 - вступить в переговоры", 
+        "128 - in Verhandlungen treten": "128 - дать обещание", 
+        "129 - ein Versprechen geben": "129 - заключить договор с", 
+        "130 - einen Vertrag abschließen mit": "130 - установить доверие", 
+        "131 - Vertrauen herstellen": "131 - провести подготовку", 
+        "132 - Vorbereitungen treffen": "132 - быть на переднем плане", 
+        "133 - im Vordergrund stehen": "133 - внести предложение", 
+        "134 - einen Vorschlag machen": "134 - предложить предложение", 
+        "135 - einen Vorschlag unterbreiten": "135 - предусмотреть условия", 
+        "136 - Vorsorge treffen für": "136 - сделать выбор", 
+        "137 - eine Wahl treffen": "137 - конкурировать с", 
+        "138 - im Wettbewerb stehen mit": "138 - ценить", 
+        "139 - Wert legen auf": "139 - пользоваться признанием", 
+        "140 - Wertschätzung genießen": "140 - противостоять", 
+        "141 - Widerstand leisten gegen": "141 - оказывать влияние", 
+        "142 - Wirkung zeigen": "142 - высказывать своё мнение", 
+        "143 - das Wort ergreifen": "143 - ставить цель", 
+        "144 - ein Ziel setzen": "144 - преследовать цель", 
+        "145 - ein Ziel verfolgen": "145 - получить обязательство", 
+        "146 - eine Zusage erhalten": "146 - иметь отношение к", 
+        "147 - im Zusammenhang stehen mit": "147 - бути пов'язаним з", 
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von": {
+				de: "Ich werde von dir Abschied nehmen.",
+                hu: " Я с вами попрощаюсь."
+			},
+			"002 - die Absicht haben": {
+				de: "Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+                hu: " Я не собираюсь говорить ему правду."
+			},
+			"003 - eine Absprache treffen mit": {
+				de: "Wir haben mit der Firma keine Absprache getroffen.",
+                hu: " Мы не заключали никаких соглашений с компанией."
+			},
+			"004 - eine Ahnung haben von": {
+				de: "Er hat keine Ahnung von moderner Technologie.",
+                hu: " Он понятия не имеет о современных технологиях."
+			},
+			"005 - eine Andeutung machen": {
+				de: "Er hat eine klare Andeutung über seine Kündigung gemacht.",
+				hu: "Он ясно дал понять, что собирается увольняться."
+			},
+			"006 - Anerkennung finden bei/für": {
+				de: "Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit.",
+				hu: "Новый сотрудник быстро завоёвывает признание коллег за свою надёжность."
+			},
+			"007 - einen Anfang machen mit": {
+				de: "Wir sollten endlich einen Anfang mit den Vorbereitungen machen.",
+				hu: "Нам нужно наконец начать подготовку."
+			},
+			"008 - eine Anforderung erfüllen": {
+				de: "Das Produkt muss alle Sicherheitsanforderungen erfüllen.",
+				hu: "Продукт должен соответствовать всем требованиям безопасности."
+			},
+			"009 - ein Angebot machen": {
+				de: "Die Firma machte dem Kunden ein sehr attraktives Angebot.",
+				hu: "Компания сделала клиенту очень выгодное предложение."
+			},
+			"010 - ein Angebot unterbreiten": {
+				de: "Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten.",
+				hu: "Застройщик представит нам письменное предложение завтра."
+			},
+			"011 - etwas im Angebot haben": {
+				de: "Der Supermarkt hat diese Woche frische Erdbeeren im Angebot.",
+				hu: "На этой неделе в супермаркете продаётся свежая клубника."
+			},
+			"012 - etwas in Anspruch nehmen": {
+				de: "Die Reparatur nahm viel Zeit in Anspruch.",
+				hu: "Ремонт занял много времени."
+			},
+			"013 - einen Antrag stellen auf": {
+				de: "Viele Studenten stellen einen Antrag auf BAföG.",
+				hu: "Многие студенты оформляют студенческие кредиты."
+			},
+			"014 - eine Antwort geben": {
+				de: "Ich konnte noch keine Antwort auf die Aufgabe geben.",
+                hu: " Я пока не смог ответить на этот вопрос."
+			},
+			"015 - eine Anweisung geben": {
+				de: "Wir haben im Computerprogramm eine Anweisung gegeben.",
+                hu: " Мы дали инструкции в программе."
+			},
+			"016 - zur Anwendung kommen": {
+				de: "Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+                hu: " Это приложение работает только на iPhone."
+			},
+			"017 - einen Auftrag erteilen": {
+				de: "Er hat einen Auftrag für eine kleine Firma erteilt.",
+                hu: " Он сделал заказ в небольшой компании."
+			},
+			"018 - in Auftrag geben zu": {
+				de: "Die Schule hat zu Renovieren in Auftrag gegeben.",
+                hu: " Школа заказала ремонт."
+			},
+			"019 - aus den Augen verlieren": {
+				de: "Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+                hu: " Я потерял маму из виду в торговом центре. В этом письме вы должны чётко выразить свою обеспокоенность."
+			},
+			"020 - zum Ausdruck bringen": {
+				de: "In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen.",
+				hu: "Настроение команды выражалось громкими возгласами радости."
+			},
+			"021 - zum Ausdruck kommen": {
+				de: "Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck.",
+				hu: "Учитель предоставил нам информацию об экзамене."
+			},
+			"022 - Auskunft geben": {
+				de: "Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+                hu: " Министр не сделал никаких заявлений по этому поводу."
+			},
+			"023 - eine Äußerung machen": {
+				de: "Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+                hu: " Моё предложение было проигнорировано классом."
+			},
+			"024 - Beachtung finden bei/für": {
+				de: "Mein Vorschlag fand bei der Klasse keine Beachtung.",
+                hu: " Мы не можем рассмотреть все вопросы."
+			},
+			"025 - Beachtung schenken": {
+				de: "Wir können nicht alle Punkten Beachtung schenken.",
+                hu: " Компания не способствует вашему профессиональному развитию."
+			},
+			"026 - einen Beitrag leisten für/zu": {
+				de: "Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+                hu: " Компания должна учитывать ваши сверхурочные часы."
+			},
+			"027 - Berücksichtigung finden": {
+				de: "Die Firma hat deine Überstunden die Berücksichtigung finden.",
+                hu: " Я не могу сообщить вам, так как буду не в сети."
+			},
+			"028 - bei/wegen Bescheid geben": {
+				de: "Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+                hu: " Я не хочу размещать заказ, так как у меня нет денег."
+			},
+			"029 - eine Bestellung aufgeben": {
+				de: "Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+                hu: " Это решение для нас не подходит."
+			},
+			"030 - in Betracht kommen": {
+				de: "Diese Lösung kommt für uns nicht in Betracht.",
+                hu: " Мы должны учесть задержку."
+			},
+			"031 - in Betracht ziehen": {
+				de: "Wir müssen die Verspätung in Betracht ziehen.",
+                hu: " Техник активировал компьютер."
+			},
+			"032 - in Betrieb nehmen": {
+				de: "Der Techniker hat der Computer in Betrieb genommen.",
+                hu: " Я имею в виду наш вчерашний разговор."
+			},
+			"033 - Bezug nehmen auf": {
+				de: "Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+                hu: " Компания всегда следит за конкуренцией."
+			},
+			"034 - im Blick haben": {
+				de: "Die Firma hat die Konkurrenz immer im Blick.",
+                hu: " Желаем вам удачи на экзамене."
+			},
+			"035 - die Daumen drücken für": {
+				de: "Wir drücken dir die Daumen für deine Prüfung.",
+                hu: " Новые предложения обсуждаются."
+			},
+			"036 - zur Debatte stehen": {
+				de: "Die neuen Vorschläge stehen zur Debatte.",
+                hu: " Я обсудил будущее с женой."
+			},
+			"037 - eine Diskussion führen über/mit": {
+				de: "Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+                hu: " Я хотел бы поднять эту тему для обсуждения."
+			},
+			"038 - zur Diskussion stellen": {
+				de: "Dieses Thema möchte ich zur Diskussion stellen.",
+                hu: " Экзаменационная ситуация оказала на него сильное давление."
+			},
+			"039 - unter Druck setzen": {
+				de: "Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+                hu: " Новая машина произвела на меня хорошее впечатление."
+			},
+			"040 - einen Eindruck bekommen von": {
+				de: "Ich habe von dir einen guten Eindruck bekommen.",
+                hu: " Она влияет на своего партнёра."
+			},
+			"041 - Eindruck machen auf": {
+				de: "Das neue Auto macht einen guten Eindruck auf mich.",
+                hu: " Мы ещё не приняли окончательного решения."
+			},
+			"042 - Einfluss nehmen auf": {
+				de: "Sie nimmt Einfluss auf ihren Partner.",
+                hu: " Он пока не смог решить, куда поехать в отпуск."
+			},
+			"043 - eine Entscheidung treffen": {
+				de: "Wir haben noch keine endgültige Entscheidung getroffen.",
+                hu: " Они не будут учитывать мои пожелания при принятии решения."
+			},
+			"044 - zur Entscheidung bringen": {
+				de: "Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+                hu: " Вы можете получить хороший опыт работы на этой работе."
+			},
+			"045 - zur Entscheidung stellen": {
+				de: "Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+                hu: " Нам нужно выяснить, кто это сделал."
+			},
+			"046 - eine Erfahrung machen mit": {
+				de: "Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+                hu: " Моя мечта наконец-то сбылась."
+			},
+			"047 - in Erfahrung bringen": {
+				de: "Wir müssen in Erfahrung bringen, wer das getan hat.",
+                hu: " Мне срочно нужно найти объяснение моему отсутствию."
+			},
+			"048 - in Erfüllung gehen": {
+				de: "Endlich ist mein Traum in Erfüllung gegangen.",
+                hu: " Страховая компания должна возместить ущерб."
+			},
+			"049 - eine Erklärung finden für": {
+				de: "Ich muss dringend eine Erklärung für mein Fehlen finden.",
+                hu: " Вы уже получили какой-либо отзыв от своего начальника?"
+			},
+			"050 - Ersatz leisten für": {
+				de: "Die Versicherung muss Ersatz für den Schaden leisten.",
+				hu: "Не могли бы вы дать мне отзыв о моём черновике?"
+			},
+			"051 - Feedback bekommen": {
+				de: "Hast du schon Feedback von deinem Chef bekommen",
+                hu: " Техник смог быстро исправить ошибку на моём ноутбуке."
+			},
+			"052 - Feedback geben": {
+				de: "Kannst du mir bitte Feedback zu meinem Entwurf geben",
+				hu: "Мои неправильные решения будут иметь серьёзные последствия."
+			},
+			"053 - einen Fehler beheben": {
+				de: "Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+                hu: " Сотрудники потребовали повышения заработной платы."
+			},
+			"054 - zur Folge haben": {
+				de: "Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+                hu: " Могу я задать вам вопрос?"
+			},
+			"055 - eine Forderung stellen": {
+				de: "Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+                hu: " Она хотела угостить своих родителей."
+			},
+			"056 - eine Frage stellen": {
+				de: "Darf ich dir eine Frage stellen?",
+                hu: " Мой начальник заключил сделку с другой компанией."
+			},
+			"057 - eine Freude bereiten": {
+				de: "Sie wollte ihren Eltern eine Freude bereiten.",
+                hu: " Начальник обсуждал со мной моё повышение."
+			},
+			"058 - ins Geschäft kommen mit": {
+				de: "Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+                hu: " Мой коллега предложил свою идею."
+			},
+			"059 - ein Gespräch führen über/mit": {
+				de: "Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+                hu: " Он атеист, потому что потерял веру."
+			},
+			"060 - ins Gespräch bringen": {
+				de: "Mein Kollege hat seine Idee ins Gespräch gebracht.",
+                hu: " Я контролирую ситуацию."
+			},
+			"061 - den Glauben verlieren": {
+				de: "Er ist Atheist, weil er den Glauben verloren hat.",
+                hu: " Новый начальник умеет управлять персоналом."
+			},
+			"062 - etwas im Griff haben": {
+				de: "Ich habe die Situation im Griff.",
+                hu: " Психолог хочет докопаться до сути человеческого разума."
+			},
+			"063 - etwas in den Griff bekommen": {
+				de: "Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+                hu: " Новая работа ставит передо мной более сложную задачу."
+			},
+			"064 - auf den Grund gehen": {
+				de: "Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+                hu: " Друзья помогли мне разобраться с немецкой бюрократией."
+			},
+			"065 - jemanden vor eine Herausforderung stellen": {
+				de: "Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+                hu: " Я обратился за помощью к другу."
+			},
+			"066 - Hilfe leisten": {
+				de: "Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+                hu: " Политик потерял надежду в политике."
+			},
+			"067 - zu Hilfe nehmen": {
+				de: "Ich habe einen Freund zu Hilfe genommen.",
+                hu: " Не стоит слишком уж надеяться."
+			},
+			"068 - die Hoffnung aufgeben": {
+				de: "Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+                hu: " Меня внезапно осенила хорошая идея."
+			},
+			"069 - sich Hoffnung machen": {
+				de: "Du solltest dir keine falschen Hoffnungen machen.",
+                hu: " Переезд в квартиру меньшей площади для меня исключен."
+			},
+			"070 - auf eine Idee kommen": {
+				de: "Ich bin plötzlich auf eine gute Idee gekommen.",
+                hu: " Он сомневается в решении начальника."
+			},
+			"071 - infrage kommen": {
+				de: "Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+                hu: " Реклама подогревает интерес к новому продукту."
+			},
+			"072 - infrage stellen": {
+				de: "Er stellt die Entscheidung des Chefs infrage.",
+                hu: " Многие студенты проявляют интерес к этому курсу."
+			},
+			"073 - Interesse wecken an/für": {
+				de: "Die Werbung weckt Interesse für das neue Produkt.",
+                hu: " Сервисный отдел информирует меня о стоимости ремонта."
+			},
+			"074 - Interesse zeigen an/für": {
+				de: "Viele Studenten zeigen Interesse an diesem Kurs.",
+                hu: " Я принял вашу жалобу к сведению."
+			},
+			"075 - in Kenntnis setzen von": {
+				de: "Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+                hu: " Хотите связаться со своими старыми друзьями?"
+			},
+			"076 - zur Kenntnis nehmen": {
+				de: "Ich nehme Ihre Beschwerde zur Kenntnis.",
+                hu: " Мне нужно прояснить решение."
+			},
+			"077 - Kontakt aufnehmen mit": {
+				de: "Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+                hu: " Я поддерживаю связь со старыми друзьями."
+			},
+			"078 - Klarheit gewinnen über": {
+				de: "Ich muss Klarheit über die Lösung gewinnen.",
+                hu: " Администратор связывается с командой разработчиков."
+			},
+			"079 - Kontakt halten": {
+				de: "Ich halte Kontakt zu meinen alten Freunden.",
+                hu: " Она хочет установить несколько контактов онлайн."
+			},
+			"080 - Kontakt knüpfen mit": {
+				de: "Der Administrator knüpft Kontakte mit der Entwicklungen.",
+                hu: " Компания сотрудничает с несколькими компаниями-партнерами."
+			},
+			"081 - Kontakt knüpfen zu": {
+				de: "Sie will mehrere Kontakte im Internet zu knüpfen.",
+                hu: " Служба поддержки клиентов связалась со мной вчера."
+			},
+			"082 - in Kontakt stehen mit": {
+				de: "Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+                hu: " Saga покрывает расходы на ремонт."
+			},
+			"083 - in Kontakt treten mit": {
+				de: "Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+                hu: " Страховая компания покрывает расходы на лечение."
+			},
+			"084 - die Kosten tragen für": {
+				de: "Die Saga trägt die Kosten für die Renovierung.",
+                hu: " Новый закон вступает в силу завтра."
+			},
+			"085 - die Kosten übernehmen für": {
+				de: "Die Versicherung übernimmt die Kosten für die Behandlung.",
+                hu: " Мы не хотим воевать с соседями."
+			},
+			"086 - in Kraft treten": {
+				de: "Das neue Gesetz wird morgen in Kraft treten.",
+                hu: " Он не критиковал решение начальника."
+			},
+			"087 - Krieg führen gegen/mit/wegen": {
+				de: "Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+                hu: " Он остался в проигрыше."
+			},
+			"088 - Kritik üben an/für": {
+				de: "Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+                hu: " Железнодорожная станция информирует пассажиров о задержке."
+			},
+			"089 - den Kürzeren ziehen": {
+				de: "Er hat den Kürzeren gezogen.",
+                hu: " В IT-отделе нужно быть в курсе событий."
+			},
+			"090 - jemanden auf dem Laufenden halten": {
+				de: "Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+                hu: " Я считаю, что у нас много задач."
+			},
+			"091 - auf dem Laufenden sein": {
+				de: "In der IT muss man auf dem Laufenden sein.",
+                hu: " В ІТ потрібно бути в курсі подій."
+			},
+			"092 - der Meinung sein": {
+				de: "Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+                hu: " Я думаю, нам слід багато працювати."
+			},
+			"093 - in Ordnung bringen": {
+				de: "Ich muss meine Wohnung in Ordnung bringen.",
+                hu: " Мені потрібно прибрати свою квартиру."
+			},
+			"094 - ein Profil anlegen": {
+				de: "Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+                hu: " Я створив новий профіль на LindeIn вчора."
+			},
+			"095 - eine Prüfung bestehen": {
+				de: "Ich will die B2 Prüfung bestehen.",
+                hu: " Я хочу скласти іспит B2."
+			},
+			"096 - durch eine Prüfung fallen": {
+				de: "Ich bin durch meine letzte B2 Prüfung gefallen.",
+                hu: " Я провалив свій останній іспит B2."
+			},
+			"097 - eine Qualifikation mitbringen": {
+				de: "Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+                hu: " Він має великий досвід і хорошу кваліфікацію."
+			},
+			"098 - einen Rat geben": {
+				de: "Können Sie mir einen guten Rat geben?",
+                hu: " Чи можете ви дати мені кілька добрих порад?"
+			},
+			"099 - Rechenschaft ablegen über": {
+				de: "Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+                hu: " Вони звітували про свої плани подорожей."
+			},
+			"100 - zur Rechenschaft ziehen für": {
+				de: "Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+                hu: " Ви не можете притягувати мене до відповідальності за ваші помилки."
+			},
+			"101 - in Rechnung stellen": {
+				de: "Der Zahnarzt stellt mir die Kosten in Rechnung.",
+                hu: " Стоматолог виставляє мені рахунок."
+			},
+			"102 - eine Rede halten über": {
+				de: "Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+                hu: " Президент виголосив промову про нові плани."
+			},
+			"103 - in eine Reihenfolge bringen": {
+				de: "Ich bringe meine Dokumente immer in eine Reihenfolge.",
+                hu: " Я завжди впорядковую свої документи."
+			},
+			"104 - den Respekt verlieren vor": {
+				de: "Man sollte vor der Natur nicht den Respekt verlieren",
+                hu: " Не слід втрачати повагу до природи."
+			},
+			"105 - Rückmeldung geben": {
+				de: "Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten.",
+				hu: "Викладач дав студентам детальний відгук про їхню роботу."
+			},
+			"106 - Rücksicht nehmen auf": {
+				de: "Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn!",
+				hu: "Будь ласка, будьте уважні до сну сусідів!"
+			},
+			"107 - die Ruhe bewahren": {
+				de: "Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe.",
+				hu: "Хоча ситуація була критичною, капітан залишався спокійним."
+			},
+			"108 - Schluss machen mit": {
+				de: "Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht.",
+				hu: "Він розлучився зі своєю дівчиною після п'яти років стосунків."
+			},
+			"109 - zur Sprache bringen": {
+				de: "Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen.",
+				hu: "Ми розглянемо ці питання на наступній зустрічі."
+			},
+			"110 - Stellung nehmen zu": {
+				de: "Ich möchte zu diesem komplizierten Fall keine Stellung nehmen.",
+				hu: "Я не хочу коментувати цю складну справу."
+			},
+			"111 - unter Strafe stehen": {
+				de: "Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig.",
+				hu: "Цей вчинок не є безпосередньо караним, але він морально сумнівний."
+			},
+			"112 - unter Strafe stellen": {
+				de: "Man sollte das unnötige Töten von Tieren unter Strafe stellen.",
+				hu: "Непотрібне вбивство тварин має бути караним правопорушенням."
+			},
+			"113 - in Streik treten": {
+				de: "Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten.",
+				hu: "Робітники сьогодні вранці оголосили страйк через низьку заробітну плату."
+			},
+			"114 - Stress haben mit": {
+				de: "Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms.",
+				hu: "У мене деякий час були проблеми з сусідкою через шум."
+			},
+			"115 - unter Stress stehen": {
+				de: "Aufgrund der Abgabetermine steht das gesamte Team unter Stress.",
+				hu: "Вся команда перебуває у стресі через дедлайни."
+			},
+			"116 - eine Tätigkeit ausüben": {
+				de: "Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus.",
+				hu: "Вона багато років працювала позаштатним перекладачем."
+			},
+			"117 - im Trend liegen": {
+				de: "Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt.",
+				hu: "Ця технологія була модною п'ять років тому, але зараз застаріла."
+			},
+			"118 - einen Überblick bekommen": {
+				de: "Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+                hu: " Мені потрібно ознайомитися з документами, щоб отримати загальне уявлення."
+			},
+			"119 - einen Überblick geben": {
+				de: "Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+                hu: " Начальник надасть усім співробітникам огляд квартальних показників."
+			},
+			"120 - einen Unterschied machen": {
+				de: "Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+                hu: " Не має значення, чи почнемо ми сьогодні вранці."
+			},
+			"121 - eine Verabredung treffen": {
+				de: "Möchten Sie mit mir eine Verabredung zu treffen?",
+                hu: " Ви хотіли б записатися до мене на прийом?"
+			},
+			"122 - die Verantwortung übernehmen für": {
+				de: "Er musste die Verantwortung für den Fehler übernehmen.",
+                hu: " Він мав взяти на себе відповідальність за помилку."
+			},
+			"123 - sich in Verbindung setzen mit": {
+				de: "Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+                hu: " Я зв'яжуся зі службою підтримки клієнтів завтра вранці."
+			},
+			"124 - eine Vereinbarung treffen zu": {
+				de: "Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+                hu: " Ми сподіваємося досягти згоди щодо умов найближчим часом."
+			},
+			"125 - zur Verfügung stehen": {
+				de: "Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+                hu: " Будь ласка, звертайтеся до мене, якщо у вас виникнуть запитання."
+			},
+			"126 - zur Verfügung stellen": {
+				de: "Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+                hu: " Компанія надасть необхідні кошти."
+			},
+			"127 - in Verhandlungen stehen": {
+				de: "Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+                hu: " Ми ведемо переговори з орендодавцем протягом місяців."
+			},
+			"128 - in Verhandlungen treten": {
+				de: "Nach der Einigung können wir über die Details in Verhandlungen treten.",
+                hu: " Як тільки ми досягнемо згоди, ми зможемо обговорити деталі."
+			},
+			"129 - ein Versprechen geben": {
+				de: "Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+                hu: " Обіцяю, що буду вчасно."
+			},
+			"130 - einen Vertrag abschließen mit": {
+				de: "Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+                hu: " Ми підписали новий контракт з нашим постачальником."
+			},
+			"131 - Vertrauen herstellen": {
+				de: "Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+                hu: " Потрібен час, щоб побудувати довіру між колегами."
+			},
+			"132 - Vorbereitungen treffen": {
+				de: "Wir müssen Vorbereitungen für die Konferenz treffen.",
+                hu: " Нам потрібно підготуватися до конференції."
+			},
+			"133 - im Vordergrund stehen": {
+				de: "Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+                hu: " Цей проект ставить ефективність вище за вартість."
+			},
+			"134 - einen Vorschlag machen": {
+				de: "Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+                hu: " Чи можу я запропонувати, як ми можемо вирішити проблему?"
+			},
+			"135 - einen Vorschlag unterbreiten": {
+				de: "Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+                hu: " Будь ласка, надішліть свою пропозицію в письмовій формі до наступного тижня."
+			},
+			"136 - Vorsorge treffen für": {
+				de: "Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+                hu: " Нам потрібно передбачити непередбачені витрати."
+			},
+			"137 - eine Wahl treffen": {
+				de: "Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+                hu: " Йому довелося вибирати між кар'єрою та сім'єю."
+			},
+			"138 - im Wettbewerb stehen mit": {
+				de: "Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+                hu: " Наша компанія конкурує з багатьма міжнародними компаніями."
+			},
+			"139 - Wert legen auf": {
+				de: "Unsere Firma legt viel Wert auf die Sicherheit.",
+                hu: " Наша компанія надає великого значення безпеці."
+			},
+			"140 - Wertschätzung genießen": {
+				de: "In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+                hu: " У Німеччині працівників цінують за їхню роботу."
+			},
+			"141 - Widerstand leisten gegen": {
+				de: "Ich leiste Widerstand gegen viele Süßigkeiten.",
+                hu: " Я уникаю занадто великої кількості солодощів."
+			},
+			"142 - Wirkung zeigen": {
+				de: "Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+                hu: " Звернення президента, на жаль, мало вплинуло."
+			},
+			"143 - das Wort ergreifen": {
+				de: "Nach einer langen Pause ergriff der Moderator das Wort.",
+                hu: " Після довгої паузи виступив модератор."
+			},
+			"144 - ein Ziel setzen": {
+				de: "Ich setze mir eine Ziel.",
+                hu: " Я поставив собі мету."
+			},
+			"145 - ein Ziel verfolgen": {
+				de: "Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+                hu: " Незважаючи на численні перешкоди, він наполегливо йшов до своєї мети."
+			},
+			"146 - eine Zusage erhalten": {
+				de: "Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+                hu: " Перш ніж ми почнемо планувати, нам потрібно отримати підтвердження від квартировласника."
+			},
+			"147 - im Zusammenhang stehen mit": {
+				de: "Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+                hu: " Зростання цін безпосередньо пов'язане з інфляцією."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

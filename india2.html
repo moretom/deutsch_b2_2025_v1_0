@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Nomen Verb Verbindungen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="india0.html"> << Zurück</a></div>
+    <h1>Nomen-Verb Verbindungen - deutsch - indisch</h1>
+	</div>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - Abschied nehmen von": "001 -  अलविदा कहना",
+			"002 - die Absicht haben": "002 -  इरादा रखना",
+			"003 - eine Absprache treffen mit": "003 -  के साथ एग्रीमेंट करना",
+			"004 - eine Ahnung haben von": "004 -  का आइडिया होना",
+			"005 - eine Andeutung machen": "005 -  हिंट देना",
+			"006 - Anerkennung finden bei/für": "006 -  से/के लिए पहचान पाना",
+			"007 - einen Anfang machen mit": "007 -  के साथ शुरुआत करना",
+			"008 - eine Anforderung erfüllen": "008 -  कोई ज़रूरत पूरी करना",
+			"009 - ein Angebot machen": "009 -  ऑफ़र देना",
+			"010 - ein Angebot unterbreiten": "010 -  ऑफ़र सबमिट करना",
+			"011 - etwas im Angebot haben": "011 -  कुछ ऑफ़र पर होना",
+			"012 - etwas in Anspruch nehmen": "012 -  किसी चीज़ का इस्तेमाल करना",
+			"013 - einen Antrag stellen auf": "013 -  अप्लाई करना",
+			"014 - eine Antwort geben": "014 -  जवाब देना",
+			"015 - eine Anweisung geben": "015 -  कोई इंस्ट्रक्शन देना",
+			"016 - zur Anwendung kommen": "016 -  लागू होना",
+			"017 - einen Auftrag erteilen": "017 -  ऑर्डर जारी करना",
+			"018 - in Auftrag geben zu": "018 -  कमीशन देना",
+			"019 - aus den Augen verlieren": "019 -  नज़रअंदाज़ करना",
+			"020 - zum Ausdruck bringen": "020 -  ज़ाहिर करना",
+			"021 - zum Ausdruck kommen": "021 -  ज़ाहिर करना",
+			"022 - Auskunft geben": "022 -  जानकारी देना",
+			"023 - eine Äußerung machen": "023 -  बयान देना",
+			"024 - Beachtung finden bei/für": "024 -  द्वारा/के लिए विचार किया जाना",
+			"025 - Beachtung schenken": "025 -  ध्यान देना",
+			"026 - einen Beitrag leisten für/zu": "026 -  योगदान देना",
+			"027 - Berücksichtigung finden": "027 -  ध्यान में रखना",
+			"028 - bei/wegen Bescheid geben": "028 -  के बारे में/के बारे में सूचना देना",
+			"029 - eine Bestellung aufgeben": "029 -  ऑर्डर देना",
+			"030 - in Betracht kommen": "030 -  विचार किया जाना",
+			"031 - in Betracht ziehen": "031 -  विचार करना",
+			"032 - in Betrieb nehmen": "032 -  चालू करना",
+			"033 - Bezug nehmen auf": "033 -  का ज़िक्र करना",
+			"034 - im Blick haben": "034 -  नज़र रखना",
+			"035 - die Daumen drücken für": "035 -  उम्मीद रखना",
+			"036 - zur Debatte stehen": "036 -  बहस के लिए तैयार होना",
+			"037 - eine Diskussion führen über/mit": "037 -  के बारे में/के साथ चर्चा करना",
+			"038 - zur Diskussion stellen": "038 -  चर्चा के लिए रखना",
+			"039 - unter Druck setzen": "039 -  दबाव डालना",
+			"040 - einen Eindruck bekommen von": "040 -  का अंदाज़ा लगाना",
+			"041 - Eindruck machen auf": "041 -  किसी पर असर डालें",
+			"042 - Einfluss nehmen auf": "042 -  किसी पर असर डालें",
+			"043 - eine Entscheidung treffen": "043 -  कोई फ़ैसला लें",
+			"044 - zur Entscheidung bringen": "044 -  फ़ैसले पर पहुँचें",
+			"045 - zur Entscheidung stellen": "045 -  फ़ैसले के लिए सबमिट करें",
+			"046 - eine Erfahrung machen mit": "046 -  अनुभव पाएँ",
+			"047 - in Erfahrung bringen": "047 -  के बारे में जानें",
+			"048 - in Erfüllung gehen": "048 -  घटित हों",
+			"049 - eine Erklärung finden für": "049 -  किसी वजह का पता लगाएँ",
+			"050 - Ersatz leisten für": "050 -  किसी चीज़ का विकल्प बनाएँ",
+			"051 - Feedback bekommen": "051 -  फ़ीडबैक लें",
+			"052 - Feedback geben": "052 -  फ़ीडबैक दें",
+			"053 - einen Fehler beheben": "053 -  गलती ठीक करें",
+			"054 - zur Folge haben": "054 -  नतीजा दें",
+			"055 - eine Forderung stellen": "055 -  कोई मांग करें",
+			"056 - eine Frage stellen": "056 -  सवाल पूछें",
+			"057 - eine Freude bereiten": "057 -  खुशी लाएं",
+			"058 - ins Geschäft kommen mit": "058 -  किसी के साथ बिज़नेस करें",
+			"059 - ein Gespräch führen über/mit": "059 -  किसी के बारे में/के साथ बातचीत करें",
+			"060 - ins Gespräch bringen": "060 -  कोई टॉपिक उठाएं",
+			"061 - den Glauben verlieren": "061 -  भरोसा खो दें",
+			"062 - etwas im Griff haben": "062 -  किसी चीज़ को कंट्रोल में रखें",
+			"063 - etwas in den Griff bekommen": "063 -  किसी चीज़ को कंट्रोल में रखें",
+			"064 - auf den Grund gehen": "064 -  चीज़ों की तह तक जाएं",
+			"065 - jemanden vor eine Herausforderung stellen": "065 -  किसी को चैलेंज करें",
+			"066 - Hilfe leisten": "066 -  मदद ऑफ़र करें",
+			"067 - zu Hilfe nehmen": "067 -  मदद मांगें",
+			"068 - die Hoffnung aufgeben": "068 -  उम्मीद छोड़ दें",
+			"069 - sich Hoffnung machen": "069 -  उम्मीद रखें",
+			"070 - auf eine Idee kommen": "070 -  कोई आइडिया सोचें",
+			"071 - infrage kommen": "071 -  विचार किया जाना",
+			"072 - infrage stellen": "072 -  सवाल",
+			"073 - Interesse wecken an/für": "073 -  में दिलचस्पी जगाना",
+			"074 - Interesse zeigen an/für": "074 -  में दिलचस्पी दिखाना",
+			"075 - in Kenntnis setzen von": "075 -  के बारे में बताना",
+			"076 - zur Kenntnis nehmen": "076 -  ध्यान देना",
+			"077 - Kontakt aufnehmen mit": "077 -  से संपर्क करना",
+			"078 - Klarheit gewinnen über": "078 -  के बारे में साफ़ जानकारी पाना",
+			"079 - Kontakt halten": "079 -  संपर्क में रहना",
+			"080 - Kontakt knüpfen mit": "080 -  से संपर्क बनाना",
+			"081 - Kontakt knüpfen zu": "081 -  से संपर्क बनाना",
+			"082 - in Kontakt stehen mit": "082 -  से संपर्क में रहना",
+			"083 - in Kontakt treten mit": "083 -  से संपर्क करना",
+			"084 - die Kosten tragen für": "084 -  का खर्च उठाना",
+			"085 - die Kosten übernehmen für": "085 -  का खर्च उठाना",
+			"086 - in Kraft treten": "086 -  लागू होना",
+			"087 - Krieg führen gegen/mit/wegen": "087 -  के खिलाफ़/के साथ/की वजह से जंग छेड़ना",
+			"088 - Kritik üben an/für": "088 -  आलोचना करना",
+			"089 - den Kürzeren ziehen": "089 -  हारना",
+			"090 - jemanden auf dem Laufenden halten": "090 -  किसी को जानकारी देना",
+			"091 - auf dem Laufenden sein": "091 -  अप-टू-डेट रहें",
+			"092 - der Meinung sein": "092 -  अपनी राय दें",
+			"093 - in Ordnung bringen": "093 -  व्यवस्था में रहें",
+			"094 - ein Profil anlegen": "094 -  प्रोफ़ाइल बनाएं",
+			"095 - eine Prüfung bestehen": "095 -  परीक्षा पास करें",
+			"096 - durch eine Prüfung fallen": "096 -  परीक्षा में फेल हों",
+			"097 - eine Qualifikation mitbringen": "097 -  योग्यता रखें",
+			"098 - einen Rat geben": "098 -  सलाह दें",
+			"099 - Rechenschaft ablegen über": "099 -  हिसाब दें",
+			"100 - zur Rechenschaft ziehen für": "100 -  के लिए ज़िम्मेदार ठहराएं",
+			"101 - in Rechnung stellen": "101 -  बिल",
+			"102 - eine Rede halten über": "102 -  के बारे में भाषण दें",
+			"103 - in eine Reihenfolge bringen": "103 -  व्यवस्था में रखें",
+			"104 - den Respekt verlieren vor": "104 -  किसी का सम्मान खो दें",
+			"105 - Rückmeldung geben": "105 -  फ़ीडबैक दें",
+			"106 - Rücksicht nehmen auf": "106 -  किसी का ध्यान रखें",
+			"107 - die Ruhe bewahren": "107 -  शांत रहें",
+			"108 - Schluss machen mit": "108 -  ब्रेकअप करें",
+			"109 - zur Sprache bringen": "109 -  बात सामने लाएं",
+			"110 - Stellung nehmen zu": "110 -  किसी पर स्टैंड लें",
+			"111 - unter Strafe stehen": "111 -  सज़ा होना",
+			"112 - unter Strafe stellen": "112 -  सज़ा देना",
+			"113 - in Streik treten": "113 -  हड़ताल पर जाना",
+			"114 - Stress haben mit": "114 -  किसी के साथ समस्या होना",
+			"115 - unter Stress stehen": "115 -  तनाव में होना",
+			"116 - eine Tätigkeit ausüben": "116 -  कोई काम करना",
+			"117 - im Trend liegen": "117 -  ट्रेंडिंग होना",
+			"118 - einen Überblick bekommen": "118 -  ओवरव्यू लेना",
+			"119 - einen Überblick geben": "119 -  ओवरव्यू देना",
+			"120 - einen Unterschied machen": "120 -  कुछ अलग करना",
+			"121 - eine Verabredung treffen": "121 -  अपॉइंटमेंट लेना",
+			"122 - die Verantwortung übernehmen für": "122 -  ज़िम्मेदारी लेना",
+			"123 - sich in Verbindung setzen mit": "123 -  संपर्क करना",
+			"124 - eine Vereinbarung treffen zu": "124 -  किसी से एग्रीमेंट करना",
+			"125 - zur Verfügung stehen": "125 -  उपलब्ध रहना",
+			"126 - zur Verfügung stellen": "126 -  उपलब्ध कराना",
+			"127 - in Verhandlungen stehen": "127 -  बातचीत में होना",
+			"128 - in Verhandlungen treten": "128 -  बातचीत में शामिल होना",
+			"129 - ein Versprechen geben": "129 -  वादा करना",
+			"130 - einen Vertrag abschließen mit": "130 -  किसी के साथ कॉन्ट्रैक्ट करना",
+			"131 - Vertrauen herstellen": "131 -  भरोसा बनाएं",
+			"132 - Vorbereitungen treffen": "132 -  तैयारी करें",
+			"133 - im Vordergrund stehen": "133 -  सबसे आगे रहें",
+			"134 - einen Vorschlag machen": "134 -  सुझाव दें",
+			"135 - einen Vorschlag unterbreiten": "135 -  प्रपोज़ल सबमिट करें",
+			"136 - Vorsorge treffen für": "136 -  के लिए इंतज़ाम करें",
+			"137 - eine Wahl treffen": "137 -  कोई चुनाव करें",
+			"138 - im Wettbewerb stehen mit": "138 -  मुकाबला करें",
+			"139 - Wert legen auf": "139 -  वैल्यू दें",
+			"140 - Wertschätzung genießen": "140 -  तारीफ़ का मज़ा लें",
+			"141 - Widerstand leisten gegen": "141 -  विरोध करें",
+			"142 - Wirkung zeigen": "142 -  असर डालें",
+			"143 - das Wort ergreifen": "143 -  अपनी बात कहें",
+			"144 - ein Ziel setzen": "144 -  एक लक्ष्य तय करें",
+			"145 - ein Ziel verfolgen": "145 -  एक लक्ष्य का पीछा करें",
+			"146 - eine Zusage erhalten": "146 -  कमिटमेंट पाएं",
+			"147 - im Zusammenhang stehen mit": "147 -  किसी से जुड़ें",
+
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - Abschied nehmen von":{
+				de: " Ich werde von dir Abschied nehmen.",
+				hu: " मैं तुम्हें अलविदा कहूंगा।"
+			},
+			"002 - die Absicht haben":{
+				de: " Ich habe keine Absicht, ihm die Wahrheit zu sagen.",
+				hu: " मेरा उसे सच बताने का कोई इरादा नहीं है।"
+			},
+			"003 - eine Absprache treffen mit":{
+				de: " Wir haben mit der Firma keine Absprache getroffen.",
+				hu: " हमने कंपनी के साथ कोई अरेंजमेंट नहीं किया है।"
+			},
+			"004 - eine Ahnung haben von":{
+				de: " Er hat keine Ahnung von moderner Technologie.",
+				hu: " उसे मॉडर्न टेक्नोलॉजी के बारे में कोई आइडिया नहीं है।"
+			},
+			"005 - eine Andeutung machen":{
+				de: " Er hat eine klare Andeutung über seine Kündigung gemacht. ",
+				hu: " उसने रिजाइन करने के अपने इरादे का साफ इशारा दिया है।"
+			},
+			"006 - Anerkennung finden bei/für":{
+				de: " Der neue Mitarbeiter findet bei seinen Kollegen schnell Anerkennung für seine Zuverlässigkeit. ",
+				hu: " नया एम्प्लॉई अपनी भरोसेमंदी के लिए अपने कलीग्स से जल्दी ही पहचान बना लेता है।"
+			},
+			"007 - einen Anfang machen mit":{
+				de: " Wir sollten endlich einen Anfang mit den Vorbereitungen machen. ",
+				hu: " हमें आखिरकार तैयारी शुरू कर देनी चाहिए।"
+			},
+			"008 - eine Anforderung erfüllen":{
+				de: " Das Produkt muss alle Sicherheitsanforderungen erfüllen. ",
+				hu: " प्रोडक्ट को सभी सेफ्टी ज़रूरतों को पूरा करना होगा।"
+			},
+			"009 - ein Angebot machen":{
+				de: " Die Firma machte dem Kunden ein sehr attraktives Angebot. ",
+				hu: " कंपनी ने कस्टमर को बहुत अच्छा ऑफर दिया।"
+			},
+			"010 - ein Angebot unterbreiten":{
+				de: " Der Bauträger wird uns morgen ein schriftliches Angebot unterbreiten. ",
+				hu: " डेवलपर कल हमें एक रिटन ऑफर देगा।"
+			},
+			"011 - etwas im Angebot haben":{
+				de: " Der Supermarkt hat diese Woche frische Erdbeeren im Angebot. ",
+				hu: " सुपरमार्केट में इस हफ़्ते ताज़ी स्ट्रॉबेरी ऑफर पर हैं।"
+			},
+			"012 - etwas in Anspruch nehmen":{
+				de: " Die Reparatur nahm viel Zeit in Anspruch. ",
+				hu: " रिपेयर में बहुत समय लगा।"
+			},
+			"013 - einen Antrag stellen auf":{
+				de: " Viele Studenten stellen einen Antrag auf BAföG. ",
+				hu: " कई स्टूडेंट्स BAföG (जर्मन स्टूडेंट फाइनेंशियल एड) के लिए अप्लाई करते हैं।"
+			},
+			"014 - eine Antwort geben":{
+				de: " Ich konnte noch keine Antwort auf die Aufgabe geben.",
+				hu: " मैं अभी तक सवाल का जवाब नहीं दे पाया हूँ।"
+			},
+			"015 - eine Anweisung geben":{
+				de: " Wir haben im Computerprogramm eine Anweisung gegeben.",
+				hu: " हमने कंप्यूटर प्रोग्राम में एक इंस्ट्रक्शन दिया था।"
+			},
+			"016 - zur Anwendung kommen":{
+				de: " Diese App kann nur auf dem Iphone zur Anwendung kommen..",
+				hu: " यह ऐप सिर्फ़ iPhone पर इस्तेमाल किया जा सकता है।"
+			},
+			"017 - einen Auftrag erteilen":{
+				de: " Er hat einen Auftrag für eine kleine Firma erteilt.",
+				hu: " उसने एक छोटी कंपनी को ऑर्डर दिया।"
+			},
+			"018 - in Auftrag geben zu":{
+				de: " Die Schule hat zu Renovieren in Auftrag gegeben.",
+				hu: " स्कूल ने रेनोवेशन का काम शुरू किया।"
+			},
+			"019 - aus den Augen verlieren":{
+				de: " Ich habe meine Mutter im Einkaufszentrum aus den Augen verloren.",
+				hu: " शॉपिंग मॉल में मेरी माँ मुझसे दूर हो गईं।"
+			},
+			"020 - zum Ausdruck bringen":{
+				de: " In diesem Brief müssen Sie Ihre Bedenken klar zum Ausdruck bringen. ",
+				hu: " इस लेटर में, आपको अपनी चिंताएँ साफ़-साफ़ बतानी होंगी।"
+			},
+			"021 - zum Ausdruck kommen":{
+				de: " Die Stimmung der Mannschaft kam im lauten Jubel zum Ausdruck. ",
+				hu: " टीम का मूड ज़ोरदार चीयरिंग से ज़ाहिर हुआ।"
+			},
+			"022 - Auskunft geben":{
+				de: " Die Lehrerin hat uns über die Prüfung Auskunft gegeben.",
+				hu: " टीचर ने हमें एग्जाम के बारे में जानकारी दी।"
+			},
+			"023 - eine Äußerung machen":{
+				de: " Der Minister hat zu diesem Thema keine Äußerung gemacht.",
+				hu: " मिनिस्टर ने इस मामले पर कोई बयान नहीं दिया।"
+			},
+			"024 - Beachtung finden bei/für":{
+				de: " Mein Vorschlag fand bei der Klasse keine Beachtung.",
+				hu: " मेरे सुझाव को क्लास ने नज़रअंदाज़ कर दिया।"
+			},
+			"025 - Beachtung schenken":{
+				de: " Wir können nicht alle Punkten Beachtung schenken.",
+				hu: " हम सभी बातों पर बात नहीं कर सकते।"
+			},
+			"026 - einen Beitrag leisten für/zu":{
+				de: " Die Firma leistet keinen Beitrag für deine Weiterbildung.",
+				hu: " कंपनी आपके प्रोफेशनल डेवलपमेंट में कोई हिस्सा नहीं देती है।"
+			},
+			"027 - Berücksichtigung finden":{
+				de: " Die Firma hat deine Überstunden die Berücksichtigung finden.",
+				hu: " कंपनी को आपके ओवरटाइम का ध्यान रखना चाहिए।"
+			},
+			"028 - bei/wegen Bescheid geben":{
+				de: " Ich kann dir nicht Bescheid geben, weil ich offline sein wird.",
+				hu: " मैं आपको इन्फॉर्म नहीं कर सकता क्योंकि मैं ऑफलाइन रहूंगा।"
+			},
+			"029 - eine Bestellung aufgeben":{
+				de: " Ich möchte keine Bestellung aufgeben, da ich kein Geld habe.",
+				hu: " मैं ऑर्डर नहीं देना चाहता क्योंकि मेरे पास पैसे नहीं हैं।"
+			},
+			"030 - in Betracht kommen":{
+				de: " Diese Lösung kommt für uns nicht in Betracht.",
+				hu: " यह सॉल्यूशन हमारे लिए कोई ऑप्शन नहीं है।"
+			},
+			"031 - in Betracht ziehen":{
+				de: " Wir müssen die Verspätung in Betracht ziehen.",
+				hu: " हमें देरी पर सोचना होगा।"
+			},
+			"032 - in Betrieb nehmen":{
+				de: " Der Techniker hat der Computer in Betrieb genommen.",
+				hu: " टेक्नीशियन ने कंप्यूटर चालू कर दिया है।"
+			},
+			"033 - Bezug nehmen auf":{
+				de: " Ich nehme Bezug auf das Gespräch, das wir gestern geführt haben.",
+				hu: " मैं कल हुई बातचीत का ज़िक्र कर रहा हूँ।"
+			},
+			"034 - im Blick haben":{
+				de: " Die Firma hat die Konkurrenz immer im Blick.",
+				hu: " कंपनी हमेशा कॉम्पिटिशन पर नज़र रखती है।"
+			},
+			"035 - die Daumen drücken für":{
+				de: " Wir drücken dir die Daumen für deine Prüfung.",
+				hu: " हम आपके एग्जाम के लिए उम्मीद कर रहे हैं।"
+			},
+			"036 - zur Debatte stehen":{
+				de: " Die neuen Vorschläge stehen zur Debatte.",
+				hu: " नए प्रपोज़ल पर चर्चा हो रही है।"
+			},
+			"037 - eine Diskussion führen über/mit":{
+				de: " Ich habe mit meiner Frau eine Diskussion über die Zukunft geführt.",
+				hu: " मैंने अपनी पत्नी से भविष्य के बारे में बात की।"
+			},
+			"038 - zur Diskussion stellen":{
+				de: " Dieses Thema möchte ich zur Diskussion stellen.",
+				hu: " मैं इस टॉपिक पर चर्चा करना चाहता हूँ।"
+			},
+			"039 - unter Druck setzen":{
+				de: " Die Prüfungssituation hat ihn stark unter Druck gesetzt.",
+				hu: " एग्जाम की स्थिति ने उस पर बहुत प्रेशर डाला।"
+			},
+			"040 - einen Eindruck bekommen von":{
+				de: " Ich habe von dir einen guten Eindruck bekommen.",
+				hu: " मुझे आपके बारे में अच्छा इंप्रेशन मिला है।"
+			},
+			"041 - Eindruck machen auf":{
+				de: " Das neue Auto macht einen guten Eindruck auf mich.",
+				hu: " नई कार मुझ पर अच्छा इंप्रेशन डालती है।"
+			},
+			"042 - Einfluss nehmen auf":{
+				de: " Sie nimmt Einfluss auf ihren Partner.",
+				hu: " वह अपने पार्टनर पर असर डाल रही है।"
+			},
+			"043 - eine Entscheidung treffen":{
+				de: " Wir haben noch keine endgültige Entscheidung getroffen.",
+				hu: " हमने अभी तक कोई फ़ाइनल फ़ैसला नहीं किया है।"
+			},
+			"044 - zur Entscheidung bringen":{
+				de: " Er konnte seinen Ziel dem Urlaub noch nicht zur Entscheidung bringen.",
+				hu: " वह अभी तक अपनी छुट्टी के बारे में कोई फ़ैसला नहीं कर पाया है।"
+			},
+			"045 - zur Entscheidung stellen":{
+				de: " Sie werden meine Wünsche nicht zur Entscheidung stellen.",
+				hu: " वे मेरी इच्छाओं को फ़ैसला लेने का फ़ैसला नहीं करने देंगे।"
+			},
+			"046 - eine Erfahrung machen mit":{
+				de: " Ihr kann mit dieser Arbeit eine gute Erfahrung machen.",
+				hu: " आप इस नौकरी से कीमती अनुभव पा सकते हैं।"
+			},
+			"047 - in Erfahrung bringen":{
+				de: " Wir müssen in Erfahrung bringen, wer das getan hat.",
+				hu: " हमें पता लगाना होगा कि यह किसने किया।"
+			},
+			"048 - in Erfüllung gehen":{
+				de: " Endlich ist mein Traum in Erfüllung gegangen.",
+				hu: " मेरा सपना आख़िरकार सच हो गया है।"
+			},
+			"049 - eine Erklärung finden für":{
+				de: " Ich muss dringend eine Erklärung für mein Fehlen finden.",
+				hu: " मुझे अपनी गैरहाज़िरी का तुरंत कोई कारण ढूंढना होगा।"
+			},
+			"050 - Ersatz leisten für":{
+				de: " Die Versicherung muss Ersatz für den Schaden leisten. ",
+				hu: " इंश्योरेंस कंपनी को नुकसान की भरपाई करनी होगी।"
+			},
+			"051 - Feedback bekommen":{
+				de: " Hast du schon Feedback von deinem Chef bekommen",
+				hu: " क्या आपको अभी तक अपने बॉस से कोई फ़ीडबैक मिला है?"
+			},
+			"052 - Feedback geben":{
+				de: " Kannst du mir bitte Feedback zu meinem Entwurf geben ",
+				hu: " क्या आप प्लीज़ मुझे मेरे ड्राफ़्ट पर फ़ीडबैक दे सकते हैं?"
+			},
+			"053 - einen Fehler beheben":{
+				de: " Der Techniker konnte den Fehler auf meinem Laptop schnell beheben.",
+				hu: " टेक्नीशियन ने मेरे लैपटॉप की प्रॉब्लम जल्दी ठीक कर दी।"
+			},
+			"054 - zur Folge haben":{
+				de: " Meine schlechten Entscheidungen werden ernsthafte Konsequenzen zur Folge haben.",
+				hu: " मेरे गलत फैसलों के गंभीर नतीजे होंगे।"
+			},
+			"055 - eine Forderung stellen":{
+				de: " Die Arbeitnehmer stellten eine Forderung nach höheren Löhnen.",
+				hu: " एम्प्लॉई ने ज़्यादा सैलरी की मांग की।"
+			},
+			"056 - eine Frage stellen":{
+				de: " Darf ich dir eine Frage stellen?",
+				hu: " क्या मैं आपसे एक सवाल पूछ सकता हूँ?"
+			},
+			"057 - eine Freude bereiten":{
+				de: " Sie wollte ihren Eltern eine Freude bereiten.",
+				hu: " वह अपने माता-पिता को खुश करना चाहती थी।"
+			},
+			"058 - ins Geschäft kommen mit":{
+				de: " Mein Chef ist mit einer anderen Firma ins Geschäft zu gekommen.",
+				hu: " मेरे बॉस ने दूसरी कंपनी के साथ डील की।"
+			},
+			"059 - ein Gespräch führen über/mit":{
+				de: " Der Chef hat mit mir über meine Förderung ein Gespräch geführt.",
+				hu: " बॉस ने मेरे प्रोफेशनल डेवलपमेंट के बारे में मुझसे बात की।"
+			},
+			"060 - ins Gespräch bringen":{
+				de: " Mein Kollege hat seine Idee ins Gespräch gebracht.",
+				hu: " मेरे कलीग ने अपना आइडिया बताया।"
+			},
+			"061 - den Glauben verlieren":{
+				de: " Er ist Atheist, weil er den Glauben verloren hat.",
+				hu: " वह नास्तिक है क्योंकि उसने अपना विश्वास खो दिया है।"
+			},
+			"062 - etwas im Griff haben":{
+				de: " Ich habe die Situation im Griff.",
+				hu: " सिचुएशन मेरे कंट्रोल में है।"
+			},
+			"063 - etwas in den Griff bekommen":{
+				de: " Der neue Chef kann die Mitarbeiterführung in den Griff bekommen.",
+				hu: " नया बॉस स्टाफ को मैनेज कर सकता है।"
+			},
+			"064 - auf den Grund gehen":{
+				de: " Der Psychologe will dem menschlichen Geist auf den Grund gehen.",
+				hu: " साइकोलॉजिस्ट इंसान के दिमाग की तह तक जाना चाहता है।"
+			},
+			"065 - jemanden vor eine Herausforderung stellen":{
+				de: " Die neue Arbeit stellt mich vor eine größere Herausforderung.",
+				hu: " नई जॉब मेरे लिए एक बड़ी चुनौती है।"
+			},
+			"066 - Hilfe leisten":{
+				de: " Meine Freunde haben mir bei der deutschen Bürokratie Hilfe geleistet.",
+				hu: " मेरे दोस्तों ने जर्मन ब्यूरोक्रेसी में मेरी मदद की।"
+			},
+			"067 - zu Hilfe nehmen":{
+				de: " Ich habe einen Freund zu Hilfe genommen.",
+				hu: " मैंने एक दोस्त की मदद ली।"
+			},
+			"068 - die Hoffnung aufgeben":{
+				de: " Der Politiker hat die Hoffnung auf die Politik aufgegeben.",
+				hu: " पॉलिटिशियन ने पॉलिटिक्स में उम्मीद छोड़ दी है।"
+			},
+			"069 - sich Hoffnung machen":{
+				de: " Du solltest dir keine falschen Hoffnungen machen.",
+				hu: " तुम्हें अपनी उम्मीदें नहीं बढ़ानी चाहिए।"
+			},
+			"070 - auf eine Idee kommen":{
+				de: " Ich bin plötzlich auf eine gute Idee gekommen.",
+				hu: " मुझे अचानक एक अच्छा आइडिया आया।"
+			},
+			"071 - infrage kommen":{
+				de: " Ein Umzug in eine kleinere Wohnung kommt für mich nicht infrage.",
+				hu: " मेरे लिए छोटे अपार्टमेंट में जाने का सवाल ही नहीं उठता।"
+			},
+			"072 - infrage stellen":{
+				de: " Er stellt die Entscheidung des Chefs infrage.",
+				hu: " वह बॉस के फैसले पर सवाल उठाता है।"
+			},
+			"073 - Interesse wecken an/für":{
+				de: " Die Werbung weckt Interesse für das neue Produkt.",
+				hu: " एडवरटाइजिंग नए प्रोडक्ट में दिलचस्पी पैदा कर रही है।"
+			},
+			"074 - Interesse zeigen an/für":{
+				de: " Viele Studenten zeigen Interesse an diesem Kurs.",
+				hu: " कई स्टूडेंट्स इस कोर्स में दिलचस्पी दिखा रहे हैं।"
+			},
+			"075 - in Kenntnis setzen von":{
+				de: " Der Service setzt mich von den Kosten der Renovierung in Kenntnis.",
+				hu: " सर्विस मुझे रेनोवेशन के खर्च के बारे में बताती है।"
+			},
+			"076 - zur Kenntnis nehmen":{
+				de: " Ich nehme Ihre Beschwerde zur Kenntnis.",
+				hu: " मैं आपकी शिकायत मानता हूँ।"
+			},
+			"077 - Kontakt aufnehmen mit":{
+				de: " Möchtest du Kontakt mit deinen alten Freunden aufnehmen?",
+				hu: " क्या आप अपने पुराने दोस्तों से कॉन्टैक्ट करना चाहेंगे?"
+			},
+			"078 - Klarheit gewinnen über":{
+				de: " Ich muss Klarheit über die Lösung gewinnen.",
+				hu: " मुझे सॉल्यूशन के बारे में क्लैरिटी चाहिए।"
+			},
+			"079 - Kontakt halten":{
+				de: " Ich halte Kontakt zu meinen alten Freunden.",
+				hu: " मैं अपने पुराने दोस्तों के कॉन्टैक्ट में रहूँगा।"
+			},
+			"080 - Kontakt knüpfen mit":{
+				de: " Der Administrator knüpft Kontakte mit der Entwicklungen.",
+				hu: " एडमिनिस्ट्रेटर डेवलपमेंट टीम से कॉन्टैक्ट करेगा।"
+			},
+			"081 - Kontakt knüpfen zu":{
+				de: " Sie will mehrere Kontakte im Internet zu knüpfen.",
+				hu: " वह ऑनलाइन कई कॉन्टैक्ट बनाना चाहती है।"
+			},
+			"082 - in Kontakt stehen mit":{
+				de: " Die Firma steht in Kontakt mit mehreren Partnerfirmen.",
+				hu: " कंपनी कई पार्टनर कंपनियों के कॉन्टैक्ट में है।"
+			},
+			"083 - in Kontakt treten mit":{
+				de: " Der Kundenservice ist gestern mit mir in Kontakt getreten.",
+				hu: " कस्टमर सर्विस ने कल मुझसे कॉन्टैक्ट किया।"
+			},
+			"084 - die Kosten tragen für":{
+				de: " Die Saga trägt die Kosten für die Renovierung.",
+				hu: " सागा रेनोवेशन का खर्च उठा रही है।"
+			},
+			"085 - die Kosten übernehmen für":{
+				de: " Die Versicherung übernimmt die Kosten für die Behandlung.",
+				hu: " इंश्योरेंस कंपनी ट्रीटमेंट का खर्च उठा रही है।"
+			},
+			"086 - in Kraft treten":{
+				de: " Das neue Gesetz wird morgen in Kraft treten.",
+				hu: " नया कानून कल से लागू होगा।"
+			},
+			"087 - Krieg führen gegen/mit/wegen":{
+				de: " Wir wollen keinen Krieg gegen unsere Nachbarn führen.",
+				hu: " हम अपने पड़ोसियों के साथ लड़ाई शुरू नहीं करना चाहते।"
+			},
+			"088 - Kritik üben an/für":{
+				de: " Er hat an der Entscheidung des Chefs keine Kritik geübt.",
+				hu: " उसने बॉस के फैसले की बुराई नहीं की।"
+			},
+			"089 - den Kürzeren ziehen":{
+				de: " Er hat den Kürzeren gezogen.",
+				hu: " वह हार गया।"
+			},
+			"090 - jemanden auf dem Laufenden halten":{
+				de: " Der Bahnhof hält die Fahrgäste über die Verspätung auf dem Laufenden.",
+				hu: " ट्रेन स्टेशन पैसेंजर्स को देरी के बारे में इन्फॉर्म कर रहा है।"
+			},
+			"091 - auf dem Laufenden sein":{
+				de: " In der IT muss man auf dem Laufenden sein.",
+				hu: " IT में, आपको अप-टू-डेट रहना होता है।"
+			},
+			"092 - der Meinung sein":{
+				de: " Ich bin der Meinung, dass wir viele Aufgaben machen sollen.",
+				hu: " मुझे लगता है कि हमें बहुत काम करना चाहिए।"
+			},
+			"093 - in Ordnung bringen":{
+				de: " Ich muss meine Wohnung in Ordnung bringen.",
+				hu: " मुझे अपना अपार्टमेंट साफ करना है।"
+			},
+			"094 - ein Profil anlegen":{
+				de: " Ich habe gestern ein neues Profil auf LindekIn angelegt.",
+				hu: " मैंने कल LindeIn पर एक नई प्रोफ़ाइल बनाई।"
+			},
+			"095 - eine Prüfung bestehen":{
+				de: " Ich will die B2 Prüfung bestehen.",
+				hu: " मैं B2 एग्ज़ाम पास करना चाहता हूँ।"
+			},
+			"096 - durch eine Prüfung fallen":{
+				de: " Ich bin durch meine letzte B2 Prüfung gefallen.",
+				hu: " मैं अपने पिछले B2 एग्ज़ाम में फेल हो गया था।"
+			},
+			"097 - eine Qualifikation mitbringen":{
+				de: " Er bringt viel Erfahrung und eine gute Qualifikation mit.",
+				hu: " उसके पास बहुत एक्सपीरियंस और अच्छी क्वालिफ़िकेशन हैं।"
+			},
+			"098 - einen Rat geben":{
+				de: " Können Sie mir einen guten Rat geben?",
+				hu: " क्या आप मुझे कुछ अच्छी सलाह दे सकते हैं?"
+			},
+			"099 - Rechenschaft ablegen über":{
+				de: " Sie haben Rechenschaft über ihre Reiseplan abgelegt.",
+				hu: " आपने अपने ट्रैवल प्लान का हिसाब दिया है।"
+			},
+			"100 - zur Rechenschaft ziehen für":{
+				de: " Du kannst mich nicht zur Rechenschaft ziehen für deine Fehler.",
+				hu: " आप अपनी गलतियों के लिए मुझे ज़िम्मेदार नहीं ठहरा सकते।"
+			},
+			"101 - in Rechnung stellen":{
+				de: " Der Zahnarzt stellt mir die Kosten in Rechnung.",
+				hu: " डेंटिस्ट मुझे बिल भेज रहा है।"
+			},
+			"102 - eine Rede halten über":{
+				de: " Der Präsident hat eine Rede über die neuen Pläne gehalten.",
+				hu: " प्रेसिडेंट ने नए प्लान के बारे में स्पीच दी।"
+			},
+			"103 - in eine Reihenfolge bringen":{
+				de: " Ich bringe meine Dokumente immer in eine Reihenfolge.",
+				hu: " मैं हमेशा अपने डॉक्यूमेंट्स को ठीक से रखता हूँ।"
+			},
+			"104 - den Respekt verlieren vor":{
+				de: " Man sollte vor der Natur nicht den Respekt verlieren",
+				hu: " नेचर के लिए रिस्पेक्ट नहीं खोनी चाहिए।"
+			},
+			"105 - Rückmeldung geben":{
+				de: " Der Dozent gab den Studenten eine detaillierte Rückmeldung zu ihren Arbeiten. ",
+				hu: " लेक्चरर ने स्टूडेंट्स को उनके काम पर डिटेल्ड फीडबैक दिया।"
+			},
+			"106 - Rücksicht nehmen auf":{
+				de: " Bitte nehmen Sie Rücksicht auf die Nachtruhe der Nachbarn! ",
+				hu: " प्लीज़ पड़ोसियों की नींद का ध्यान रखें!"
+			},
+			"107 - die Ruhe bewahren":{
+				de: " Obwohl die Situation kritisch war, bewahrte der Kapitän die Ruhe. ",
+				hu: " हालाँकि सिचुएशन क्रिटिकल थी, कैप्टन शांत रहे।"
+			},
+			"108 - Schluss machen mit":{
+				de: " Er hat nach fünf Jahren Schluss mit seiner Freundin gemacht. ",
+				hu: " पाँच साल बाद उनका अपनी गर्लफ्रेंड से ब्रेकअप हो गया।"
+			},
+			"109 - zur Sprache bringen":{
+				de: " Wir werden die Probleme bei der nächsten Besprechung zur Sprache bringen. ",
+				hu: " हम अगली मीटिंग में प्रॉब्लम्स पर बात करेंगे।"
+			},
+			"110 - Stellung nehmen zu":{
+				de: " Ich möchte zu diesem komplizierten Fall keine Stellung nehmen. ",
+				hu: " मैं इस कॉम्प्लिकेटेड केस पर कमेंट नहीं करना चाहता।"
+			},
+			"111 - unter Strafe stehen":{
+				de: " Diese Handlung steht nicht direkt unter Strafe, aber sie ist moralisch fragwürdig. ",
+				hu: " इस काम के लिए सीधे तौर पर सज़ा नहीं है, लेकिन यह नैतिक रूप से गलत है।"
+			},
+			"112 - unter Strafe stellen":{
+				de: " Man sollte das unnötige Töten von Tieren unter Strafe stellen. ",
+				hu: " जानवरों को बेवजह मारना सज़ा होनी चाहिए।"
+			},
+			"113 - in Streik treten":{
+				de: " Wegen der niedrigen Löhne sind die Arbeiter heute Morgen in Streik getreten. ",
+				hu: " कम सैलरी की वजह से आज सुबह वर्कर हड़ताल पर चले गए।"
+			},
+			"114 - Stress haben mit":{
+				de: " Ich hatte eine Zeit lang Stress mit meinem Nachbarn wegen des Lärms. ",
+				hu: " शोर की वजह से मुझे कुछ समय से अपने पड़ोसी से दिक्कत हो रही थी।"
+			},
+			"115 - unter Stress stehen":{
+				de: " Aufgrund der Abgabetermine steht das gesamte Team unter Stress. ",
+				hu: " डेडलाइन की वजह से पूरी टीम स्ट्रेस में है।"
+			},
+			"116 - eine Tätigkeit ausüben":{
+				de: " Sie übt seit vielen Jahren eine Tätigkeit als freiberufliche Übersetzerin aus. ",
+				hu: " वह कई सालों से फ्रीलांस ट्रांसलेटर के तौर पर काम कर रही है।"
+			},
+			"117 - im Trend liegen":{
+				de: " Diese Technologie lag vor fünf Jahren im Trend, ist aber heute überholt. ",
+				hu: " यह टेक्नोलॉजी पांच साल पहले ट्रेंडी थी, लेकिन अब पुरानी हो गई है।"
+			},
+			"118 - einen Überblick bekommen":{
+				de: " Ich muss die Unterlagen lesen, um einen Überblick zu bekommen.",
+				hu: " मुझे ओवरव्यू पाने के लिए डॉक्यूमेंट्स पढ़ने होंगे।"
+			},
+			"119 - einen Überblick geben":{
+				de: " Der Chef wird allen Mitarbeitern einen Überblick über die Quartalszahlen geben.",
+				hu: " बॉस सभी एम्प्लॉई को तिमाही आंकड़ों का ओवरव्यू देंगे।"
+			},
+			"120 - einen Unterschied machen":{
+				de: " Es macht keinen Unterschied, ob wir heute morgen anfangen.",
+				hu: " इससे कोई फर्क नहीं पड़ता कि हम आज सुबह शुरू करते हैं या नहीं।"
+			},
+			"121 - eine Verabredung treffen":{
+				de: " Möchten Sie mit mir eine Verabredung zu treffen?",
+				hu: " क्या आप मेरे साथ अपॉइंटमेंट लेना चाहेंगे?"
+			},
+			"122 - die Verantwortung übernehmen für":{
+				de: " Er musste die Verantwortung für den Fehler übernehmen.",
+				hu: " उसे गलती की ज़िम्मेदारी लेनी पड़ी।"
+			},
+			"123 - sich in Verbindung setzen mit":{
+				de: " Ich werde mich morgen früh mit dem Kundenservice  in Verbindung setzen.",
+				hu: " मैं कल सुबह कस्टमर सर्विस से कॉन्टैक्ट करूँगा।"
+			},
+			"124 - eine Vereinbarung treffen zu":{
+				de: " Wir hoffen, bald eine Vereinbarung zu den Konditionen treffen zu können.",
+				hu: " हमें उम्मीद है कि जल्द ही शर्तों पर एग्रीमेंट हो जाएगा।"
+			},
+			"125 - zur Verfügung stehen":{
+				de: " Bei Fragen stehe ich Ihnen gerne zur Verfügung.",
+				hu: " आपके किसी भी सवाल का जवाब देने में मुझे खुशी होगी।"
+			},
+			"126 - zur Verfügung stellen":{
+				de: " Die Firma wird die notwendigen Mittel zur Verfügung stellen.",
+				hu: " कंपनी ज़रूरी फंड देगी।"
+			},
+			"127 - in Verhandlungen stehen":{
+				de: " Seit Monaten stehen wir in Verhandlungen mit dem Vermieter.",
+				hu: " हम महीनों से मकान मालिक के साथ बातचीत कर रहे हैं।"
+			},
+			"128 - in Verhandlungen treten":{
+				de: " Nach der Einigung können wir über die Details in Verhandlungen treten.",
+				hu: " एक बार एग्रीमेंट हो जाने के बाद, हम डिटेल्स पर बातचीत कर सकते हैं।"
+			},
+			"129 - ein Versprechen geben":{
+				de: " Ich gebe dir das Versprechen, dass ich pünktlich sein werde.",
+				hu: " मैं समय पर आने का वादा करता हूँ।"
+			},
+			"130 - einen Vertrag abschließen mit":{
+				de: " Wir haben einen neuen Vertrag mit unserem Lieferanten abgeschlossen.",
+				hu: " हमने अपने सप्लायर के साथ एक नया कॉन्ट्रैक्ट साइन किया है।"
+			},
+			"131 - Vertrauen herstellen":{
+				de: " Es braucht Zeit, Vertrauen zwischen den Kollegen herzustellen.",
+				hu: " साथ काम करने वालों के बीच भरोसा बनाने में समय लगता है।"
+			},
+			"132 - Vorbereitungen treffen":{
+				de: " Wir müssen Vorbereitungen für die Konferenz treffen.",
+				hu: " हमें कॉन्फ्रेंस की तैयारी करनी है।"
+			},
+			"133 - im Vordergrund stehen":{
+				de: " Bei diesem Projekt steht die Effizienz im Vordergrund, nicht die Kosten.",
+				hu: " इस प्रोजेक्ट में, एफिशिएंसी सबसे ज़रूरी है, कॉस्ट नहीं।"
+			},
+			"134 - einen Vorschlag machen":{
+				de: " Darf ich einen Vorschlag machen, wie wir das Problem lösen können?",
+				hu: " क्या मैं कोई सुझाव दे सकता हूँ कि हम इस प्रॉब्लम को कैसे सॉल्व कर सकते हैं?"
+			},
+			"135 - einen Vorschlag unterbreiten":{
+				de: " Bitte unterbreiten Sie mir Ihren Vorschlag schriftlich bis nächste Woche.",
+				hu: " प्लीज़ अगले हफ़्ते तक अपना सुझाव मुझे लिखकर भेज दें।"
+			},
+			"136 - Vorsorge treffen für":{
+				de: " Wir müssen Vorsorge für unvorhergesehene Kosten treffen.",
+				hu: " हमें अचानक आने वाले खर्चों के लिए इंतज़ाम करने होंगे।"
+			},
+			"137 - eine Wahl treffen":{
+				de: " Er musste eine Wahl zwischen seiner Karriere und seiner Familie treffen.",
+				hu: " उसे अपने करियर और अपने परिवार में से किसी एक को चुनना था।"
+			},
+			"138 - im Wettbewerb stehen mit":{
+				de: " Unsere Firma steht im Wettbewerb mit vielen internationalen Unternehmen.",
+				hu: " हमारी कंपनी कई इंटरनेशनल कंपनियों से मुकाबला करती है।"
+			},
+			"139 - Wert legen auf":{
+				de: " Unsere Firma legt viel Wert auf die Sicherheit.",
+				hu: " हमारी कंपनी सेफ्टी पर बहुत ज़ोर देती है।"
+			},
+			"140 - Wertschätzung genießen":{
+				de: " In Deutschland genießen die Mitarbeitern Wertschätzung für ihre Arbeit.",
+				hu: " जर्मनी में, एम्प्लॉई को उनके काम के लिए वैल्यू दी जाती है।"
+			},
+			"141 - Widerstand leisten gegen":{
+				de: " Ich leiste Widerstand gegen viele Süßigkeiten.",
+				hu: " मैं बहुत ज़्यादा मिठाइयाँ खाने से मना करता हूँ।"
+			},
+			"142 - Wirkung zeigen":{
+				de: " Der Appell des Präsidenten hat leider kaum Wirkung gezeigt.",
+				hu: " बदकिस्मती से, प्रेसिडेंट की अपील का ज़्यादा असर नहीं हुआ।"
+			},
+			"143 - das Wort ergreifen":{
+				de: " Nach einer langen Pause ergriff der Moderator das Wort.",
+				hu: " काफी देर रुकने के बाद, मॉडरेटर ने बात शुरू की।"
+			},
+			"144 - ein Ziel setzen":{
+				de: " Ich setze mir eine Ziel.",
+				hu: " मैंने अपने लिए एक लक्ष्य तय किया।"
+			},
+			"145 - ein Ziel verfolgen":{
+				de: " Trotz vieler Hindernisse verfolgte er beharrlich sein Ziel.",
+				hu: " कई मुश्किलों के बावजूद, वह अपने लक्ष्य को पाने में डटा रहा।"
+			},
+			"146 - eine Zusage erhalten":{
+				de: " Bevor wir planen, müssen wir eine Zusage vom Apartment erhalten.",
+				hu: " प्लान बनाने से पहले, हमें अपार्टमेंट से कन्फर्मेशन लेना होगा।"
+			},
+			"147 - im Zusammenhang stehen mit":{
+				de: " Der Anstieg der Preise steht im direkten Zusammenhang mit der Inflation.",
+				hu: " कीमत में बढ़ोतरी सीधे महंगाई से जुड़ी है।"
+			},
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

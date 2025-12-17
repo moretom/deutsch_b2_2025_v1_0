@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Verben mit Präpositionen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+		.div1 {
+			color: #333;
+			text-align: center;
+			font-size: 48px;
+		}
+        select, button {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 48px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #eredmeny {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 48px;
+        }
+        #pelda {
+            margin-top: 10px;
+            font-size: 48px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+	<div class="div1"><a href="ukrain0.html"> << Zurück</a></div>
+    <h1>Verben mit Präpositionen - deutsch - ukrainisch</h1>
+
+    <label for="nemet">Wählst du ein Wort:</label><br>
+    <select id="nemet">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <label for="magyar">Wählst du ein Wort:</label><br>
+    <select id="magyar">
+        <option value="">-- Wählen --</option>
+    </select><br><br>
+
+    <button id="ellenoriz">Check!</button>
+
+    <div id="eredmeny"></div>
+    <div id="pelda"></div>
+
+    <script>
+        // Szótár: német -> magyar
+        const szotar = {
+
+			"001 - abhängen von + D": "001 - залежати від + D.",
+			"002 - achten auf + A": "002 - звернути увагу на + A.",
+			"003 - anfangen mit + D": "003 - почати з + D.",
+			"004 - ankommen auf + A": "004 - прибути до + A.",
+			"005 - antworten auf + A": "005 - відповідати + A.",
+			"006 - sich ärgern über + A": "006 - дратуватися через + A.",
+			"007 - aufhören mit + D": "007 - зупинитися на + D.",
+			"008 - aufpassen auf + A": "008 - звернути увагу на + A.",
+			"009 - sich aufregen über + A": "009 - засмучуватися через + A.",
+			"010 - ausgeben für + A": "010 - витрачати на + A.",
+			"011 - sich bedanken bei + D": "011 - дякувати + D.",
+			"012 - sich bedanken für + A": "012 - дякувати за + A.",
+			"013 - beginnen mit + D": "013 - почати з + D.",
+			"014 - sich bemühen um + A": "014 - докласти зусиль для + A.",
+			"015 - berichten über. + A": "015 - звітувати про. + A.",
+			"016 - sich beschäftigen mit + D": "016 - розбиратися з + D.",
+			"017 - sich beschweren bei + D": "017 - скаржитися до + D.",
+			"018 - bestehen aus + D": "018 - складатися з + D.",
+			"019 - bestehen auf + A": "019 - наполягати на + A.",
+			"020 - sich beteiligen an + D": "020 - брати участь у + D.",
+			"021 - sich bewerben bei + D": "021 - подати заявку до + D.",
+			"022 - sich bewerben um + A": "022 - подати заявку на + A.",
+			"023 - sich beziehen auf + A": "023 - посилатися на + A.",
+			"024 - bitten um + A": "024 - запитувати на + A.",
+			"025 - danken für + A": "025 - дякувати за + A.",
+			"026 - denken an + A": "026 - думати про + A.",
+			"027 - diskutieren über + A": "027 - обговорити + A.",
+			"028 - einladen zu + D": "028 - запросити до + D.",
+			"029 - sich entscheiden für + A": "029 - вирішити щодо + A.",
+			"030 - sich entschließen zu + D": "030 - вирішити + D.",
+			"031 - sich entschuldigen bei + D": "031 - вибачитися перед + D.",
+			"032 - sich entschuldigen für + A": "032 - вибачитися за + A.",
+			"033 - erfahren von + D": "033 - дізнатися про + D.",
+			"034 - sich erholen von + D": "034 - оговтатися від + D.",
+			"035 - sich erinnern an + A": "035 - пам'ятати + A.",
+			"036 - erkennen an + D": "036 - визнати + D.",
+			"037 - sich erkundigen nach + D": "037 - запитати про + D.",
+			"038 - erschrecken über + A": "038 - бути враженим + A.",
+			"039 - erzählen über + A": "039 - розповісти про + A.",
+			"040 - erzählen von + D": "040 - розповісти про + D.",
+			"041 - fragen nach + D": "041 - запитати про + D.",
+			"042 - sich freuen auf + A": "042 - з нетерпінням чекати + A.",
+			"043 - sich freuen über + A": "043 - радіти про + A.",
+			"044 - gehen um + A": "044 - ходити навколо + A.",
+			"045 - gehören zu + D": "045 - належати до + D.",
+			"046 - sich gewöhnen an + A": "046 - звикати до + A.",
+			"047 - glauben an + A": "047 - вірити в + A.",
+			"048 - gratulieren zu + D": "048 - вітати + D.",
+			"049 - halten für + A": "049 - думати про + A.",
+			"050 - halten von + D": "050 - думати про + D.",
+			"051 - sich handeln um + A": "051 - діяти щодо + A.",
+			"052 - handeln von + D": "052 - діяти щодо + D.",
+			"053 - helfen bei + D": "053 - допомога з + D.",
+			"054 - hindern an + D": "054 - заважати + D.",
+			"055 - hoffen auf + A": "055 - сподіватися на + A.",
+			"056 - hören von + D": "056 - чути про + D.",
+			"057 - sich informieren über + A": "057 - дізнаватися про + A.",
+			"058 - sich interessieren für + A": "058 - цікавитися + A.",
+			"059 - klagen über + A": "059 - скаржитися на + A.",
+			"060 - kämpfen für + A": "060 - боротися за + A.",
+			"061 - kommen zu + D": "061 - прийти до + D.",
+			"062 - sich konzentrieren auf + A": "062 - зосередитися на + A.",
+			"063 - sich kümmern um + A": "063 - піклуватися про + A.",
+			"064 - lachen über + A": "064 - сміятися з + A.",
+			"065 - leiden an + D": "065 - страждати від + D.",
+			"066 - leiden unter + A": "066 - страждати через + A.",
+			"067 - nachdenken über + A": "067 - думати про + A.",
+			"068 - protestieren gegen + A": "068 - протестувати проти + A.",
+			"069 - rechnen mit + D": "069 - розраховувати на + D.",
+			"070 - reden über + A": "070 - говорити про + A.",
+			"071 - reden von + D": "071 - говорити про + D.",
+			"072 - riechen nach + D": "072 - запахнути + D.",
+			"073 - sagen über + A": "073 - казати про + A.",
+			"074 - sagen zu + D": "074 - казати + D.",
+			"075 - schicken an + A": "075 - надіслати + A.",
+			"076 - schicken zu + D": "076 - надіслати + D.",
+			"077 - schimpfen über + A": "077 - скаржитися на + A.",
+			"078 - schmecken nach + D": "078 - смак + D.",
+			"079 - schreiben an + A": "079 - написати + A.",
+			"080 - sich schützen vor + D": "080 - захищати від + D.",
+			"081 - sein für + A": "081 - бути за + A.",
+			"082 - sein gegen  + A": "082 - бути проти + A.",
+			"083 - sorgen für + A": "083 - турбуватися за + A.",
+			"084 - sprechen mit + D": "084 - розмовляти з + D.",
+			"085 - sprechen über + A": "085 - розмовляти про + A.",
+			"086 - sterben an + D": "086 - померти від + D.",
+			"087 - streiten mit + D": "087 - сперечатися з + D.",
+			"088 - streiten über + A": "088 - сперечатися про + A.",
+			"089 - teilnehmen an + D": "089 - брати участь у + D.",
+			"090 - telefonieren mit + D": "090 - телефонувати + D.",
+			"091 - sich treffen mit + D": "091 - зустрітися з + D.",
+			"092 - sich treffen zu + D": "092 - зустрітися о + D.",
+			"093 - überreden zu + D": "093 - переконати + D.",
+			"094 - sich unterhalten mit + D": "094 - розмовляти з + D.",
+			"095 - sich unterhalten über + A": "095 - розмовляти про + A.",
+			"096 - sich verabreden mit + D": "096 - записатися на зустріч з + D.",
+			"097 - sich verabschieden von + D": "097 - попрощатися з + D.",
+			"098 - vergleichen mit + D": "098 - порівняти з + D.",
+			"099 - sich verlassen auf + A": "099 - покладатися на + A.",
+			"100 - sich verlieben in + A": "100 - закохатися в + A.",
+			"101 - sich verstehen mit + D": "101 - розуміти + D.",
+			"102 - verstehen von + D": "102 - розуміти + D.",
+			"103 - sich vorbereiten auf + A": "103 - готуватися до + A.",
+			"104 - warnen vor + D": "104 - попереджати про + D.",
+			"105 - warten auf + A": "105 - чекати на + A.",
+			"106 - sich wenden an + A": "106 - звертатися до + A.",
+			"107 - werden zu + D": "107 - стати + D.",
+			"108 - wissen von + D": "108 - знати про + D.",
+			"109 - sich wundern über + A": "109 - бути здивованим + A.",
+			"110 - zuschauen bei + D": "110 - спостерігати + D.",
+			"111 - zusehen bei + D": "111 - спостерігати + D.",
+			"112 - zweifeln an + D": "112 - сумніватися + D.",
+
+
+        };
+
+        // Példa mondatok: német és magyar verzióban
+        const peldak = {
+
+			"001 - abhängen von + D":{
+				de: "Ob wir fahren, hängt vom Wetter ab.",
+				hu: " Чи підемо ми, залежить від погоди."
+			},
+			"002 - achten auf + A":{
+				de: "Bitte achte auf den neuen Mantel.",
+				hu: " Будь ласка, подбай про нове пальто."
+			},
+			"003 - anfangen mit + D":{
+				de: "Ich fange mit der Übung an.",
+				hu: " Я починаю вправу."
+			},
+			"004 - ankommen auf + A":{
+				de: "Es kommt auf den richtigen Preis an.",
+				hu: " Все залежить від правильної ціни."
+			},
+			"005 - antworten auf + A":{
+				de: "Bitte antworten Sie heute auf den Brief.",
+				hu: " Будь ласка, дайте відповідь на лист сьогодні."
+			},
+			"006 - sich ärgern über + A":{
+				de: "Wir ärgern uns über den Regen.",
+				hu: " Ми роздратовані дощем."
+			},
+			"007 - aufhören mit + D":{
+				de: "Er hört um 17.00 Uhr mit der Arbeit auf.",
+				hu: " Він закінчує роботу о 17:00."
+			},
+			"008 - aufpassen auf + A":{
+				de: "Ein Babysitter passt auf kleine Kinder auf. ",
+				hu: " Няня доглядає за маленькими дітьми."
+			},
+			"009 - sich aufregen über + A":{
+				de: "Deutsche regen sich über Unpünktlichkeit auf.",
+				hu: " Німці скаржаться на непунктуальність."
+			},
+			"010 - ausgeben für + A":{
+				de: "Frauen geben viel Geld für Schuhe aus.",
+				hu: " Жінки витрачають багато грошей на взуття."
+			},
+			"011 - sich bedanken bei + D":{
+				de: "Ich bedanke mich herzlich bei dir.",
+				hu: " Щиро дякую."
+			},
+			"012 - sich bedanken für + A":{
+				de: "Martin bedankt sich für das Geschenk.",
+				hu: " Мартін дякує за подарунок."
+			},
+			"013 - beginnen mit + D":{
+				de: "Wir beginnen pünktlich mit dem Deutschkurs.",
+				hu: " Ми починаємо курс німецької мови вчасно."
+			},
+			"014 - sich bemühen um + A":{
+				de: "Karla bemüht sich um eine Arbeit.",
+				hu: " Карла шукає роботу."
+			},
+			"015 - berichten über. + A":{
+				de: "Der Reporter berichtet über die Wahlen.",
+				hu: " Репортер повідомляє про вибори."
+			},
+			"016 - sich beschäftigen mit + D":{
+				de: "Ich beschäftige mich gern mit Pflanzen.",
+				hu: " Мені подобається працювати з рослинами."
+			},
+			"017 - sich beschweren bei + D":{
+				de: "Der Gast beschwert sich beim Kellner.",
+				hu: " Гість скаржиться офіціанту."
+			},
+			"018 - bestehen aus + D":{
+				de: "Eheringe bestehen aus Gold.",
+				hu: " Обручки зроблені із золота."
+			},
+			"019 - bestehen auf + A":{
+				de: "Ich bestehe auf sofortige Bezahlung des Autos.",
+				hu: " Я наполягаю на негайній оплаті за машину."
+			},
+			"020 - sich beteiligen an + D":{
+				de: "Viele Studenten beteiligen sich an den Streiks.",
+				hu: " Багато студентів беруть участь у страйках."
+			},
+			"021 - sich bewerben bei + D":{
+				de: "Er bewirbt sich bei einer Bäckerei.",
+				hu: " Він влаштовується на роботу в пекарню."
+			},
+			"022 - sich bewerben um + A":{
+				de: "Sie bewirbt sich um eine Stelle als Sekretärin.",
+				hu: " Вона влаштовується на посаду секретарки."
+			},
+			"023 - sich beziehen auf + A":{
+				de: "Meine Frage bezieht sich auf Ihr Angebot.",
+				hu: " Моє запитання стосується вашої пропозиції."
+			},
+			"024 - bitten um + A":{
+				de: "Der Redner bittet um Aufmerksamkeit.",
+				hu: " Спікер просить уваги."
+			},
+			"025 - danken für + A":{
+				de: "Sam dankt für Ritas Hilfe.",
+				hu: " Сем дякує Ріті за допомогу."
+			},
+			"026 - denken an + A":{
+				de: "Maria denkt oft an den Urlaub.",
+				hu: " Марія часто думає про відпустку."
+			},
+			"027 - diskutieren über + A":{
+				de: "Das Kabinett diskutiert über eine neue Steuer.",
+				hu: " Кабінет міністрів обговорює новий податок."
+			},
+			"028 - einladen zu + D":{
+				de: "Ich lade dich zu meinem Geburtstag ein.",
+				hu: " Я запрошую вас на свій день народження."
+			},
+			"029 - sich entscheiden für + A":{
+				de: "Frauen entscheiden sich gern für Gold. ",
+				hu: " Жінки часто обирають золото."
+			},
+			"030 - sich entschließen zu + D":{
+				de: "Karl entschließt sich zu einem Studium. ",
+				hu: " Карл вирішує вступити до університету."
+			},
+			"031 - sich entschuldigen bei + D":{
+				de: "Mia entschuldigt sich bei ihrem Mann.",
+				hu: " Міа вибачається перед чоловіком."
+			},
+			"032 - sich entschuldigen für + A":{
+				de: "Ich entschuldige mich für das Verhalten meiner Tochter.",
+				hu: " Я вибачаюся за поведінку моєї доньки."
+			},
+			"033 - erfahren von + D":{
+				de: "Heute haben wir von dem Bauprojekt erfahren.",
+				hu: " Сьогодні ми дізналися про будівельний проект."
+			},
+			"034 - sich erholen von + D":{
+				de: "Von dem Schock muss ich mich erst erholen.",
+				hu: " Мені потрібно оговтатися від шоку."
+			},
+			"035 - sich erinnern an + A":{
+				de: "Wir erinnern uns gern an unser erstes Ehejahr.",
+				hu: " Ми з ніжністю згадуємо наш перший рік шлюбу."
+			},
+			"036 - erkennen an + D":{
+				de: "Man erkennt Pinocchio an seiner langen Nase.",
+				hu: " Піноккіо можна впізнати за його довгим носом."
+			},
+			"037 - sich erkundigen nach + D":{
+				de: "Oma erkundigt sich oft nach meinen Plänen.",
+				hu: " Бабуся часто питає про мої плани."
+			},
+			"038 - erschrecken über + A":{
+				de: "Die Frau erschrickt über eine Maus.",
+				hu: " Жінку лякає миша."
+			},
+			"039 - erzählen über + A":{
+				de: "Ein Ostberliner erzählt über sein Leben in der ehemaligen DDR.",
+				hu: " Східний берлінець розповідає про своє життя в колишній НДР."
+			},
+			"040 - erzählen von + D":{
+				de: "Der Bischoff erzählt von der Reise nach Rom.",
+				hu: " Єпископ розповідає про свою поїздку до Риму."
+			},
+			"041 - fragen nach + D":{
+				de: "Die Journalistin fragt nach den Konsequenzen der Gesetzesänderung.",
+				hu: " Журналіст запитує про наслідки зміни в законі."
+			},
+			"042 - sich freuen auf + A":{
+				de: "Kinder freuen sich auf Weihnachten.",
+				hu: " Діти з нетерпінням чекають Різдва."
+			},
+			"043 - sich freuen über + A":{
+				de: "Jeder freut sich über eine Gehaltserhöhung.",
+				hu: " Усі радіють підвищенню зарплати."
+			},
+			"044 - gehen um + A":{
+				de: "Immer geht es um Geld.",
+				hu: " Це завжди про гроші."
+			},
+			"045 - gehören zu + D":{
+				de: "Das Elsass gehört zu Frankreich.",
+				hu: " Ельзас належить Франції."
+			},
+			"046 - sich gewöhnen an + A":{
+				de: "Ich kann mich nicht an den Euro gewöhnen.",
+				hu: " Я не можу звикнути до євро."
+			},
+			"047 - glauben an + A":{
+				de: "Teenager glauben an die große Liebe.",
+				hu: " Підлітки вірять у справжнє кохання."
+			},
+			"048 - gratulieren zu + D":{
+				de: "Wir gratulieren dir zum 18. Geburtstag.",
+				hu: " Ми вітаємо вас з 18-річчям."
+			},
+			"049 - halten für + A":{
+				de: "Ich halte das für keine gute Idee.",
+				hu: " Я не думаю, що це гарна ідея."
+			},
+			"050 - halten von + D":{
+				de: "Kinder halten nicht viel von Ordnung.",
+				hu: " Діти не дуже дбають про охайність."
+			},
+			"051 - sich handeln um + A":{
+				de: "Bei der Kopie handelt es sich nicht um Originalsoftware.",
+				hu: " Копія не є оригінальним програмним забезпеченням."
+			},
+			"052 - handeln von + D":{
+				de: "Märchen handeln von Gut und Böse.",
+				hu: " Казки про добро і зло."
+			},
+			"053 - helfen bei + D":{
+				de: "Kann ich dir beim Tischdecken helfen?",
+				hu: " Чи можу я допомогти вам накрити на стіл?"
+			},
+			"054 - hindern an + D":{
+				de: "Ein langsamer Fahrer hindert Greta am Überholen.",
+				hu: " Повільний водій заважає Греті обігнати."
+			},
+			"055 - hoffen auf + A":{
+				de: "Im März hoffen alle auf warme Frühlingstage.",
+				hu: " У березні всі сподіваються на теплі весняні дні."
+			},
+			"056 - hören von + D":{
+				de: "Ich habe seit Sonntag nichts von Piet gehört.",
+				hu: " Я не чув від Піта з неділі."
+			},
+			"057 - sich informieren über + A":{
+				de: "Auf der Messe kann man sich über die neue Technologie informieren.",
+				hu: " Ви можете дізнатися про нову технологію на ярмарку."
+			},
+			"058 - sich interessieren für + A":{
+				de: "Monika interessiert sich für ein Smartphone.",
+				hu: " Моніка зацікавлена ​​у смартфоні."
+			},
+			"059 - klagen über + A":{
+				de: "Frauen klagen häufig über Kopfschmerzen.",
+				hu: " Жінки часто скаржаться на головний біль."
+			},
+			"060 - kämpfen für + A":{
+				de: "Die Gewerkschaft kämpft für höhere Löhne.",
+				hu: " Профспілка бореться за підвищення заробітної плати."
+			},
+			"061 - kommen zu + D":{
+				de: "In der Besprechung kam es zu einem Streit.",
+				hu: " Під час зустрічі виникла суперечка."
+			},
+			"062 - sich konzentrieren auf + A":{
+				de: "Karl konzentriert sich auf seine Hausaufgaben.",
+				hu: " Карл зосереджений на домашньому завданні."
+			},
+			"063 - sich kümmern um + A":{
+				de: "Im Pflegeheim kümmert man sich um alte Leute, die krank sind.",
+				hu: " У будинку для людей похилого віку доглядають за хворими літніми людьми."
+			},
+			"064 - lachen über + A":{
+				de: "Über einen guten Witz muss man laut lachen.",
+				hu: " З гарного жарту доводиться голосно сміятися."
+			},
+			"065 - leiden an + D":{
+				de: "Jeder fünfte Manager leidet an Burn-out.",
+				hu: " Кожен п'ятий менеджер страждає від вигорання."
+			},
+			"066 - leiden unter + A":{
+				de: "Kaffeetrinker leiden unter Schlafproblemen.",
+				hu: " Кавоманки страждають від проблем зі сном."
+			},
+			"067 - nachdenken über + A":{
+				de: "Beamte müssen nicht über ihre Rente nachdenken.",
+				hu: " Державним службовцям не потрібно турбуватися про свої пенсії."
+			},
+			"068 - protestieren gegen + A":{
+				de: "Viele Menschen protestieren gegen Atomkraft.",
+				hu: " Багато людей протестують проти атомної енергетики."
+			},
+			"069 - rechnen mit + D":{
+				de: "Im Januar muss man mit Schnee rechnen.",
+				hu: " У січні слід очікувати снігу."
+			},
+			"070 - reden über + A":{
+				de: "Deine Mutter redet gern über Krankheiten.",
+				hu: " Ваша мама любить говорити про хвороби."
+			},
+			"071 - reden von + D":{
+				de: "Großvater redet von den guten alten Zeiten.",
+				hu: " Дідусь розповідає про старі добрі часи."
+			},
+			"072 - riechen nach + D":{
+				de: "Hier riecht es nach Kuchen.",
+				hu: " Тут пахне тортом."
+			},
+			"073 - sagen über + A":{
+				de: "Brigitte sagt über Dietmar, dass er oft lügt.",
+				hu: " Бріжит каже, що Дітмар часто бреше."
+			},
+			"074 - sagen zu + D":{
+				de: "Was sagst du zu meinem neuen Haarschnitt?",
+				hu: " Що ви думаєте про мою нову стрижку?"
+			},
+			"075 - schicken an + A":{
+				de: "Die E-Mail schicke ich dir morgen.",
+				hu: " Я надішлю вам електронного листа завтра."
+			},
+			"076 - schicken zu + D":{
+				de: "Der Allgemeinmediziner schickt den Patienten zu einem Spezialisten.",
+				hu: " Терапевт направляє пацієнта до спеціаліста."
+			},
+			"077 - schimpfen über + A":{
+				de: "Alle schimpfen über den Regen.",
+				hu: " Усі скаржаться на дощ."
+			},
+			"078 - schmecken nach + D":{
+				de: "Muscheln schmecken nach Meerwasser.",
+				hu: " Мідії на смак як морська вода."
+			},
+			"079 - schreiben an + A":{
+				de: "Bitte schreibe noch heute an deine Mutter.",
+				hu: " Будь ласка, напишіть своїй матері сьогодні."
+			},
+			"080 - sich schützen vor + D":{
+				de: "Den Computer des Ministers muss man vor Hackern schützen.",
+				hu: " Комп'ютер міністра має бути захищений від хакерів."
+			},
+			"081 - sein für + A":{
+				de: "Ich bin für die Abschaffung der Kinderarbeit.",
+				hu: " Я за скасування дитячої праці."
+			},
+			"082 - sein gegen  + A":{
+				de: "Viele sind gegen Steuererhöhungen.",
+				hu: " Багато хто проти підвищення податків."
+			},
+			"083 - sorgen für + A":{
+				de: "Kinder müssen im Alter für ihre Eltern sorgen.",
+				hu: " Діти повинні піклуватися про своїх батьків у старості."
+			},
+			"084 - sprechen mit + D":{
+				de: "Ich spreche noch einmal mit deinem Vater.",
+				hu: " Я ще раз поговорю з твоїм батьком."
+			},
+			"085 - sprechen über + A":{
+				de: "Lass uns über deine Zukunft sprechen.",
+				hu: " Давай поговоримо про твоє майбутнє."
+			},
+			"086 - sterben an + D":{
+				de: "Zwei Deutsche sind an der Grippe gestorben.",
+				hu: " Двоє німців померли від грипу."
+			},
+			"087 - streiten mit + D":{
+				de: "Ich möchte nicht mit dir streiten.",
+				hu: " Я не хочу з тобою сперечатися."
+			},
+			"088 - streiten über + A":{
+				de: "Die USA und Deutschland streiten über eine neue Strategie.",
+				hu: " США та Німеччина сперечаються щодо нової стратегії."
+			},
+			"089 - teilnehmen an + D":{
+				de: "Nordkorea nimmt an der Fußball-WM teil.",
+				hu: " Північна Корея бере участь у Чемпіонаті світу з футболу."
+			},
+			"090 - telefonieren mit + D":{
+				de: "Hast du schon mit dem Arzt telefoniert?",
+				hu: " Ви вже розмовляли з лікарем?"
+			},
+			"091 - sich treffen mit + D":{
+				de: "Die Kanzlerin trifft sich täglich mit ihrem Pressesprecher.",
+				hu: " Канцлер щодня зустрічається зі своїм прессекретарем."
+			},
+			"092 - sich treffen zu + D":{
+				de: "Sie treffen sich nur zu einem kurzen Gespräch.",
+				hu: " Вони зустрічаються лише для короткої розмови."
+			},
+			"093 - überreden zu + D":{
+				de: "Kann ich dich zu einem Glas Wein überreden?",
+				hu: " Чи можу я вмовити тебе випити келих вина?"
+			},
+			"094 - sich unterhalten mit + D":{
+				de: "Der Sänger unterhält sich mit dem Bassisten.",
+				hu: " Співачка розмовляє з басистом."
+			},
+			"095 - sich unterhalten über + A":{
+				de: "Die Modedesigner unterhalten sich über die neuesten Trends.",
+				hu: " Модельєри обговорюють останні тенденції."
+			},
+			"096 - sich verabreden mit + D":{
+				de: "Heute verabrede ich mich mit einer Freundin.",
+				hu: " Я сьогодні зустрічаюся з другом."
+			},
+			"097 - sich verabschieden von + D":{
+				de: "Nun wollen wir uns von euch verabschieden.",
+				hu: " А тепер ми хочемо попрощатися."
+			},
+			"098 - vergleichen mit + D":{
+				de: "Vergleichen Sie München mit Berlin.",
+				hu: " Порівняйте Мюнхен з Берліном."
+			},
+			"099 - sich verlassen auf + A":{
+				de: "Auf mich kann man sich verlassen.",
+				hu: " Ви можете на мене покластися."
+			},
+			"100 - sich verlieben in + A":{
+				de: "Britta hat sich in das alte Bauernhaus verliebt.",
+				hu: " Брітта закохалася у старий фермерський будинок."
+			},
+			"101 - sich verstehen mit + D":{
+				de: "Daniel versteht sich gut mit seinem Chef.",
+				hu: " Даніель добре ладнає зі своїм начальником."
+			},
+			"102 - verstehen von + D":{
+				de: "Verstehst du etwas von Elektrik?",
+				hu: " Ви щось знаєте про електромонтажні роботи?"
+			},
+			"103 - sich vorbereiten auf + A":{
+				de: "Karl bereitet sich auf eine Präsentation vor.",
+				hu: " Карл готується до презентації."
+			},
+			"104 - warnen vor + D":{
+				de: "Man hatte ihn vor den hohen Kosten für das alte Auto gewarnt.",
+				hu: " Його попередили про високу вартість старого автомобіля."
+			},
+			"105 - warten auf + A":{
+				de: "In Namibia wartet man lange auf einen Bus.",
+				hu: " У Намібії доводиться довго чекати на автобус."
+			},
+			"106 - sich wenden an + A":{
+				de: "Bitte wenden Sie sich an die Buchhaltung.",
+				hu: " Будь ласка, зверніться до бухгалтерії."
+			},
+			"107 - werden zu + D":{
+				de: "Unter null Grad wird Eis zu Wasser.",
+				hu: " При температурі нижче нуля градусів за Цельсієм лід тане у воду."
+			},
+			"108 - wissen von + D":{
+				de: "Ich weiß nichts von neuen Computern für unser Team.",
+				hu: " Я нічого не знаю про нові комп'ютери для нашої команди."
+			},
+			"109 - sich wundern über + A":{
+				de: "Viele Deutsche wundern sich über die plötzlich so hohen Stromkosten.",
+				hu: " Багато німців здивовані раптовим зростанням цін на електроенергію."
+			},
+			"110 - zuschauen bei + D":{
+				de: "Kann ich dir bei der Reparatur zuschauen?",
+				hu: " Можна мені подивитися, як ти це ремонтуєш?"
+			},
+			"111 - zusehen bei + D":{
+				de: "Willst du mir beim Kochen zusehen?",
+				hu: " Хочеш подивитися, як я готую?"
+			},
+			"112 - zweifeln an + D":{
+				de: "John zweifelt daran, dass sein Sohn die Wahrheit gesagt hat.",
+				hu: " Джон сумнівається, що його син сказав правду."
+			},
+
+
+        };
+
+        // A listák feltöltése
+        const nemetLista = document.getElementById("nemet");
+        const magyarLista = document.getElementById("magyar");
+
+        for (const nemetSzo in szotar) {
+            const option = document.createElement("option");
+            option.value = nemetSzo;
+            option.textContent = nemetSzo;
+            nemetLista.appendChild(option);
+        }
+
+        const magyarSzavak = Object.values(szotar);
+        magyarSzavak.forEach(magyar => {
+            const option = document.createElement("option");
+            option.value = magyar;
+            option.textContent = magyar;
+            magyarLista.appendChild(option);
+        });
+
+        // Ellenőrzés logika
+        document.getElementById("ellenoriz").addEventListener("click", () => {
+            const nemetValasztott = nemetLista.value;
+            const magyarValasztott = magyarLista.value;
+            const eredmenyDiv = document.getElementById("eredmeny");
+            const peldaDiv = document.getElementById("pelda");
+
+            peldaDiv.textContent = ""; // előző példa törlése
+
+            if (!nemetValasztott || !magyarValasztott) {
+                eredmenyDiv.textContent = "Kérlek, válassz mindkét listából!";
+                eredmenyDiv.style.color = "orange";
+                return;
+            }
+
+            if (szotar[nemetValasztott] === magyarValasztott) {
+                eredmenyDiv.textContent = "✅ Korrekt!";
+                eredmenyDiv.style.color = "green";
+
+                // Példa mondat megjelenítése
+                const pelda = peldak[nemetValasztott];
+                if (pelda) {
+                    peldaDiv.innerHTML = `<b>Beispiel Satz:</b><br>${pelda.de}<br><i>${pelda.hu}</i>`;
+                }
+            } else {
+                eredmenyDiv.textContent = "❌ Nicht Korrekt!";
+                eredmenyDiv.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
